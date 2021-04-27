@@ -30,7 +30,7 @@
  */
 package com.elephasvacation.tms.web.commonConstant;
 
-public class ApplicationProperties {
+public final class ApplicationProperties {
     public static final String DATABASE_USER_NAME = "app.database.username";
     public static final String DATABASE_PASSWORD = "app.database.password";
     public static final String DATABASE_URL = "app.database.url";

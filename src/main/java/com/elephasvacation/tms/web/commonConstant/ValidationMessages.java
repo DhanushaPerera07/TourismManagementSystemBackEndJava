@@ -22,21 +22,16 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
- * @since : 21/04/2021
+ * @date : 27/04/2021
  */
 /**
  * @author : Dhanusha Perera
- * @since : 21/04/2021
+ * @date : 27/04/2021
  */
 package com.elephasvacation.tms.web.commonConstant;
 
-public final class FailedMessages {
-    public static final String FAILED_LOADING_PROPERTIES_FILE = "Failed to load properties file: ";
-    public static final String FAILED_LOADING_APPLICATION_PROPERTIES_FILE = "Failed to load application properties file.";
-    public static final String FAILED_OPENING_CONNECTION = "Error when opening connection.";
-    public static final String SOMETHING_WENT_WRONG = "Something went wrong";
-    public static final String SOMETHING_WENT_WRONG_LOADING_PROPERTIES_FILE = "Something went wrong when loading the properties file:";
-    public static final String SOMETHING_WENT_WRONG_DATABASE_OPERATION = "Something went wrong when performing database operation.";
-    public static final String SOMETHING_WENT_WRONG_READING_REQUEST_BODY = "Something went wrong when reading request body.";
-
+public final class ValidationMessages {
+    public static final String INVALID_DATA_INPUT = "Invalid data input";
+    public static final String INVALID_ID = "Invalid input detected. {0} id should only be an integer (except zero).";
+    public static final String SQL_INTEGRITY_CONSTRAINT_VIOLATION = "An integrity constraint (foreign key, primary key or unique key) has been violated.";
 }

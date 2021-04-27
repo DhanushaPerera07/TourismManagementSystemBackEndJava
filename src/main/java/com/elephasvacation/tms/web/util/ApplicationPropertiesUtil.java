@@ -75,7 +75,7 @@ public class ApplicationPropertiesUtil {
                 ioException.printStackTrace();
             } catch (Exception exception) {
                 exception.printStackTrace();
-                logger.error("Something went wrong when loading the properties file:", exception);
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_LOADING_PROPERTIES_FILE, exception);
             }
         } else {
 //            System.out.println(FailedMessages.FAILED_LOADING_PROPERTIES_FILE + propertiesFileName);

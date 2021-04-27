@@ -22,6 +22,8 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @since : 21/04/2021
  * @since : 21/04/2021
  */
 /**
@@ -32,16 +34,21 @@ package com.elephasvacation.tms.web.commonConstant;
 
 import java.io.File;
 
-public class Commons {
+public final class Commons {
 
     public static final String NEXT_LINE = "\n";
     public static final String CP = "cp";
+    public static final String MESSAGES_PROPERTIES = "messages_properties";
     public static final String APPLICATION_PROPERTIES_FILE_NAME = "/application.properties";
     public static final String USER_DIR = "user.dir";
 
-    public static final String LOGGER_FILE_DIRECTORY ="logs";
-    public static final String LOGGER_FILE_NAME ="tms-logs.log";
+    public static final String LOGGER_FILE_DIRECTORY = "logs";
+    public static final String LOGGER_FILE_NAME = "tms-logs.log";
     public static final String LOGGER_FILE_PATH = "logs" + File.separator + LOGGER_FILE_NAME;
     public static final String LOGGER_FILE_FULL_PATH =
             System.getProperty(USER_DIR) + File.separator + LOGGER_FILE_PATH;
+
+
+    public static final String ID = "id";
+
 }

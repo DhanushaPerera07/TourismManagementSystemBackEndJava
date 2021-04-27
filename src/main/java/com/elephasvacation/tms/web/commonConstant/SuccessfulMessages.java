@@ -30,8 +30,9 @@
  */
 package com.elephasvacation.tms.web.commonConstant;
 
-public class SuccessfulMessages {
+public final class SuccessfulMessages {
 
     public static final String CONTEXT_INITIALIZED_SUCCESSFUL = "Context initialized successfully...!";
     public static final String LOGGER_INITIALIZED_SUCCESSFUL = "Logger initialized successfully...!";
+    public static final String CREATED_RECORD_SUCCESSFUL = "Created {0} record, generated ID: {1}";
 }
