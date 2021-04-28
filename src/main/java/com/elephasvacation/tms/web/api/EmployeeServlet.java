@@ -229,17 +229,85 @@ public class EmployeeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        super.doPut(req, resp);
+        super.doPut(request, response);
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        super.doDelete(req, resp);
+
+        String id = request.getParameter(Commons.ID);
+        if (id == null) {
+            /* send error - id is required. */
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    MessageFormat.format(
+                            ValidationMessages.ID_IS_REQUIRED +
+                                    Commons.EMPTY_SPACE +
+                                    ValidationMessages.INTEGERS_ARE_ONLY_ACCEPTED_EXCEPT_ZERO,
+                            Employee.class.getSimpleName()
+                    ));
+            return;
+        }
+
+        if (!isIdValid(id)) {
+            /* send error - id is not an integer. */
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    MessageFormat.format(
+                            ValidationMessages.INVALID_ID,
+                            Employee.class.getSimpleName()
+                    ));
+
+            return;
+        }
+
+        /* get reference of the basic datasource from the servlet context. */
+        BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+        try {
+            Connection connection = basicDataSource.getConnection();
+
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE FROM employee e WHERE e.id=?");
+            preparedStatement.setInt(Number.ONE, Integer.parseInt(id));
+
+            if (preparedStatement.executeUpdate() > 0) {
+                /* deleted successfully. */
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            } else {
+                /* not found matching record to delete. */
+                logger.info(MessageFormat.format(
+                        ValidationMessages.RECORD_IS_NOT_FOUND,
+                        Employee.class.getSimpleName(),
+                        id,
+                        ValidationMessages.TO_DELETE
+                ));
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+
+        } catch (SQLException sqlException) {
+            /* sql error. */
+            sqlException.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (NumberFormatException numberFormatException) {
+            numberFormatException.printStackTrace();
+            logger.error(FailedMessages.FAILED_PARSING_TO_INTEGER, numberFormatException);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
+
+    /**
+     * Check the id is valid.
+     *
+     * @returns true if valid.
+     * otherwise, false.
+     */
+    private boolean isIdValid(String id) {
+        return id.matches("^[1-9]$|^[1-9]\\d+$");
+    }
 
     /**
      * Check the given email is already in use.
@@ -334,7 +402,8 @@ public class EmployeeServlet extends HttpServlet {
         return nic.matches("^\\d{12}$|^\\d{9}[V|v]$");
     }
 
-    /** Check whether the contact number is in valid format.
+    /**
+     * Check whether the contact number is in valid format.
      *
      * @returns true if valid.
      * otherwise false.

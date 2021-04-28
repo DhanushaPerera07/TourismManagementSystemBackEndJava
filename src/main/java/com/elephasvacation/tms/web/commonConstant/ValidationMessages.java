@@ -37,4 +37,12 @@ public final class ValidationMessages {
     public static final String INVALID_ID = "Invalid input detected. {0} id should only be an integer (except zero).";
     public static final String SQL_INTEGRITY_CONSTRAINT_VIOLATION = "An integrity constraint (foreign key, primary key or unique key) has been violated.";
     public static final String EMAIL_IS_ALREADY_TAKEN = "Given email is already taken.";
+
+    public static final String ID_IS_REQUIRED = "{0} ID is required.";
+    public static final String INTEGERS_ARE_ONLY_ACCEPTED_EXCEPT_ZERO = "Integers are only accepted (except zero).";
+
+    public static final String RECORD_IS_NOT_FOUND = "{0} record is not found for user input({1}) {2}";
+    public static final String TO_RETRIEVE = "to retrieve.";
+    public static final String TO_UPDATE = "to update.";
+    public static final String TO_DELETE = "to delete.";
 }

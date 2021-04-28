@@ -39,4 +39,6 @@ public final class FailedMessages {
     public static final String SOMETHING_WENT_WRONG_DATABASE_OPERATION = "Something went wrong when performing database operation.";
     public static final String SOMETHING_WENT_WRONG_READING_REQUEST_BODY = "Something went wrong when reading request body.";
 
+    public static final String FAILED_PARSING_TO_INTEGER = "Invalid input as parameter: cannot not be parsed to integer.";
+    public static final String FAILED_DELETE = "FAILED: Record is not deleted. {0} id : {1}.";
 }

@@ -37,6 +37,7 @@ import java.io.File;
 public final class Commons {
 
     public static final String EMPTY_STRING = "";
+    public static final String EMPTY_SPACE = " ";
     public static final String NEXT_LINE = "\n";
     public static final String CP = "cp";
     public static final String MESSAGES_PROPERTIES = "messages_properties";
