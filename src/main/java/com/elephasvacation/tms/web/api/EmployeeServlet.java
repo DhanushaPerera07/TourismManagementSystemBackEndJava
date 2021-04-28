@@ -10,7 +10,9 @@ import com.elephasvacation.tms.web.model.Employee;
 import com.elephasvacation.tms.web.model.enumeration.GenderTypes;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +124,107 @@ public class EmployeeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        /* get the print-writer. */
         PrintWriter out = response.getWriter();
+
+        try {
+            /* read the request body. */
+            Employee employee = jsonb.fromJson(request.getReader(), Employee.class);
+
+            /* employee id should be set to zero or
+             * employee id should not be included to in the request header.
+             * */
+            if (employee.getId() != 0) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.INVALID_DATA_INPUT_ID_SHOULD_NOT_BE_INCLUDED);
+                return;
+            }
+
+            /* validate user input. */
+            String errors = validateUserInput(employee);
+            if (errors != null) {
+                /* there are errors. */
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, errors);
+                return;
+            }
+
+            /* Check whether the email is already taken or not. */
+            if (isEmailUsed(employee.getEmail())) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+                return;
+            }
+
+            /* get reference of the basic datasource from the servlet context. */
+            BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+            try {
+                try (Connection connection = basicDataSource.getConnection()) {
+
+                    PreparedStatement preparedStatement = connection
+                            .prepareStatement(
+                                    "INSERT INTO employee " +
+                                            "(name, address, dob, nic, contact,email, " +
+                                            "gender, position, status, password) " +
+                                            "VALUES(?,?,?,?,?,?,?,?,?,?)",
+                                    Statement.RETURN_GENERATED_KEYS);
+
+                    preparedStatement.setString(Number.ONE, employee.getName());
+                    preparedStatement.setString(Number.TWO, employee.getAddress());
+                    preparedStatement.setDate(Number.THREE, employee.getDateOfBirth());
+                    preparedStatement.setString(Number.FOUR, employee.getNic());
+                    preparedStatement.setString(Number.FIVE, employee.getContact());
+                    preparedStatement.setString(Number.SIX, employee.getEmail());
+                    preparedStatement.setString(Number.SEVEN, employee.getGender().toString());
+                    preparedStatement.setString(Number.EIGHT, employee.getPosition());
+                    preparedStatement.setString(Number.NINE, employee.getStatus());
+                    preparedStatement.setString(Number.TEN, employee.getPassword());
+
+                    preparedStatement.executeUpdate();
+                    ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+
+                    if (generatedKeys.next()) {
+                        /* insertion succeed. */
+                        int generatedId = generatedKeys.getInt(Number.ONE);
+                        response.setStatus(HttpServletResponse.SC_CREATED);
+                        out.println(jsonb.toJson(generatedId));
+                        logger.info(MessageFormat.format(
+                                SuccessfulMessages.CREATED_RECORD_SUCCESSFUL,
+                                Employee.class.getSimpleName(), generatedId));
+                    } else {
+                        /* insertion failed. */
+                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    }
+                }
+            } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+                /* duplicate key found (integrity constraint violation). */
+                logger.error(ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                        sqlIntegrityConstraintViolationException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION);
+            } catch (SQLException sqlException) {
+                /* sql error. */
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
+        } catch (JsonbException jsonbException) {
+            /* cannot parse the request header to an employee object. */
+            jsonbException.printStackTrace();
+            logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (IOException ioException) {
+            /* inputStream error when reading the request object. */
+            ioException.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (Exception exception) {
+            /* something went wrong. */
+            exception.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
 
     }
 
@@ -139,5 +238,108 @@ public class EmployeeServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         super.doDelete(req, resp);
+    }
+
+
+    /**
+     * Check the given email is already in use.
+     *
+     * @return true, If the given email is already in use.
+     * Otherwise false.
+     */
+    private boolean isEmailUsed(String email) {
+
+        boolean result = false;
+
+        /* get reference of the basic datasource from the servlet context. */
+        BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+        try {
+            try (Connection connection = basicDataSource.getConnection()) {
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT e.email FROM employee e WHERE e.email=?");
+
+                preparedStatement.setString(Number.ONE, email);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    result = true;
+                }
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    /**
+     * check the user input are valid.
+     *
+     * @returns true if valid,
+     * otherwise false.
+     */
+    private String validateUserInput(Employee employee) {
+
+        String errors = Commons.EMPTY_STRING;
+
+        boolean isValidEmail = EmailValidator
+                .getInstance().isValid(employee.getEmail());
+
+        if (!isEmailValid(employee.getEmail())) {
+            String emailInvalidMessage = MessageFormat.format(
+                    ValidationMessages.INVALID_DATA_INPUT_CUSTOMIZED,
+                    ModelFields.EMAIL);
+
+            errors += emailInvalidMessage;
+        }
+
+        if (!isNICValid(employee.getNic())) {
+            String nicInvalidMessage = MessageFormat.format(
+                    ValidationMessages.INVALID_DATA_INPUT_CUSTOMIZED,
+                    ModelFields.NIC);
+
+            errors += nicInvalidMessage;
+        }
+
+        if (!isContactNumberValid(employee.getContact())) {
+            String contactNoInvalidMessage = MessageFormat.format(
+                    ValidationMessages.INVALID_DATA_INPUT_CUSTOMIZED,
+                    ModelFields.CONTACT_NO);
+
+            errors += contactNoInvalidMessage;
+        }
+
+        return (errors.isEmpty()) ? null : errors;
+    }
+
+
+    /**
+     * Check whether the email is in valid format.
+     *
+     * @returns true if email is valid.
+     * otherwise false.
+     */
+    private boolean isEmailValid(String email) {
+        return EmailValidator
+                .getInstance().isValid(email);
+    }
+
+    /**
+     * Check whether the nic is in valid format.
+     *
+     * @returns true if valid.
+     * otherwise false.
+     */
+    private boolean isNICValid(String nic) {
+        return nic.matches("^\\d{12}$|^\\d{9}[V|v]$");
+    }
+
+    /** Check whether the contact number is in valid format.
+     *
+     * @returns true if valid.
+     * otherwise false.
+     */
+    private boolean isContactNumberValid(String contactNo) {
+        return contactNo.matches("^\\d{10}$|^[+]94\\d{9}$");
     }
 }

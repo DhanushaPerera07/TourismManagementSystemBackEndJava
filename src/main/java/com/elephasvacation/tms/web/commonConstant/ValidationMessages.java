@@ -32,6 +32,9 @@ package com.elephasvacation.tms.web.commonConstant;
 
 public final class ValidationMessages {
     public static final String INVALID_DATA_INPUT = "Invalid data input";
+    public static final String INVALID_DATA_INPUT_CUSTOMIZED = "Invalid data input: {0} is invalid.\n";
+    public static final String INVALID_DATA_INPUT_ID_SHOULD_NOT_BE_INCLUDED = "Invalid data input: id should not be included or set the id to zero";
     public static final String INVALID_ID = "Invalid input detected. {0} id should only be an integer (except zero).";
     public static final String SQL_INTEGRITY_CONSTRAINT_VIOLATION = "An integrity constraint (foreign key, primary key or unique key) has been violated.";
+    public static final String EMAIL_IS_ALREADY_TAKEN = "Given email is already taken.";
 }
