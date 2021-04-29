@@ -28,7 +28,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "EmployeeServlet", urlPatterns = "/v1/api/employees")
+@WebServlet(name = "EmployeeServlet", urlPatterns = "/api/v1/employees")
 public class EmployeeServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeServlet.class);
