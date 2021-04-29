@@ -231,7 +231,108 @@ public class EmployeeServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        super.doPut(request, response);
+
+        try {
+            /* read the request body. */
+            Employee employee = jsonb.fromJson(request.getReader(), Employee.class);
+
+            /* Client should specify the id in the request body only.*/
+            if (!isIdValid(Integer.toString(employee.getId()))) {
+                /* send error - id is not an integer. */
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        MessageFormat.format(
+                                ValidationMessages.INVALID_ID,
+                                Employee.class.getSimpleName()
+                        ));
+
+                return;
+            }
+
+            /* validate user input. */
+            String errors = validateUserInput(employee);
+            if (errors != null) {
+                /* there are errors. */
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, errors);
+                return;
+            }
+
+            /* perform update operation */
+            /* get reference of the basic datasource from the servlet context. */
+            BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+            try (Connection connection = basicDataSource.getConnection()) {
+                /* check whether there is a matching record. */
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("SELECT e.id FROM employee e WHERE e.id=?");
+
+                preparedStatement.setInt(Number.ONE, employee.getId());
+
+                /* check whether there is a matching record for the given id. */
+                if (preparedStatement.executeQuery().next()) {
+                    /* record is available for the given id.
+                     * then, perform update. */
+                    preparedStatement =
+                            connection.prepareStatement("UPDATE employee e " +
+                                    "SET name=?, address=?, dob=?, nic=?, " +
+                                    "contact=?,email=?, gender=?, position=?, " +
+                                    "status=?, password=? WHERE e.id=?");
+
+                    preparedStatement.setString(Number.ONE, employee.getName());
+                    preparedStatement.setString(Number.TWO, employee.getAddress());
+                    preparedStatement.setDate(Number.THREE, employee.getDateOfBirth());
+                    preparedStatement.setString(Number.FOUR, employee.getNic());
+                    preparedStatement.setString(Number.FIVE, employee.getContact());
+                    preparedStatement.setString(Number.SIX, employee.getEmail());
+                    preparedStatement.setString(Number.SEVEN, employee.getGender().toString());
+                    preparedStatement.setString(Number.EIGHT, employee.getPosition());
+                    preparedStatement.setString(Number.NINE, employee.getStatus());
+                    preparedStatement.setString(Number.TEN, employee.getPassword());
+                    preparedStatement.setInt(Number.ELEVEN, employee.getId());
+
+                    if (preparedStatement.executeUpdate() > 0) {
+                        /* update successful. */
+                        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                    } else {
+                        /* update not succeed. */
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    }
+
+                } else {
+                    /* no record found for that given id. */
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+
+            }
+
+
+        } catch (JsonbException jsonbException) {
+            /* cannot parse the request header to an employee object. */
+            jsonbException.printStackTrace();
+            logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (IOException ioException) {
+            /* inputStream error when reading the request object. */
+            ioException.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+            /* duplicate key found (integrity constraint violation). */
+            logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                            ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                    sqlIntegrityConstraintViolationException);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (Exception exception) {
+            /* something went wrong. */
+            exception.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @Override
@@ -266,24 +367,25 @@ public class EmployeeServlet extends HttpServlet {
         BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
 
         try {
-            Connection connection = basicDataSource.getConnection();
+            try (Connection connection = basicDataSource.getConnection()) {
 
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM employee e WHERE e.id=?");
-            preparedStatement.setInt(Number.ONE, Integer.parseInt(id));
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("DELETE FROM employee e WHERE e.id=?");
+                preparedStatement.setInt(Number.ONE, Integer.parseInt(id));
 
-            if (preparedStatement.executeUpdate() > 0) {
-                /* deleted successfully. */
-                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-            } else {
-                /* not found matching record to delete. */
-                logger.info(MessageFormat.format(
-                        ValidationMessages.RECORD_IS_NOT_FOUND,
-                        Employee.class.getSimpleName(),
-                        id,
-                        ValidationMessages.TO_DELETE
-                ));
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                if (preparedStatement.executeUpdate() > 0) {
+                    /* deleted successfully. */
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    /* not found matching record to delete. */
+                    logger.info(MessageFormat.format(
+                            ValidationMessages.RECORD_IS_NOT_FOUND,
+                            Employee.class.getSimpleName(),
+                            id,
+                            ValidationMessages.TO_DELETE
+                    ));
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
             }
 
         } catch (SQLException sqlException) {

@@ -36,6 +36,7 @@ public final class ValidationMessages {
     public static final String INVALID_DATA_INPUT_ID_SHOULD_NOT_BE_INCLUDED = "Invalid data input: id should not be included or set the id to zero";
     public static final String INVALID_ID = "Invalid input detected. {0} id should only be an integer (except zero).";
     public static final String SQL_INTEGRITY_CONSTRAINT_VIOLATION = "An integrity constraint (foreign key, primary key or unique key) has been violated.";
+    public static final String EMAIL_IS_ALREADY_TAKEN_CUSTOMIZED = "{0} email is already taken.";
     public static final String EMAIL_IS_ALREADY_TAKEN = "Given email is already taken.";
 
     public static final String ID_IS_REQUIRED = "{0} ID is required.";
@@ -45,4 +46,5 @@ public final class ValidationMessages {
     public static final String TO_RETRIEVE = "to retrieve.";
     public static final String TO_UPDATE = "to update.";
     public static final String TO_DELETE = "to delete.";
+
 }
