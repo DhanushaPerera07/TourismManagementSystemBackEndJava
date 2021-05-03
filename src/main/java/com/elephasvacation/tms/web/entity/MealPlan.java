@@ -20,6 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -38,19 +41,22 @@ public class MealPlan {
     private BigDecimal allInclusive;
     private Date created;
     private Date lastUpdated;
+    private String remark;
 
     /* no args constructor. */
     public MealPlan() {
     }
 
     /* full args constructor. */
+
     public MealPlan(int accommodationPackageId,
                     BigDecimal bedAndBreakfast,
                     BigDecimal halfBoard,
                     BigDecimal fullBoard,
                     BigDecimal allInclusive,
                     Date created,
-                    Date lastUpdated) {
+                    Date lastUpdated,
+                    String remark) {
         this.accommodationPackageId = accommodationPackageId;
         this.bedAndBreakfast = bedAndBreakfast;
         this.halfBoard = halfBoard;
@@ -58,6 +64,7 @@ public class MealPlan {
         this.allInclusive = allInclusive;
         this.created = created;
         this.lastUpdated = lastUpdated;
+        this.remark = remark;
     }
 
     /* getters and setters. */
@@ -117,6 +124,14 @@ public class MealPlan {
         this.lastUpdated = lastUpdated;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "MealPlan{" +
@@ -127,6 +142,7 @@ public class MealPlan {
                 ", allInclusive=" + allInclusive +
                 ", created=" + created +
                 ", lastUpdated=" + lastUpdated +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }
