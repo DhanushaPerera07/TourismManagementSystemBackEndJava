@@ -42,9 +42,32 @@ public class Customer {
     private Date addedDate;
     private Date lastUpdated;
 
+    /* no args constructor. */
     public Customer() {
     }
 
+    /* constructor without addedDate and lastUpdated properties. */
+    public Customer(int id,
+                    String name,
+                    String nationality,
+                    String passportNo,
+                    String email,
+                    String countryCallingCode,
+                    String country,
+                    String description,
+                    String additionalNotes) {
+        this.id = id;
+        this.name = name;
+        this.nationality = nationality;
+        this.passportNo = passportNo;
+        this.email = email;
+        this.countryCallingCode = countryCallingCode;
+        this.country = country;
+        this.description = description;
+        this.additionalNotes = additionalNotes;
+    }
+
+    /* full args constructor. */
     public Customer(int id,
                     String name,
                     String nationality,
