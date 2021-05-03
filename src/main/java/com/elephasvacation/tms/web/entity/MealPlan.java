@@ -27,5 +27,106 @@
  */
 package com.elephasvacation.tms.web.entity;
 
+import java.math.BigDecimal;
+import java.sql.Date;
+
 public class MealPlan {
+    private int accommodationPackageId;
+    private BigDecimal bedAndBreakfast;
+    private BigDecimal halfBoard;
+    private BigDecimal fullBoard;
+    private BigDecimal allInclusive;
+    private Date created;
+    private Date lastUpdated;
+
+    /* no args constructor. */
+    public MealPlan() {
+    }
+
+    /* full args constructor. */
+    public MealPlan(int accommodationPackageId,
+                    BigDecimal bedAndBreakfast,
+                    BigDecimal halfBoard,
+                    BigDecimal fullBoard,
+                    BigDecimal allInclusive,
+                    Date created,
+                    Date lastUpdated) {
+        this.accommodationPackageId = accommodationPackageId;
+        this.bedAndBreakfast = bedAndBreakfast;
+        this.halfBoard = halfBoard;
+        this.fullBoard = fullBoard;
+        this.allInclusive = allInclusive;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
+    }
+
+    /* getters and setters. */
+    public int getAccommodationPackageId() {
+        return accommodationPackageId;
+    }
+
+    public void setAccommodationPackageId(int accommodationPackageId) {
+        this.accommodationPackageId = accommodationPackageId;
+    }
+
+    public BigDecimal getBedAndBreakfast() {
+        return bedAndBreakfast;
+    }
+
+    public void setBedAndBreakfast(BigDecimal bedAndBreakfast) {
+        this.bedAndBreakfast = bedAndBreakfast;
+    }
+
+    public BigDecimal getHalfBoard() {
+        return halfBoard;
+    }
+
+    public void setHalfBoard(BigDecimal halfBoard) {
+        this.halfBoard = halfBoard;
+    }
+
+    public BigDecimal getFullBoard() {
+        return fullBoard;
+    }
+
+    public void setFullBoard(BigDecimal fullBoard) {
+        this.fullBoard = fullBoard;
+    }
+
+    public BigDecimal getAllInclusive() {
+        return allInclusive;
+    }
+
+    public void setAllInclusive(BigDecimal allInclusive) {
+        this.allInclusive = allInclusive;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    @Override
+    public String toString() {
+        return "MealPlan{" +
+                "accommodationPackageId=" + accommodationPackageId +
+                ", bedAndBreakfast=" + bedAndBreakfast +
+                ", halfBoard=" + halfBoard +
+                ", fullBoard=" + fullBoard +
+                ", allInclusive=" + allInclusive +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
+                '}';
+    }
 }
