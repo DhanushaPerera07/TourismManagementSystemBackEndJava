@@ -6,8 +6,8 @@ package com.elephasvacation.tms.web.api;
 
 import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.commonConstant.*;
-import com.elephasvacation.tms.web.model.Employee;
-import com.elephasvacation.tms.web.model.enumeration.GenderTypes;
+import com.elephasvacation.tms.web.entity.Employee;
+import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;

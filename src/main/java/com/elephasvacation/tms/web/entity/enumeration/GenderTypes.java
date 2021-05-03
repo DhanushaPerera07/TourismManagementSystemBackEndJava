@@ -25,7 +25,7 @@
  * @author : Dhanusha Perera
  * @since : 26/04/2021
  */
-package com.elephasvacation.tms.web.model.enumeration;
+package com.elephasvacation.tms.web.entity.enumeration;
 
 public enum GenderTypes {
     MALE,

@@ -25,9 +25,9 @@
  * @author : Dhanusha Perera
  * @since : 26/04/2021
  */
-package com.elephasvacation.tms.web.model;
+package com.elephasvacation.tms.web.entity;
 
-import com.elephasvacation.tms.web.model.enumeration.GenderTypes;
+import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 
 import java.sql.Date;
 
