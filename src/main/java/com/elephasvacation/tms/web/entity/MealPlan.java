@@ -39,9 +39,9 @@ public class MealPlan {
     private BigDecimal halfBoard;
     private BigDecimal fullBoard;
     private BigDecimal allInclusive;
+    private String remark;
     private Date created;
     private Date lastUpdated;
-    private String remark;
 
     /* no args constructor. */
     public MealPlan() {
@@ -54,17 +54,17 @@ public class MealPlan {
                     BigDecimal halfBoard,
                     BigDecimal fullBoard,
                     BigDecimal allInclusive,
+                    String remark,
                     Date created,
-                    Date lastUpdated,
-                    String remark) {
+                    Date lastUpdated) {
         this.accommodationPackageId = accommodationPackageId;
         this.bedAndBreakfast = bedAndBreakfast;
         this.halfBoard = halfBoard;
         this.fullBoard = fullBoard;
         this.allInclusive = allInclusive;
+        this.remark = remark;
         this.created = created;
         this.lastUpdated = lastUpdated;
-        this.remark = remark;
     }
 
     /* getters and setters. */
@@ -140,9 +140,9 @@ public class MealPlan {
                 ", halfBoard=" + halfBoard +
                 ", fullBoard=" + fullBoard +
                 ", allInclusive=" + allInclusive +
+                ", remark='" + remark + '\'' +
                 ", created=" + created +
                 ", lastUpdated=" + lastUpdated +
-                ", remark='" + remark + '\'' +
                 '}';
     }
 }
