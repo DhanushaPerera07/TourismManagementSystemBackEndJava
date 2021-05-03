@@ -20,6 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -30,4 +33,150 @@ package com.elephasvacation.tms.web.entity;
 import java.io.Serializable;
 
 public class Accommodation implements Serializable {
+    private int id;
+    private String name;
+    private String situatedIn;
+    private String starRating;
+    private String type;
+    private String contact;
+    private String email;
+    private String address;
+    private String website;
+    private String specialDetails;
+    private String remark;
+
+    /* no args constructor. */
+    public Accommodation() {
+    }
+
+    /* full args constructor. */
+    public Accommodation(int id,
+                         String name,
+                         String situatedIn,
+                         String starRating,
+                         String type,
+                         String contact,
+                         String email,
+                         String address,
+                         String website,
+                         String specialDetails,
+                         String remark) {
+        this.id = id;
+        this.name = name;
+        this.situatedIn = situatedIn;
+        this.starRating = starRating;
+        this.type = type;
+        this.contact = contact;
+        this.email = email;
+        this.address = address;
+        this.website = website;
+        this.specialDetails = specialDetails;
+        this.remark = remark;
+    }
+
+    /* getters and setters. */
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSituatedIn() {
+        return situatedIn;
+    }
+
+    public void setSituatedIn(String situatedIn) {
+        this.situatedIn = situatedIn;
+    }
+
+    public String getStarRating() {
+        return starRating;
+    }
+
+    public void setStarRating(String starRating) {
+        this.starRating = starRating;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getSpecialDetails() {
+        return specialDetails;
+    }
+
+    public void setSpecialDetails(String specialDetails) {
+        this.specialDetails = specialDetails;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "Accommodation{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", situatedIn='" + situatedIn + '\'' +
+                ", starRating='" + starRating + '\'' +
+                ", type='" + type + '\'' +
+                ", contact='" + contact + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", website='" + website + '\'' +
+                ", specialDetails='" + specialDetails + '\'' +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
 }
