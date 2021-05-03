@@ -20,9 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
- * @author : Dhanusha Perera
- * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -30,5 +27,69 @@
  */
 package com.elephasvacation.tms.web.entity;
 
+import java.math.BigDecimal;
+
 public class GuidePlan {
+    private int accommodationPackageId;
+    private boolean isAvailable;
+    private BigDecimal cost;
+    private String remark;
+
+    /* no args constructor. */
+    public GuidePlan() {
+    }
+
+    /* full args constructor. */
+    public GuidePlan(int accommodationPackageId,
+                     boolean isAvailable,
+                     BigDecimal cost,
+                     String remark) {
+        this.accommodationPackageId = accommodationPackageId;
+        this.isAvailable = isAvailable;
+        this.cost = cost;
+        this.remark = remark;
+    }
+
+    /* getters and setters. */
+    public int getAccommodationPackageId() {
+        return accommodationPackageId;
+    }
+
+    public void setAccommodationPackageId(int accommodationPackageId) {
+        this.accommodationPackageId = accommodationPackageId;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "GuidePlan{" +
+                "accommodationPackageId=" + accommodationPackageId +
+                ", isAvailable=" + isAvailable +
+                ", cost=" + cost +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
 }
