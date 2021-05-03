@@ -41,4 +41,5 @@ public final class FailedMessages {
 
     public static final String FAILED_PARSING_TO_INTEGER = "Invalid input as parameter: cannot not be parsed to integer.";
     public static final String FAILED_DELETE = "FAILED: Record is not deleted. {0} id : {1}.";
+
 }

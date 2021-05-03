@@ -35,4 +35,7 @@ public final class SuccessfulMessages {
     public static final String CONTEXT_INITIALIZED_SUCCESSFUL = "Context initialized successfully...!";
     public static final String LOGGER_INITIALIZED_SUCCESSFUL = "Logger initialized successfully...!";
     public static final String CREATED_RECORD_SUCCESSFUL = "Created {0} record, generated ID: {1}";
+
+
+    public static final String SEND_LIST_SUCCESSFULLY = "Send {0} record(s) successfully. No of records: {1}";
 }

@@ -44,6 +44,7 @@ public final class Commons {
     public static final String APPLICATION_PROPERTIES_FILE_NAME = "/application.properties";
     public static final String USER_DIR = "user.dir";
 
+    /* logger file related. */
     public static final String LOGGER_FILE_DIRECTORY = "logs";
     public static final String LOGGER_FILE_NAME = "tms-logs.log";
     public static final String LOGGER_FILE_PATH = "logs" + File.separator + LOGGER_FILE_NAME;
@@ -52,5 +53,18 @@ public final class Commons {
 
 
     public static final String ID = "id";
+
+
+    /* names of the entities. */
+    public static final String EMPLOYEE = "Employee";
+    public static final String CUSTOMER = "Customer";
+    public static final String ACCOMMODATION = "Accommodation";
+    public static final String ACCOMMODATION_PACKAGE = "Accommodation Package";
+    public static final String TOUR_DETAIL = "Tour Detail";
+
+
+    public static final String NO_RECORDS_FOUND = "No {0} records found!";
+
+
 
 }
