@@ -23,6 +23,8 @@
  *
  * @author : Dhanusha Perera
  * @date : 27/04/2021
+ * @author : Dhanusha Perera
+ * @date : 27/04/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -48,6 +50,6 @@ public final class ValidationMessages {
     public static final String TO_DELETE = "to delete.";
 
 
-    public static final String REQUEST_CONTENT_TYPE_INVALID = "Invalid data input: Request Content Type is invalid. Request Content Type should be: {0} only.";
+    public static final String REQUEST_CONTENT_TYPE_INVALID = "Invalid Content Type: Request Content Type is invalid. Request Content Type should be: {0} only.";
 
 }

@@ -15,7 +15,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +35,7 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         /* get id param from the query string. */
         String id = request.getParameter(Commons.ID);
 
@@ -129,12 +128,10 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
         /* get the print-writer. */
         PrintWriter out = response.getWriter();
-
-        logger.info("Request Content Type: " + request.getContentType());
 
         /* check the request content type.
          * content type should be application/json. otherwise send bad request. */
@@ -173,8 +170,7 @@ public class CustomerServlet extends HttpServlet {
                     DatabaseColumnNames.EMAIL,
                     customer.getEmail(),
                     response)) {
-                logger.info(ValidationMessages.EMAIL_IS_ALREADY_TAKEN,
-                        customer.getEmail());
+                logger.info(ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
                 return;
@@ -256,14 +252,24 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
+
+        /* check the request content type.
+         * content type should be application/json. otherwise send bad request. */
+        if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
+            String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
+                    MimeTypes.Application.JSON);
+            logger.info(errorMessage);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            return;
+        }
 
         try {
             /* read the request body. */
             Customer customer = jsonb.fromJson(request.getReader(), Customer.class);
 
             /* Client should specify the id in the request body only.*/
-            if (!isIdValid(Integer.toString(customer.getId()))) {
+            if (isIdNotValid(Integer.toString(customer.getId()))) {
                 /* send error - id is not an integer. */
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         MessageFormat.format(
@@ -349,7 +355,7 @@ public class CustomerServlet extends HttpServlet {
                     ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (Exception exception) {
             /* something went wrong. */
@@ -363,7 +369,8 @@ public class CustomerServlet extends HttpServlet {
 
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
         String id = request.getParameter(Commons.ID);
 
         /* id should not be null. */
@@ -380,7 +387,7 @@ public class CustomerServlet extends HttpServlet {
         }
 
         /* check the validity of the id. */
-        if (!isIdValid(id)) {
+        if (isIdNotValid(id)) {
             /* send error - id is not an integer. */
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     MessageFormat.format(
@@ -432,11 +439,11 @@ public class CustomerServlet extends HttpServlet {
     /**
      * Check the id is valid.
      *
-     * @returns true if valid.
+     * @returns true if not valid.
      * otherwise, false.
      */
-    private boolean isIdValid(String id) {
-        return id.matches("^[1-9]$|^[1-9]\\d+$");
+    private boolean isIdNotValid(String id) {
+        return !id.matches("^[1-9]$|^[1-9]\\d+$");
     }
 
     /**
@@ -515,9 +522,9 @@ public class CustomerServlet extends HttpServlet {
         try {
             try (Connection connection = basicDataSource.getConnection()) {
 
-                String query = "SELECT t.{0} FROM {1} t WHERE t.{2}=?";
+                String queryTemp = "SELECT t.{0} FROM {1} t WHERE t.{2}=?";
 
-                query = MessageFormat.format(query,
+                String query = MessageFormat.format(queryTemp,
                         databaseTableColumnName, databaseTableName, databaseTableColumnName);
 
                 PreparedStatement preparedStatement =
@@ -526,9 +533,8 @@ public class CustomerServlet extends HttpServlet {
                 preparedStatement.setString(Number.ONE, inputValue);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                while (resultSet.next()) {
+                if (resultSet.next()) {
                     result = true;
-                    break;
                 }
             }
         } catch (SQLException sqlException) {
@@ -544,7 +550,7 @@ public class CustomerServlet extends HttpServlet {
     /**
      * validate the given input.
      *
-     * @returns true: if valid,
+     * @return true: if valid,
      * otherwise, false.
      */
     private boolean isNationalityValid(String nationality) {
