@@ -16,7 +16,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,13 +35,8 @@ public class EmployeeServlet extends HttpServlet {
     Jsonb jsonb = JsonbBuilder.create();
 
     @Override
-    protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-    }
-
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
         /* get id param from the query string. */
         String id = request.getParameter(Commons.ID);
@@ -53,7 +47,7 @@ public class EmployeeServlet extends HttpServlet {
             /* Error: employee id should be an integer. */
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     MessageFormat.format(ValidationMessages.INVALID_ID,
-                            Employee.class.getSimpleName()));
+                            Commons.EMPLOYEE));
             return;
         }
 
@@ -122,10 +116,21 @@ public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
+
+        /* check the request content type.
+         * content type should be application/json. otherwise send bad request. */
+        if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
+            String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
+                    MimeTypes.Application.JSON);
+            logger.info(errorMessage);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            return;
+        }
 
         /* get the print-writer. */
         PrintWriter out = response.getWriter();
+
 
         try {
             /* read the request body. */
@@ -190,7 +195,7 @@ public class EmployeeServlet extends HttpServlet {
                         out.println(jsonb.toJson(generatedId));
                         logger.info(MessageFormat.format(
                                 SuccessfulMessages.CREATED_RECORD_SUCCESSFUL,
-                                Employee.class.getSimpleName(), generatedId));
+                                Commons.EMPLOYEE, generatedId));
                     } else {
                         /* insertion failed. */
                         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -230,19 +235,29 @@ public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
+
+        /* check the request content type.
+         * content type should be application/json. otherwise send bad request. */
+        if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
+            String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
+                    MimeTypes.Application.JSON);
+            logger.info(errorMessage);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            return;
+        }
 
         try {
             /* read the request body. */
             Employee employee = jsonb.fromJson(request.getReader(), Employee.class);
 
             /* Client should specify the id in the request body only.*/
-            if (!isIdValid(Integer.toString(employee.getId()))) {
+            if (isIdNotValid(Integer.toString(employee.getId()))) {
                 /* send error - id is not an integer. */
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         MessageFormat.format(
                                 ValidationMessages.INVALID_ID,
-                                Employee.class.getSimpleName()
+                                Commons.EMPLOYEE
                         ));
 
                 return;
@@ -304,7 +319,6 @@ public class EmployeeServlet extends HttpServlet {
 
             }
 
-
         } catch (JsonbException jsonbException) {
             /* cannot parse the request header to an employee object. */
             jsonbException.printStackTrace();
@@ -324,7 +338,7 @@ public class EmployeeServlet extends HttpServlet {
                     ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (Exception exception) {
             /* something went wrong. */
@@ -337,7 +351,7 @@ public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
         String id = request.getParameter(Commons.ID);
         if (id == null) {
@@ -347,17 +361,17 @@ public class EmployeeServlet extends HttpServlet {
                             ValidationMessages.ID_IS_REQUIRED +
                                     Commons.EMPTY_SPACE +
                                     ValidationMessages.INTEGERS_ARE_ONLY_ACCEPTED_EXCEPT_ZERO,
-                            Employee.class.getSimpleName()
+                            Commons.EMPLOYEE
                     ));
             return;
         }
 
-        if (!isIdValid(id)) {
+        if (!isIdNotValid(id)) {
             /* send error - id is not an integer. */
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     MessageFormat.format(
                             ValidationMessages.INVALID_ID,
-                            Employee.class.getSimpleName()
+                            Commons.EMPLOYEE
                     ));
 
             return;
@@ -380,7 +394,7 @@ public class EmployeeServlet extends HttpServlet {
                     /* not found matching record to delete. */
                     logger.info(MessageFormat.format(
                             ValidationMessages.RECORD_IS_NOT_FOUND,
-                            Employee.class.getSimpleName(),
+                            Commons.EMPLOYEE,
                             id,
                             ValidationMessages.TO_DELETE
                     ));
@@ -404,11 +418,11 @@ public class EmployeeServlet extends HttpServlet {
     /**
      * Check the id is valid.
      *
-     * @returns true if valid.
+     * @returns true if not valid.
      * otherwise, false.
      */
-    private boolean isIdValid(String id) {
-        return id.matches("^[1-9]$|^[1-9]\\d+$");
+    private boolean isIdNotValid(String id) {
+        return !id.matches("^[1-9]$|^[1-9]\\d+$");
     }
 
     /**
