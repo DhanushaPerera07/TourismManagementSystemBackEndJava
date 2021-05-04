@@ -53,6 +53,7 @@ public final class Commons {
 
 
     public static final String ID = "id";
+    public static final String CUSTOMER_ID = "customerId";
 
 
     /* names of the entities. */

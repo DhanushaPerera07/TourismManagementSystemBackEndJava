@@ -20,27 +20,18 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
- * @author : Dhanusha Perera
- * @date : 28/04/2021
  */
 /**
  * @author : Dhanusha Perera
- * @date : 28/04/2021
+ * @date : 04/05/2021
  */
 package com.elephasvacation.tms.web.commonConstant;
 
-public final class EntityFields {
+public final class QueryParameters {
 
     public static final String ID = "id";
 
-    public static final String EMAIL = "Email";
-    public static final String NIC = "NIC (National Identity Card Number)";
-    public static final String CONTACT_NO = "Contact Number";
-
-    public static final String PASSPORT_NO = "Passport No";
-    public static final String NATIONALITY = "Nationality";
-    public static final String COUNTRY_CALLING_CODE = "Country Calling Code";
-    public static final String COUNTRY = "Country";
-
+    public static final class TourDetail{
+        public static final String CUSTOMER_ID = "customerId";
+    }
 }
