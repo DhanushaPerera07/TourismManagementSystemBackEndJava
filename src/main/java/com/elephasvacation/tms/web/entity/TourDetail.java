@@ -20,6 +20,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -45,12 +50,13 @@ public class TourDetail {
     private String tourAgent;
     private BigDecimal agentProfit;
     private int customerId;
+    private Date created;
+    private Date lastUpdated;
 
     /* no args constructor. */
     public TourDetail() {
     }
 
-    /* full args constructor. */
     public TourDetail(int id,
                       int noOfDays,
                       int noOfPeople,
@@ -75,6 +81,37 @@ public class TourDetail {
         this.tourAgent = tourAgent;
         this.agentProfit = agentProfit;
         this.customerId = customerId;
+    }
+
+    /* full args constructor. */
+    public TourDetail(int id,
+                      int noOfDays,
+                      int noOfPeople,
+                      int noOfChildren,
+                      int starCategory,
+                      Date arrivalDate,
+                      Date departureDate,
+                      TourDetailStatusTypes status,
+                      BigDecimal exchangeRate,
+                      String tourAgent,
+                      BigDecimal agentProfit,
+                      int customerId,
+                      Date created,
+                      Date lastUpdated) {
+        this.id = id;
+        this.noOfDays = noOfDays;
+        this.noOfPeople = noOfPeople;
+        this.noOfChildren = noOfChildren;
+        this.starCategory = starCategory;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
+        this.status = status;
+        this.exchangeRate = exchangeRate;
+        this.tourAgent = tourAgent;
+        this.agentProfit = agentProfit;
+        this.customerId = customerId;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
     }
 
     /* getters and setters. */
@@ -174,6 +211,22 @@ public class TourDetail {
         this.customerId = customerId;
     }
 
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
     @Override
     public String toString() {
         return "TourDetail{" +
@@ -189,6 +242,8 @@ public class TourDetail {
                 ", tourAgent='" + tourAgent + '\'' +
                 ", agentProfit=" + agentProfit +
                 ", customerId=" + customerId +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
                 '}';
     }
 }
