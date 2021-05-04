@@ -22,21 +22,23 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
- * @date : 28/04/2021
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
- * @date : 28/04/2021
+ * @date : 03/05/2021
  */
 package com.elephasvacation.tms.web.commonConstant;
 
-public final class EntityFields {
-    public static final String EMAIL = "Email";
-    public static final String NIC = "NIC (National Identity Card Number)";
-    public static final String CONTACT_NO = "Contact Number";
+public final class DatabaseColumnNames {
 
-    public static final String PASSPORT_NO = "Passport No";
-    public static final String NATIONALITY = "Nationality";
-    public static final String COUNTRY_CALLING_CODE = "Country Calling Code";
-    public static final String COUNTRY = "Country";
+    public static final String EMAIL = "email";
+
+    public static final class Employee{
+        public static final String EMAIL = "email";
+    }
+
+    public static final class Customer{
+        public static final String COUNTRY_CALLING_CODE = "country_calling_code";
+    }
 }

@@ -452,13 +452,10 @@ public class EmployeeServlet extends HttpServlet {
 
         String errors = Commons.EMPTY_STRING;
 
-        boolean isValidEmail = EmailValidator
-                .getInstance().isValid(employee.getEmail());
-
         if (!isEmailValid(employee.getEmail())) {
             String emailInvalidMessage = MessageFormat.format(
                     ValidationMessages.INVALID_DATA_INPUT_CUSTOMIZED,
-                    ModelFields.EMAIL);
+                    EntityFields.EMAIL);
 
             errors += emailInvalidMessage;
         }
@@ -466,7 +463,7 @@ public class EmployeeServlet extends HttpServlet {
         if (!isNICValid(employee.getNic())) {
             String nicInvalidMessage = MessageFormat.format(
                     ValidationMessages.INVALID_DATA_INPUT_CUSTOMIZED,
-                    ModelFields.NIC);
+                    EntityFields.NIC);
 
             errors += nicInvalidMessage;
         }
@@ -474,7 +471,7 @@ public class EmployeeServlet extends HttpServlet {
         if (!isContactNumberValid(employee.getContact())) {
             String contactNoInvalidMessage = MessageFormat.format(
                     ValidationMessages.INVALID_DATA_INPUT_CUSTOMIZED,
-                    ModelFields.CONTACT_NO);
+                    EntityFields.CONTACT_NO);
 
             errors += contactNoInvalidMessage;
         }

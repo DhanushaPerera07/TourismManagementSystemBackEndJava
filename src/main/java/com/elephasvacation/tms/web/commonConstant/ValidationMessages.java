@@ -47,4 +47,7 @@ public final class ValidationMessages {
     public static final String TO_UPDATE = "to update.";
     public static final String TO_DELETE = "to delete.";
 
+
+    public static final String REQUEST_CONTENT_TYPE_INVALID = "Invalid data input: Request Content Type is invalid. Request Content Type should be: {0} only.";
+
 }
