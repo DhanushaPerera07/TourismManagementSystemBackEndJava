@@ -90,6 +90,8 @@ public class EmployeeServlet extends HttpServlet {
                     employee.setPosition(resultSet.getString(Number.NINE));
                     employee.setStatus(resultSet.getString(Number.TEN));
                     employee.setPassword(resultSet.getString(Number.ELEVEN));
+                    employee.setCreated(resultSet.getDate(Number.TWELVE));
+                    employee.setLastUpdated(resultSet.getDate(Number.THIRTEEN));
 
                     /* add employee to the arraylist. */
                     employeeList.add(employee);

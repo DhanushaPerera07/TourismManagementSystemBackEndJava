@@ -46,4 +46,5 @@ public final class Number {
     public static final int TEN = 10;
     public static final int ELEVEN = 11;
     public static final int TWELVE = 12;
+    public static final int THIRTEEN = 13;
 }
