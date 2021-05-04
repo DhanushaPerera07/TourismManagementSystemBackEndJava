@@ -254,6 +254,113 @@ public class CustomerServlet extends HttpServlet {
 
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+            /* read the request body. */
+            Customer customer = jsonb.fromJson(request.getReader(), Customer.class);
+
+            /* Client should specify the id in the request body only.*/
+            if (!isIdValid(Integer.toString(customer.getId()))) {
+                /* send error - id is not an integer. */
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        MessageFormat.format(
+                                ValidationMessages.INVALID_ID,
+                                Commons.CUSTOMER
+                        ));
+
+                return;
+            }
+
+            /* validate user input. */
+            String errors = validateUserInput(customer);
+            if (errors != null) {
+                /* there are errors. */
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, errors);
+                return;
+            }
+
+            /* perform update operation */
+            /* get reference of the basic datasource from the servlet context. */
+            BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+            try (Connection connection = basicDataSource.getConnection()) {
+                /* check whether there is a matching record. */
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("SELECT c.id FROM customer c WHERE c.id=?");
+
+                /* set parameters of the query. */
+                preparedStatement.setInt(Number.ONE, customer.getId());
+
+                /* check whether there is a matching record for the given id. */
+                if (preparedStatement.executeQuery().next()) {
+                    /* record is available for the given id.
+                     * then, perform update. */
+                    preparedStatement =
+                            connection.prepareStatement("UPDATE customer c " +
+                                    "SET c.name=?, c.nationality=?, c.passport_no=?, c.email=?, " +
+                                    "c.country_calling_code=?,c.country=?, c.description=?, c.additional_notes=? " +
+                                    "WHERE c.id=?");
+
+                    /* setting input to the update query. */
+                    preparedStatement.setString(Number.ONE, customer.getName());
+                    preparedStatement.setString(Number.TWO, customer.getNationality());
+                    preparedStatement.setString(Number.THREE, customer.getPassportNo());
+                    preparedStatement.setString(Number.FOUR, customer.getEmail());
+                    preparedStatement.setString(Number.FIVE, customer.getCountryCallingCode());
+                    preparedStatement.setString(Number.SIX, customer.getCountry());
+                    preparedStatement.setString(Number.SEVEN, customer.getDescription());
+                    preparedStatement.setString(Number.EIGHT, customer.getAdditionalNotes());
+                    preparedStatement.setInt(Number.NINE, customer.getId());
+
+                    if (preparedStatement.executeUpdate() > 0) {
+                        /* update successful. */
+                        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                    } else {
+                        /* update not succeed. */
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    }
+
+                } else {
+                    /* no record found for that given id. */
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+
+            }
+
+        } catch (JsonbException jsonbException) {
+            /* cannot parse the request header to an employee object. */
+            jsonbException.printStackTrace();
+            logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (IOException ioException) {
+            /* inputStream error when reading the request object. */
+            ioException.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+            /* duplicate key found (integrity constraint violation). */
+            logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                            ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                    sqlIntegrityConstraintViolationException);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (Exception exception) {
+            /* something went wrong. */
+            exception.printStackTrace();
+            logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
+
+    }
+
     /**
      * Check the id is valid.
      *
