@@ -43,12 +43,14 @@ public class Employee {
     private String position;
     private String status; // ACTIVE', 'FORMER EMPLOYEE', 'RESIGNED'
     private String password;
+    private Date created;
+    private Date lastUpdated;
 
     /* no args constructor */
     public Employee() {
     }
 
-    /* full args constructor */
+    /* custom constructor - without created, lastUpdated. */
     public Employee(int id,
                     String name,
                     String address,
@@ -71,6 +73,35 @@ public class Employee {
         this.position = position;
         this.status = status;
         this.password = password;
+    }
+
+    /* full args constructor. */
+    public Employee(int id,
+                    String name,
+                    String address,
+                    Date dateOfBirth,
+                    String nic,
+                    String contact,
+                    String email,
+                    GenderTypes gender,
+                    String position,
+                    String status,
+                    String password,
+                    Date created,
+                    Date lastUpdated) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.nic = nic;
+        this.contact = contact;
+        this.email = email;
+        this.gender = gender;
+        this.position = position;
+        this.status = status;
+        this.password = password;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
     }
 
     public int getId() {
@@ -161,6 +192,22 @@ public class Employee {
         this.password = password;
     }
 
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -175,6 +222,8 @@ public class Employee {
                 ", position='" + position + '\'' +
                 ", status='" + status + '\'' +
                 ", password='" + password + '\'' +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
                 '}';
     }
 }
