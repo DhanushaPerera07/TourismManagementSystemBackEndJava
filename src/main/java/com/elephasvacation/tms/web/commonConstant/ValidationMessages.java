@@ -25,6 +25,8 @@
  * @date : 27/04/2021
  * @author : Dhanusha Perera
  * @date : 27/04/2021
+ * @author : Dhanusha Perera
+ * @date : 27/04/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -52,4 +54,9 @@ public final class ValidationMessages {
 
     public static final String REQUEST_CONTENT_TYPE_INVALID = "Invalid Content Type: Request Content Type is invalid. Request Content Type should be: {0} only.";
 
+    public static final String ID_AND_FOREIGN_KEY_ID_BOTH_NOT_ALLOWED = "Invalid input: Both {0} id and {1} id are not allowed. Only one of them is allowed.";
+
+    public static final String DATES_NOT_ACCEPTABLE = "Invalid input: No of days, arrival date and departure date not acceptable (Departure date - Arrival date difference should be at least a day).\n";
+
+    public static final String RECORD_NOT_FOUND_FOR_THE_ID = "Invalid input: No matching {0} record found for the given {0} id.\n";
 }

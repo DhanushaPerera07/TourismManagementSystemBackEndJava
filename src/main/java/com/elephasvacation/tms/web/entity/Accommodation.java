@@ -23,6 +23,10 @@
  *
  * @author : Dhanusha Perera
  * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -30,13 +34,13 @@
  */
 package com.elephasvacation.tms.web.entity;
 
-import java.io.Serializable;
+import java.sql.Date;
 
-public class Accommodation implements Serializable {
+public class Accommodation implements SuperEntity {
     private int id;
     private String name;
     private String situatedIn;
-    private String starRating;
+    private int starRating;
     private String type;
     private String contact;
     private String email;
@@ -44,16 +48,17 @@ public class Accommodation implements Serializable {
     private String website;
     private String specialDetails;
     private String remark;
+    private Date created;
+    private Date lastUpdated;
 
     /* no args constructor. */
     public Accommodation() {
     }
 
-    /* full args constructor. */
     public Accommodation(int id,
                          String name,
                          String situatedIn,
-                         String starRating,
+                         int starRating,
                          String type,
                          String contact,
                          String email,
@@ -72,6 +77,23 @@ public class Accommodation implements Serializable {
         this.website = website;
         this.specialDetails = specialDetails;
         this.remark = remark;
+    }
+
+    /* full args constructor. */
+    public Accommodation(int id, String name, String situatedIn, int starRating, String type, String contact, String email, String address, String website, String specialDetails, String remark, Date created, Date lastUpdated) {
+        this.id = id;
+        this.name = name;
+        this.situatedIn = situatedIn;
+        this.starRating = starRating;
+        this.type = type;
+        this.contact = contact;
+        this.email = email;
+        this.address = address;
+        this.website = website;
+        this.specialDetails = specialDetails;
+        this.remark = remark;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
     }
 
     /* getters and setters. */
@@ -99,11 +121,11 @@ public class Accommodation implements Serializable {
         this.situatedIn = situatedIn;
     }
 
-    public String getStarRating() {
+    public int getStarRating() {
         return starRating;
     }
 
-    public void setStarRating(String starRating) {
+    public void setStarRating(int starRating) {
         this.starRating = starRating;
     }
 
@@ -163,13 +185,29 @@ public class Accommodation implements Serializable {
         this.remark = remark;
     }
 
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
     @Override
     public String toString() {
         return "Accommodation{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", situatedIn='" + situatedIn + '\'' +
-                ", starRating='" + starRating + '\'' +
+                ", starRating=" + starRating +
                 ", type='" + type + '\'' +
                 ", contact='" + contact + '\'' +
                 ", email='" + email + '\'' +
@@ -177,6 +215,8 @@ public class Accommodation implements Serializable {
                 ", website='" + website + '\'' +
                 ", specialDetails='" + specialDetails + '\'' +
                 ", remark='" + remark + '\'' +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
                 '}';
     }
 }

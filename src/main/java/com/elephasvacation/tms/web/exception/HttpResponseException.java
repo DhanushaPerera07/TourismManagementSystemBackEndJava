@@ -22,19 +22,27 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 03/07/2021
  */
 /**
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 03/07/2021
  */
-package com.elephasvacation.tms.web.entity.enumeration;
+package com.elephasvacation.tms.web.exception;
 
-public enum TourDetailStatusTypes {
-    CANCELED,
-    POTENTIAL,
-    DEPRECATED,
-    CONFIRMED,
-    ARRANGED,
-    COMPLETED
+public class HttpResponseException extends RuntimeException{
+    private int statusCode;
+
+    public HttpResponseException(int statusCode, String message, Throwable cause) {
+        super(message, cause);
+        this.setStatusCode(statusCode);
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
 }

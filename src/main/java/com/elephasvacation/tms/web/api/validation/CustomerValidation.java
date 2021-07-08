@@ -1,4 +1,4 @@
-/**
+/*
  * MIT License
  * <p>
  * Copyright (c) 2021 Dhanusha Perera
@@ -22,19 +22,27 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 03/07/2021
  */
-/**
+/*
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 03/07/2021
  */
-package com.elephasvacation.tms.web.entity.enumeration;
+package com.elephasvacation.tms.web.api.validation;
 
-public enum TourDetailStatusTypes {
-    CANCELED,
-    POTENTIAL,
-    DEPRECATED,
-    CONFIRMED,
-    ARRANGED,
-    COMPLETED
+import com.elephasvacation.tms.web.dto.CustomerDTO;
+
+public class CustomerValidation implements Validation{
+
+    CustomerDTO customerDTO;
+
+    public CustomerValidation(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
+    }
+
+    @Override
+    public boolean validate() {
+        /* TODO: customerDTO validation logic */
+        return false;
+    }
 }

@@ -22,19 +22,36 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 03/07/2021
+ * @author : Dhanusha Perera
+ * @date : 03/07/2021
+ * @author : Dhanusha Perera
+ * @date : 03/07/2021
+ * @author : Dhanusha Perera
+ * @date : 03/07/2021
+ * @author : Dhanusha Perera
+ * @date : 03/07/2021
  */
 /**
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 03/07/2021
  */
-package com.elephasvacation.tms.web.entity.enumeration;
+package com.elephasvacation.tms.web.api.customer.customerAPI;
 
-public enum TourDetailStatusTypes {
-    CANCELED,
-    POTENTIAL,
-    DEPRECATED,
-    CONFIRMED,
-    ARRANGED,
-    COMPLETED
+import com.elephasvacation.tms.web.api.SuperAPI;
+import com.elephasvacation.tms.web.dto.CustomerDTO;
+
+import java.util.List;
+
+public interface CustomerAPI extends SuperAPI {
+
+    Integer createCustomer(CustomerDTO customerDTO) throws Exception;
+
+    boolean updateCustomer(CustomerDTO customerDTO) throws Exception;
+
+    boolean deleteCustomer(int customerID) throws Exception;
+
+    CustomerDTO getCustomerByID(int customerID) throws Exception;
+
+    List<CustomerDTO> getAllCustomers() throws Exception;
 }

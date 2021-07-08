@@ -43,4 +43,17 @@ public final class EntityFields {
     public static final String COUNTRY_CALLING_CODE = "Country Calling Code";
     public static final String COUNTRY = "Country";
 
+    /* tour detail class */
+    public static final String NO_OF_DAYS = "No of days";
+    public static final String NO_OF_PEOPLE = "No of people";
+    public static final String NO_OF_CHILDREN = "No of children";
+    public static final String STAR_CATEGORY = "Star Category";
+    public static final String ARRIVAL_DATE = "Arrival Date";
+    public static final String DEPARTURE_DATE = "Departure Date";
+    public static final String STATUS = "Status";
+    public static final String EXCHANGE_RATE = "Exchange Rate";
+    public static final String TOUR_AGENT = "Tour Agent";
+    public static final String TOUR_AGENT_PROFIT = "Tour Agent Profit";
+    public static final String CUSTOMER_ID = "Customer ID";
+
 }

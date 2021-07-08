@@ -65,6 +65,7 @@ public final class Commons {
 
 
     public static final String NO_RECORDS_FOUND = "No {0} records found!";
+    public static final String NO_MATCHING_RECORDS_FOUND = "No {0} matching record(s) found!";
 
 
 

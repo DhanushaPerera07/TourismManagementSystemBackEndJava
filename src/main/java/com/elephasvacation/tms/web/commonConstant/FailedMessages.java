@@ -44,4 +44,6 @@ public final class FailedMessages {
 
     public static final String ERROR_WHEN_FINDING_VALUE = "Error when finding {0}. user-input: {1}";
 
+    public static final String CANNOT_GET_TO_BE_CONVERT_TO_AN_INTEGER = "FAILED: Input cannot get to be convert to an integer.";
+
 }

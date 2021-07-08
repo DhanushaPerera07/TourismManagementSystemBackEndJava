@@ -33,6 +33,7 @@ package com.elephasvacation.tms.web.commonConstant;
 public final class Number {
 
     /* numbers */
+    public static final int MINUS_ONE = -1;
     public static final int ZERO = 0;
     public static final int ONE = 1;
     public static final int TWO = 2;
@@ -47,4 +48,5 @@ public final class Number {
     public static final int ELEVEN = 11;
     public static final int TWELVE = 12;
     public static final int THIRTEEN = 13;
+    public static final int FOURTEEN = 14;
 }

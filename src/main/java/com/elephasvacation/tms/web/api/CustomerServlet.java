@@ -4,9 +4,17 @@
 */
 package com.elephasvacation.tms.web.api;
 
+import com.elephasvacation.tms.web.api.customer.customerAPI.CustomerAPI;
+import com.elephasvacation.tms.web.api.customer.tourDetailsAPI.TourDetailsAPI;
+import com.elephasvacation.tms.web.api.util.IDUtil;
 import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.commonConstant.*;
+import com.elephasvacation.tms.web.dto.CreatedOutputDTO;
+import com.elephasvacation.tms.web.dto.CustomerDTO;
+import com.elephasvacation.tms.web.dto.TourDetailsDTO;
 import com.elephasvacation.tms.web.entity.Customer;
+import com.elephasvacation.tms.web.exception.HttpResponseException;
+import com.elephasvacation.tms.web.exception.ResponseExceptionUtil;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
@@ -23,10 +31,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "CustomerServlet", urlPatterns = "/api/v1/customers")
+@WebServlet(name = "CustomerServlet", urlPatterns = "/api/v1/customers/*")
 public class CustomerServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerServlet.class);
@@ -34,108 +41,167 @@ public class CustomerServlet extends HttpServlet {
     Jsonb jsonb = JsonbBuilder.create();
 
     @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        try {
+            super.service(req, resp);
+        } catch (Throwable t) {
+            ResponseExceptionUtil.handle(t, resp);
+        }
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        /* get id param from the query string. */
-        String id = request.getParameter(Commons.ID);
-
-        /* validation part -
-        if id is not empty that means there is an id and it should be an integer greater than zero. */
-        if (id != null && !(id.matches("^[1-9]+$"))) {
-            /* send the client that it is a bad request. */
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
-            /* Error: id should be an integer. */
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    MessageFormat.format(ValidationMessages.INVALID_ID,
-                            Commons.CUSTOMER));
-            return;
-        }
-
-        /* set respond type. */
-        response.setContentType(MimeTypes.Application.JSON);
-        /* get the print-writer. */
+        int customerID;
+        int tourDetailID;
+        CustomerAPI customerAPI = APIFactory.getInstance().getAPI(APITypes.CUSTOMER);
+        TourDetailsAPI tourDetailAPI = APIFactory.getInstance().getAPI(APITypes.TOUR_DETAIL);
         PrintWriter out = response.getWriter();
+        response.setContentType(MimeTypes.Application.JSON);
 
-        /* get reference of the basic datasource from the servlet context. */
-        BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+//        System.out.println("request.getContextPath() : " + request.getContextPath());
+//        System.out.println("request.getServletPath() : " + request.getServletPath());
+//        System.out.println("request.getQueryString() : " + request.getQueryString());
+//        System.out.println("request.getPathInfo() : " + request.getPathInfo());
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
 
-        /* holds the record(s). */
-        List<Customer> customerList = new ArrayList<>();
-        Customer customer;
-        try {
-            try (Connection connection = basicDataSource.getConnection()) {
-                // get all customers in the database.
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement("SELECT * FROM customer e" +
-                                ((id != null) ? " WHERE e.id=?" : ";"));
-
-                if (id != null) {
-                    preparedStatement.setInt(Number.ONE, Integer.parseInt(id));
-                }
-
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    /* creates a new customer object. */
-                    customer = new Customer();
-
-                    /* set customer details */
-                    customer.setId(resultSet.getInt(Number.ONE));
-                    customer.setName(resultSet.getString(Number.TWO));
-                    customer.setNationality(resultSet.getString(Number.THREE));
-                    customer.setPassportNo(resultSet.getString(Number.FOUR));
-                    customer.setEmail(resultSet.getString(Number.FIVE));
-                    customer.setCountryCallingCode(resultSet.getString(Number.SIX));
-                    customer.setCountry(resultSet.getString(Number.SEVEN));
-                    customer.setDescription(resultSet.getString(Number.EIGHT));
-                    customer.setAdditionalNotes(resultSet.getString(Number.NINE));
-                    customer.setAddedDate(resultSet.getDate(Number.TEN));
-                    customer.setLastUpdated(resultSet.getDate(Number.ELEVEN));
-
-                    /* add customer to the arraylist. */
-                    customerList.add(customer);
-                } // end of the while
-
+        /* get all customers. */
+        if (request.getPathInfo() == null || request.getPathInfo()
+                .replace("/", "")
+                .trim()
+                .isEmpty()) {
+            try {
+                Connection connection = bds.getConnection();
+                customerAPI.setConnection(connection);
+                List<CustomerDTO> allCustomers = customerAPI.getAllCustomers();
+                out.println(jsonb.toJson(allCustomers));
+            } catch (SQLException sqlException) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                sqlException.printStackTrace();
+            } catch (Exception exception) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                exception.printStackTrace();
             }
-
-            if (id != null && customerList.isEmpty()) {
-                /* no records found. */
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                logger.info(MessageFormat.format(
-                        Commons.NO_RECORDS_FOUND,
-                        Commons.CUSTOMER));
-            } else if (id != null && customerList.size() == Number.ONE) {
-                /* if found a record for the given ID, return the result. */
-                out.print(jsonb.toJson(customerList.get(Number.ZERO)));
-                logger.info(MessageFormat.format(
-                        SuccessfulMessages.SEND_LIST_SUCCESSFULLY,
-                        Commons.CUSTOMER,
-                        customerList.size()), customerList.get(Number.ZERO));
-            } else {
-                /* write to the print-writer. */
-                out.println(jsonb.toJson(customerList));
-                logger.info(MessageFormat.format(
-                        SuccessfulMessages.SEND_LIST_SUCCESSFULLY,
-                        Commons.CUSTOMER,
-                        customerList.size()), customerList);
-            }
-        } catch (SQLException sqlException) {
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
-            sqlException.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+
+        /* get customer by customerID. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .replace("/", "")
+                        .matches("^c\\d{3}$")) {
+            String[] splitURIArray = request.getPathInfo().toLowerCase().trim().split("/");
+
+            try {
+                customerID = Integer.parseInt(splitURIArray[Number.ONE].replace("c", ""));
+            } catch (NumberFormatException numberFormatException) {
+                numberFormatException.printStackTrace();
+                throw new HttpResponseException(400, "Invaid Customer ID", numberFormatException);
+            }
+
+            try {
+                Connection connection = bds.getConnection();
+                customerAPI.setConnection(connection);
+                CustomerDTO customerDTO = customerAPI.getCustomerByID(customerID);
+                if (customerDTO == null) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                } else {
+                    out.println(jsonb.toJson(customerDTO));
+                }
+            } catch (SQLException sqlException) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                sqlException.printStackTrace();
+            } catch (Exception exception) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                exception.printStackTrace();
+            }
+
+        }
+
+        /* get all tour details of a customer. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .matches("^/c\\d{3}/tour-details|/c\\d{3}/tour-details/$")) {
+
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
+
+            /* extracting customer ID from URL. */
+            customerID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "c",
+                    "Invalid Customer ID");
+
+            try {
+                Connection connection = bds.getConnection();
+                tourDetailAPI.setConnection(connection);
+                List<TourDetailsDTO> tourDetailsDTOS = tourDetailAPI.getAllTourDetailByCustomerID(customerID);
+                out.println(jsonb.toJson(tourDetailsDTOS));
+            } catch (SQLException sqlException) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                sqlException.printStackTrace();
+            } catch (Exception exception) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                exception.printStackTrace();
+                throw new RuntimeException(exception);
+            }
+
+        }
+
+
+        /* get a tour details(single tour-detail) of a customer. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .matches("^/c\\d{3}/tour-details/td\\d{3}|/C\\d{3}/tour-details/td\\d{3}/$")) {
+
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
+
+            /* extracting customer ID from URL. */
+            customerID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "c",
+                    "Invalid Customer ID");
+
+            /* extracting tour-detail ID from URL. */
+            tourDetailID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.THREE,
+                    "td",
+                    "Invalid TourDetail ID");
+
+            try {
+                Connection connection = bds.getConnection();
+                tourDetailAPI.setConnection(connection);
+                TourDetailsDTO tourDetailsDTO = tourDetailAPI.getTourDetailsByIDAndCustomerID(customerID,
+                        tourDetailID);
+                if (tourDetailsDTO == null) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                } else {
+                    out.println(jsonb.toJson(tourDetailsDTO));
+                }
+            } catch (SQLException sqlException) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                sqlException.printStackTrace();
+            } catch (Exception exception) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                exception.printStackTrace();
+                throw new RuntimeException(exception);
+            }
+        }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-
+        CustomerAPI customerAPI = APIFactory.getInstance().getAPI(APITypes.CUSTOMER);
+        TourDetailsAPI tourDetailAPI = APIFactory.getInstance().getAPI(APITypes.TOUR_DETAIL);
         /* get the print-writer. */
         PrintWriter out = response.getWriter();
 
         /* check the request content type.
          * content type should be application/json. otherwise send bad request. */
-        if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
+        if (request.getContentType() == null || !request.getContentType().equals(MimeTypes.Application.JSON)) {
             String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
                     MimeTypes.Application.JSON);
             logger.info(errorMessage);
@@ -143,109 +209,107 @@ public class CustomerServlet extends HttpServlet {
             return;
         }
 
-        try {
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+        /* CREATE a customer. */
+        if (request.getPathInfo() == null || request.getPathInfo()
+                .replace("/", "")
+                .trim().isEmpty()) {
 
             /* read the request body. */
-            Customer customer = jsonb.fromJson(request.getReader(), Customer.class);
-
-            /* Validation error - customer id should be set to zero or
-             * customer id should not be included to in the request header.
-             * */
-            if (customer.getId() != 0) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        ValidationMessages.INVALID_DATA_INPUT_ID_SHOULD_NOT_BE_INCLUDED);
-                return;
+            CustomerDTO customerDTO = null;
+            try {
+                customerDTO = jsonb.fromJson(request.getReader(), CustomerDTO.class);
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an customer object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-
-            /* validate user input. */
-            String errors = validateUserInput(customer);
-            if (errors != null) {
-                /* there are errors. */
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, errors);
-                return;
-            }
-
-            /* Check whether the email is already taken or not. */
-            if (isValueInUse(Commons.CUSTOMER.toLowerCase(),
-                    DatabaseColumnNames.EMAIL,
-                    customer.getEmail(),
-                    response)) {
-                logger.info(ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
-                return;
-            }
-
-            /* get reference of the basic datasource from the servlet context. */
-            BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
 
             try {
-                try (Connection connection = basicDataSource.getConnection()) {
-
-                    PreparedStatement preparedStatement = connection
-                            .prepareStatement(
-                                    "INSERT INTO customer " +
-                                            "(name, nationality, passport_no, email, country_calling_code,country, " +
-                                            "description, additional_notes) " +
-                                            "VALUES(?,?,?,?,?,?,?,?)",
-                                    Statement.RETURN_GENERATED_KEYS);
-
-                    /* set customer related information with the insert query. */
-                    preparedStatement.setString(Number.ONE, customer.getName());
-                    preparedStatement.setString(Number.TWO, customer.getNationality());
-                    preparedStatement.setString(Number.THREE, customer.getPassportNo());
-                    preparedStatement.setString(Number.FOUR, customer.getEmail());
-                    preparedStatement.setString(Number.FIVE, customer.getCountryCallingCode());
-                    preparedStatement.setString(Number.SIX, customer.getCountry());
-                    preparedStatement.setString(Number.SEVEN, customer.getDescription());
-                    preparedStatement.setString(Number.EIGHT, customer.getAdditionalNotes());
-
-                    preparedStatement.executeUpdate();
-                    ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-
-                    if (generatedKeys.next()) {
-                        /* insertion succeed. */
-                        int generatedId = generatedKeys.getInt(Number.ONE);
-                        response.setStatus(HttpServletResponse.SC_CREATED);
-                        out.println(jsonb.toJson(generatedId));
-                        logger.info(MessageFormat.format(
-                                SuccessfulMessages.CREATED_RECORD_SUCCESSFUL,
-                                Commons.CUSTOMER, generatedId));
-                    } else {
-                        /* insertion failed. */
-                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                        logger.error(FailedMessages.SOMETHING_WENT_WRONG);
-                    }
+                Connection connection = bds.getConnection();
+                customerAPI.setConnection(connection);
+                Integer generatedCustomerID = customerAPI.createCustomer(customerDTO);
+                if (generatedCustomerID != null && generatedCustomerID > 0) {
+                    /* Customer created successfully. */
+                    /* response-content-type. */
+                    response.setContentType(MimeTypes.Application.JSON);
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                    out.println(jsonb.toJson(new CreatedOutputDTO(String.format("C%03d", generatedCustomerID))));
+                } else {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
             } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
                 /* duplicate key found (integrity constraint violation). */
-                logger.error(ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
                         sqlIntegrityConstraintViolationException);
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
             } catch (SQLException sqlException) {
-                /* sql error. */
                 sqlException.printStackTrace();
-                logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+            }
+
+
+        } // end-create-customer
+
+
+        /* create a tour-detail. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .matches("^/c\\d{3}/tour-details|/c\\d{3}/tour-details/$")) {
+
+            /* read the request body. */
+            TourDetailsDTO tourDetailsDTO = null;
+            try {
+                tourDetailsDTO = jsonb.fromJson(request.getReader(), TourDetailsDTO.class);
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an customer object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
 
-        } catch (JsonbException jsonbException) {
-            /* cannot parse the request header to an customer object. */
-            jsonbException.printStackTrace();
-            logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } catch (IOException ioException) {
-            /* inputStream error when reading the request object. */
-            ioException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (Exception exception) {
-            /* something went wrong. */
-            exception.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+            try {
+                Connection connection = bds.getConnection();
+                tourDetailAPI.setConnection(connection);
+                Integer generatedTourDetailID = tourDetailAPI.createTourDetails(tourDetailsDTO);
+                if (generatedTourDetailID != null && generatedTourDetailID > 0) {
+                    /* TourDetail created successfully. */
+                    /* response-content-type. */
+                    response.setContentType(MimeTypes.Application.JSON);
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                    out.println(jsonb.toJson(new CreatedOutputDTO(String.format("TD%03d", generatedTourDetailID))));
+                } else {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+            }
+
+
+        } // end-create-tour-detail
 
 
     }
@@ -254,6 +318,14 @@ public class CustomerServlet extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
+        // variables
+        int customerID;
+        int tourDetailID;
+
+        /* Define APIs. */
+        CustomerAPI customerAPI = APIFactory.getInstance().getAPI(APITypes.CUSTOMER);
+        TourDetailsAPI tourDetailAPI = APIFactory.getInstance().getAPI(APITypes.TOUR_DETAIL);
+
         /* check the request content type.
          * content type should be application/json. otherwise send bad request. */
         if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
@@ -264,106 +336,178 @@ public class CustomerServlet extends HttpServlet {
             return;
         }
 
-        try {
-            /* read the request body. */
-            Customer customer = jsonb.fromJson(request.getReader(), Customer.class);
+        /* get datasource. */
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
 
-            /* Client should specify the id in the request body only.*/
-            if (isIdNotValid(Integer.toString(customer.getId()))) {
-                /* send error - id is not an integer. */
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        MessageFormat.format(
-                                ValidationMessages.INVALID_ID,
-                                Commons.CUSTOMER
-                        ));
+        /* UPDATE a customer. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .replace("/", "")
+                        .matches("^c\\d{3}$")) {
 
-                return;
-            }
 
-            /* validate user input. */
-            String errors = validateUserInput(customer);
-            if (errors != null) {
-                /* there are errors. */
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, errors);
-                return;
-            }
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
 
-            /* perform update operation */
-            /* get reference of the basic datasource from the servlet context. */
-            BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+            /* extracting customer ID from URL. */
+            customerID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "c",
+                    "Invalid Customer ID");
 
-            try (Connection connection = basicDataSource.getConnection()) {
-                /* check whether there is a matching record. */
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("SELECT c.id FROM customer c WHERE c.id=?");
 
-                /* set parameters of the query. */
-                preparedStatement.setInt(Number.ONE, customer.getId());
+            try (Connection connection = bds.getConnection();) {
 
-                /* check whether there is a matching record for the given id. */
-                if (preparedStatement.executeQuery().next()) {
-                    /* record is available for the given id.
-                     * then, perform update. */
-                    preparedStatement =
-                            connection.prepareStatement("UPDATE customer c " +
-                                    "SET c.name=?, c.nationality=?, c.passport_no=?, c.email=?, " +
-                                    "c.country_calling_code=?,c.country=?, c.description=?, c.additional_notes=? " +
-                                    "WHERE c.id=?");
+                /* initialize the connection. */
+                customerAPI.setConnection(connection);
 
-                    /* setting input to the update query. */
-                    preparedStatement.setString(Number.ONE, customer.getName());
-                    preparedStatement.setString(Number.TWO, customer.getNationality());
-                    preparedStatement.setString(Number.THREE, customer.getPassportNo());
-                    preparedStatement.setString(Number.FOUR, customer.getEmail());
-                    preparedStatement.setString(Number.FIVE, customer.getCountryCallingCode());
-                    preparedStatement.setString(Number.SIX, customer.getCountry());
-                    preparedStatement.setString(Number.SEVEN, customer.getDescription());
-                    preparedStatement.setString(Number.EIGHT, customer.getAdditionalNotes());
-                    preparedStatement.setInt(Number.NINE, customer.getId());
-
-                    if (preparedStatement.executeUpdate() > 0) {
-                        /* update successful. */
-                        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                    } else {
-                        /* update not succeed. */
-                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    }
-
-                } else {
-                    /* no record found for that given id. */
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                /* check matching record in DB. */
+                if (customerAPI.getCustomerByID(customerID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.CUSTOMER),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
                 }
 
+                /* read the request body. */
+                CustomerDTO customerDTO = jsonb.fromJson(request.getReader(), CustomerDTO.class);
+                customerDTO.setId(customerID);
+
+                if (customerAPI.updateCustomer(customerDTO)) {
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an customer object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+                /* duplicate key found (integrity constraint violation). */
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                        sqlIntegrityConstraintViolationException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                /* something went wrong. */
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
-        } catch (JsonbException jsonbException) {
-            /* cannot parse the request header to an customer object. */
-            jsonbException.printStackTrace();
-            logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } catch (IOException ioException) {
-            /* inputStream error when reading the request object. */
-            ioException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
-            /* duplicate key found (integrity constraint violation). */
-            logger.error(sqlIntegrityConstraintViolationException.getMessage() +
-                            ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
-                    sqlIntegrityConstraintViolationException);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (Exception exception) {
-            /* something went wrong. */
-            exception.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+        } // end-update-customer
 
+
+
+        /* UPDATE a tour-detail. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .matches("^/c\\d{3}/tour-details/td\\d{3}|/C\\d{3}/tour-details/td\\d{3}/$")) {
+
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
+
+            /* extracting customer ID from URL. */
+            customerID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "c",
+                    "Invalid Customer ID");
+
+            /* extracting tour-detail ID from URL. */
+            tourDetailID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.THREE,
+                    "td",
+                    "Invalid TourDetail ID");
+
+
+            try (Connection connection = bds.getConnection();) {
+
+                /* initialize the connection. */
+                customerAPI.setConnection(connection);
+                tourDetailAPI.setConnection(connection);
+
+                /* check matching record in DB. */
+                if (customerAPI.getCustomerByID(customerID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.CUSTOMER),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
+                }
+
+                /* check matching record in DB. */
+                if (tourDetailAPI.getTourDetailsByIDAndCustomerID(customerID, tourDetailID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.TOUR_DETAIL),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
+                }
+
+
+                /* read the request body. */
+                TourDetailsDTO tourDetailsDTO = jsonb.fromJson(request.getReader(), TourDetailsDTO.class);
+                tourDetailsDTO.setId(tourDetailID); // set tourDetailID
+                tourDetailsDTO.setCustomerId(customerID); // set customerID
+
+                /* TODO: validate TourDetailsDTO. */
+
+                if (tourDetailAPI.updateTourDetails(tourDetailsDTO)) {
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an customer object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+                /* duplicate key found (integrity constraint violation). */
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                        sqlIntegrityConstraintViolationException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                /* something went wrong. */
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
+        } // end-update-tour-detail
 
     }
 
@@ -371,75 +515,142 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        String id = request.getParameter(Commons.ID);
 
-        /* id should not be null. */
-        if (id == null) {
-            /* send error - id is required. */
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    MessageFormat.format(
-                            ValidationMessages.ID_IS_REQUIRED +
-                                    Commons.EMPTY_SPACE +
-                                    ValidationMessages.INTEGERS_ARE_ONLY_ACCEPTED_EXCEPT_ZERO,
-                            Commons.CUSTOMER
-                    ));
-            return;
-        }
+        // variables
+        int customerID;
+        int tourDetailID;
 
-        /* check the validity of the id. */
-        if (isIdNotValid(id)) {
-            /* send error - id is not an integer. */
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    MessageFormat.format(
-                            ValidationMessages.INVALID_ID,
-                            Commons.CUSTOMER
-                    ));
+        /* Define APIs. */
+        CustomerAPI customerAPI = APIFactory.getInstance().getAPI(APITypes.CUSTOMER);
+        TourDetailsAPI tourDetailAPI = APIFactory.getInstance().getAPI(APITypes.TOUR_DETAIL);
 
-            return;
-        }
+        /* get datasource. */
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
 
-        /* get reference of the basic datasource from the servlet context. */
-        BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+        /* DELETE a customer. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .replace("/", "")
+                        .matches("^c\\d{3}$")) {
 
-        try {
-            try (Connection connection = basicDataSource.getConnection()) {
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
 
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("DELETE FROM customer c WHERE c.id=?");
-                preparedStatement.setInt(Number.ONE, Integer.parseInt(id));
+            /* extracting customer ID from URL. */
+            customerID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "c",
+                    "Invalid Customer ID");
 
-                if (preparedStatement.executeUpdate() > 0) {
-                    /* deleted successfully. */
+            try (Connection connection = bds.getConnection();) {
+                /* initialize the connection. */
+                customerAPI.setConnection(connection);
+
+                /* check matching record in DB. */
+                if (customerAPI.getCustomerByID(customerID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.CUSTOMER),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
+                }
+
+
+                if (customerAPI.deleteCustomer(customerID)) {
                     response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 } else {
-                    /* not found matching record to delete. */
-                    logger.info(MessageFormat.format(
-                            ValidationMessages.RECORD_IS_NOT_FOUND,
-                            Commons.CUSTOMER,
-                            id,
-                            ValidationMessages.TO_DELETE
-                    ));
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
+
+            } catch (SQLException sqlException) {
+                /* sql error. */
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
 
-        } catch (SQLException sqlException) {
-            /* sql error. */
-            sqlException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (NumberFormatException numberFormatException) {
-            numberFormatException.printStackTrace();
-            logger.error(FailedMessages.FAILED_PARSING_TO_INTEGER, numberFormatException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+        } // end-delete-customer
+
+        /* DELETE a tour-detail. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .matches("^/c\\d{3}/tour-details/td\\d{3}|/C\\d{3}/tour-details/td\\d{3}/$")) {
+
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
+
+            /* extracting customer ID from URL. */
+            customerID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "c",
+                    "Invalid Customer ID");
+
+            /* extracting tour-detail ID from URL. */
+            tourDetailID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.THREE,
+                    "td",
+                    "Invalid TourDetail ID");
+
+            try (Connection connection = bds.getConnection();) {
+                /* initialize the connection. */
+                customerAPI.setConnection(connection);
+                tourDetailAPI.setConnection(connection);
+
+                /* check matching record in DB. */
+                if (customerAPI.getCustomerByID(customerID) == null) {
+                    /* no matching record found. */
+                    throw new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.CUSTOMER),
+                            null);
+                }
+
+
+                /* check matching record in DB. */
+                if (tourDetailAPI.getTourDetailsByIDAndCustomerID(customerID, tourDetailID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.TOUR_DETAIL),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
+                }
+
+
+                if (tourDetailAPI.deleteTourDetails(tourDetailID)) {
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+
+            } catch (SQLException sqlException) {
+                /* sql error. */
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                exception.printStackTrace();
+            }
+
         }
 
     }
 
+
     /**
      * Check the id is valid.
      *
-     * @returns true if not valid.
+     * @return true if not valid.
      * otherwise, false.
      */
     private boolean isIdNotValid(String id) {
@@ -449,7 +660,7 @@ public class CustomerServlet extends HttpServlet {
     /**
      * check the user input are valid.
      *
-     * @returns true if valid,
+     * @return true if valid,
      * otherwise false.
      */
     private String validateUserInput(Customer customer) {
@@ -560,7 +771,7 @@ public class CustomerServlet extends HttpServlet {
     /**
      * validate the given input.
      *
-     * @returns true: if valid,
+     * @return true: if valid,
      * otherwise, false.
      */
     private boolean isPassportNoValid(String passportNo) {
@@ -570,7 +781,7 @@ public class CustomerServlet extends HttpServlet {
     /**
      * validate the given input.
      *
-     * @returns true: if valid,
+     * @return true: if valid,
      * otherwise, false.
      */
     private boolean isEmailValid(String email) {
@@ -583,7 +794,7 @@ public class CustomerServlet extends HttpServlet {
      * starting with plus character,
      * and two or three digit should be there to a valid input.
      *
-     * @returns true: if valid (ex: +94 OR +205),
+     * @return true: if valid (ex: +94 OR +205),
      * otherwise, false.
      */
     private boolean isCountryCallingCodeValid(String countryCallingCode) {
@@ -593,7 +804,7 @@ public class CustomerServlet extends HttpServlet {
     /**
      * validate the given input.
      *
-     * @returns true: if valid,
+     * @return true: if valid,
      * otherwise, false.
      */
     private boolean isCountryValid(String passportNo) {

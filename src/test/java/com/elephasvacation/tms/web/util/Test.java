@@ -22,19 +22,30 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 04/05/2021
+ * @author : Dhanusha Perera
+ * @date : 04/05/2021
+ * @author : Dhanusha Perera
+ * @date : 04/05/2021
+ * @author : Dhanusha Perera
+ * @date : 04/05/2021
+ * @author : Dhanusha Perera
+ * @date : 04/05/2021
  */
 /**
  * @author : Dhanusha Perera
- * @date : 03/05/2021
+ * @date : 04/05/2021
  */
-package com.elephasvacation.tms.web.entity.enumeration;
+package com.elephasvacation.tms.web.util;
 
-public enum TourDetailStatusTypes {
-    CANCELED,
-    POTENTIAL,
-    DEPRECATED,
-    CONFIRMED,
-    ARRANGED,
-    COMPLETED
+import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+
+public class Test {
+    public static void main(String[] args) throws ParseException {
+
+        System.out.println(BigDecimal.ZERO);
+    }
 }

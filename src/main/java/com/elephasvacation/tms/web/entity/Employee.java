@@ -31,7 +31,7 @@ import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 
 import java.sql.Date;
 
-public class Employee {
+public class Employee implements SuperEntity{
     private int id;
     private String name;
     private String address;
