@@ -70,8 +70,7 @@ public class CustomerServlet extends HttpServlet {
                 .replace("/", "")
                 .trim()
                 .isEmpty()) {
-            try {
-                Connection connection = bds.getConnection();
+            try (Connection connection = bds.getConnection();) {
                 customerAPI.setConnection(connection);
                 List<CustomerDTO> allCustomers = customerAPI.getAllCustomers();
                 out.println(jsonb.toJson(allCustomers));
@@ -90,17 +89,17 @@ public class CustomerServlet extends HttpServlet {
                         .toLowerCase()
                         .replace("/", "")
                         .matches("^c\\d{3}$")) {
-            String[] splitURIArray = request.getPathInfo().toLowerCase().trim().split("/");
 
-            try {
-                customerID = Integer.parseInt(splitURIArray[Number.ONE].replace("c", ""));
-            } catch (NumberFormatException numberFormatException) {
-                numberFormatException.printStackTrace();
-                throw new HttpResponseException(400, "Invaid Customer ID", numberFormatException);
-            }
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
 
-            try {
-                Connection connection = bds.getConnection();
+            /* extracting customer ID from URL. */
+            customerID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "c",
+                    "Invalid Customer ID");
+
+            try (Connection connection = bds.getConnection();) {
+
                 customerAPI.setConnection(connection);
                 CustomerDTO customerDTO = customerAPI.getCustomerByID(customerID);
                 if (customerDTO == null) {
@@ -132,8 +131,7 @@ public class CustomerServlet extends HttpServlet {
                     "c",
                     "Invalid Customer ID");
 
-            try {
-                Connection connection = bds.getConnection();
+            try (Connection connection = bds.getConnection();) {
                 tourDetailAPI.setConnection(connection);
                 List<TourDetailsDTO> tourDetailsDTOS = tourDetailAPI.getAllTourDetailByCustomerID(customerID);
                 out.println(jsonb.toJson(tourDetailsDTOS));
@@ -169,8 +167,7 @@ public class CustomerServlet extends HttpServlet {
                     "td",
                     "Invalid TourDetail ID");
 
-            try {
-                Connection connection = bds.getConnection();
+            try (Connection connection = bds.getConnection();) {
                 tourDetailAPI.setConnection(connection);
                 TourDetailsDTO tourDetailsDTO = tourDetailAPI.getTourDetailsByIDAndCustomerID(customerID,
                         tourDetailID);
@@ -232,8 +229,7 @@ public class CustomerServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
-            try {
-                Connection connection = bds.getConnection();
+            try (Connection connection = bds.getConnection();) {
                 customerAPI.setConnection(connection);
                 Integer generatedCustomerID = customerAPI.createCustomer(customerDTO);
                 if (generatedCustomerID != null && generatedCustomerID > 0) {
@@ -287,8 +283,7 @@ public class CustomerServlet extends HttpServlet {
             }
 
 
-            try {
-                Connection connection = bds.getConnection();
+            try (Connection connection = bds.getConnection();){
                 tourDetailAPI.setConnection(connection);
                 Integer generatedTourDetailID = tourDetailAPI.createTourDetails(tourDetailsDTO);
                 if (generatedTourDetailID != null && generatedTourDetailID > 0) {

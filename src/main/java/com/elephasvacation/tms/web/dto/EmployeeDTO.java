@@ -27,10 +27,55 @@
  */
 package com.elephasvacation.tms.web.dto;
 
-import java.io.Serializable;
+import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.sql.Date;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeDTO implements Serializable {
 
-    public EmployeeDTO() {
+    private int id;
+    private String name;
+    private String address;
+    private Date dateOfBirth;
+    private String nic;
+    private String contact;
+    private String email;
+    private GenderTypes gender;
+    private String position;
+    private String status;
+    private String password;
+    private Date created;
+    private Date lastUpdated;
+
+    /* custom constructor - without created, lastUpdated. */
+    public EmployeeDTO(int id,
+                       String name,
+                       String address,
+                       Date dateOfBirth,
+                       String nic,
+                       String contact,
+                       String email,
+                       GenderTypes gender,
+                       String position,
+                       String status,
+                       String password) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.nic = nic;
+        this.contact = contact;
+        this.email = email;
+        this.gender = gender;
+        this.position = position;
+        this.status = status;
+        this.password = password;
     }
 }

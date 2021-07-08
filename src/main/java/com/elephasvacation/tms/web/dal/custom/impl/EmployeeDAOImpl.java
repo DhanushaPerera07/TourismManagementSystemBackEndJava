@@ -40,6 +40,7 @@ import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
+    private static final String COLUMN_NAMES = "(name, address, dob, nic, contact, email, gender, position, status, password)";
     private Connection connection;
 
     @Override
@@ -50,7 +51,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     public Integer save(Employee employee) throws Exception {
         return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO employee VALUES (?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO employee " + COLUMN_NAMES + " VALUES (?,?,?,?,?,?,?,?,?,?)",
                 employee.getName(),
                 employee.getAddress(),
                 employee.getDateOfBirth(),
