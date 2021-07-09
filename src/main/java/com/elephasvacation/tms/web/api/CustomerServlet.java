@@ -7,6 +7,7 @@ package com.elephasvacation.tms.web.api;
 import com.elephasvacation.tms.web.api.customer.customerAPI.CustomerAPI;
 import com.elephasvacation.tms.web.api.customer.tourDetailsAPI.TourDetailsAPI;
 import com.elephasvacation.tms.web.api.util.IDUtil;
+import com.elephasvacation.tms.web.api.validation.CommonValidation;
 import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.commonConstant.*;
 import com.elephasvacation.tms.web.dto.CreatedOutputDTO;
@@ -84,7 +85,7 @@ public class CustomerServlet extends HttpServlet {
         }
 
         /* get customer by customerID. */
-        if (request.getPathInfo() != null &&
+        else if (request.getPathInfo() != null &&
                 request.getPathInfo()
                         .toLowerCase()
                         .replace("/", "")
@@ -118,7 +119,7 @@ public class CustomerServlet extends HttpServlet {
         }
 
         /* get all tour details of a customer. */
-        if (request.getPathInfo() != null &&
+        else if (request.getPathInfo() != null &&
                 request.getPathInfo()
                         .toLowerCase()
                         .matches("^/c\\d{3}/tour-details|/c\\d{3}/tour-details/$")) {
@@ -148,7 +149,7 @@ public class CustomerServlet extends HttpServlet {
 
 
         /* get a tour details(single tour-detail) of a customer. */
-        if (request.getPathInfo() != null &&
+        else if (request.getPathInfo() != null &&
                 request.getPathInfo()
                         .toLowerCase()
                         .matches("^/c\\d{3}/tour-details/td\\d{3}|/C\\d{3}/tour-details/td\\d{3}/$")) {
@@ -184,6 +185,9 @@ public class CustomerServlet extends HttpServlet {
                 exception.printStackTrace();
                 throw new RuntimeException(exception);
             }
+        } else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
 
     }
@@ -198,11 +202,8 @@ public class CustomerServlet extends HttpServlet {
 
         /* check the request content type.
          * content type should be application/json. otherwise send bad request. */
-        if (request.getContentType() == null || !request.getContentType().equals(MimeTypes.Application.JSON)) {
-            String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
-                    MimeTypes.Application.JSON);
-            logger.info(errorMessage);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+        if (CommonValidation.isContentTypeNotJSON(request)) {
+            CommonValidation.sendBadRequest(response, logger);
             return;
         }
 
@@ -261,7 +262,7 @@ public class CustomerServlet extends HttpServlet {
 
 
         /* create a tour-detail. */
-        if (request.getPathInfo() != null &&
+        else if (request.getPathInfo() != null &&
                 request.getPathInfo()
                         .toLowerCase()
                         .matches("^/c\\d{3}/tour-details|/c\\d{3}/tour-details/$")) {
@@ -283,7 +284,7 @@ public class CustomerServlet extends HttpServlet {
             }
 
 
-            try (Connection connection = bds.getConnection();){
+            try (Connection connection = bds.getConnection();) {
                 tourDetailAPI.setConnection(connection);
                 Integer generatedTourDetailID = tourDetailAPI.createTourDetails(tourDetailsDTO);
                 if (generatedTourDetailID != null && generatedTourDetailID > 0) {
@@ -306,6 +307,11 @@ public class CustomerServlet extends HttpServlet {
 
         } // end-create-tour-detail
 
+        else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+        }
+
 
     }
 
@@ -323,11 +329,8 @@ public class CustomerServlet extends HttpServlet {
 
         /* check the request content type.
          * content type should be application/json. otherwise send bad request. */
-        if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
-            String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
-                    MimeTypes.Application.JSON);
-            logger.info(errorMessage);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+        if (CommonValidation.isContentTypeNotJSON(request)) {
+            CommonValidation.sendBadRequest(response, logger);
             return;
         }
 
@@ -411,7 +414,7 @@ public class CustomerServlet extends HttpServlet {
 
 
         /* UPDATE a tour-detail. */
-        if (request.getPathInfo() != null &&
+        else if (request.getPathInfo() != null &&
                 request.getPathInfo()
                         .toLowerCase()
                         .matches("^/c\\d{3}/tour-details/td\\d{3}|/C\\d{3}/tour-details/td\\d{3}/$")) {
@@ -504,6 +507,11 @@ public class CustomerServlet extends HttpServlet {
 
         } // end-update-tour-detail
 
+        else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+        }
+
     }
 
 
@@ -573,7 +581,7 @@ public class CustomerServlet extends HttpServlet {
         } // end-delete-customer
 
         /* DELETE a tour-detail. */
-        if (request.getPathInfo() != null &&
+        else if (request.getPathInfo() != null &&
                 request.getPathInfo()
                         .toLowerCase()
                         .matches("^/c\\d{3}/tour-details/td\\d{3}|/C\\d{3}/tour-details/td\\d{3}/$")) {
@@ -637,6 +645,11 @@ public class CustomerServlet extends HttpServlet {
                 exception.printStackTrace();
             }
 
+        } // end-delete-tour-detail
+
+        else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
 
     }

@@ -6,10 +6,14 @@ package com.elephasvacation.tms.web.api;
 
 import com.elephasvacation.tms.web.api.employee.EmployeeAPI;
 import com.elephasvacation.tms.web.api.util.IDUtil;
+import com.elephasvacation.tms.web.api.validation.CommonValidation;
 import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.commonConstant.*;
+import com.elephasvacation.tms.web.dto.CreatedOutputDTO;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
 import com.elephasvacation.tms.web.entity.Employee;
+import com.elephasvacation.tms.web.exception.HttpResponseException;
+import com.elephasvacation.tms.web.exception.ResponseExceptionUtil;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
@@ -24,7 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -66,14 +72,14 @@ public class EmployeeServlet extends HttpServlet {
         }
 
         /* get employee by employeeID. */
-        if (request.getPathInfo() != null &&
+        else if (request.getPathInfo() != null &&
                 request.getPathInfo()
                         .toLowerCase()
                         .replace("/", "")
                         .matches("^e\\d{3}$")) {
             String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
 
-            /* extracting customer ID from URL. */
+            /* extracting Employee ID from URL. */
             employeeID = IDUtil.extractIDFrom(splitURIArray,
                     Number.ONE,
                     "e",
@@ -96,6 +102,9 @@ public class EmployeeServlet extends HttpServlet {
                 exception.printStackTrace();
             }
 
+        } else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
 
     }
@@ -104,117 +113,73 @@ public class EmployeeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        /* check the request content type.
-         * content type should be application/json. otherwise send bad request. */
-        if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
-            String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
-                    MimeTypes.Application.JSON);
-            logger.info(errorMessage);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
-            return;
-        }
+        EmployeeAPI employeeAPI = APIFactory.getInstance().getAPI(APITypes.EMPLOYEE);
 
         /* get the print-writer. */
         PrintWriter out = response.getWriter();
 
+        /* check the request content type.
+         * content type should be application/json. otherwise send bad request. */
+        if (CommonValidation.isContentTypeNotJSON(request)) {
+            CommonValidation.sendBadRequest(response, logger);
+            return;
+        }
 
-        try {
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+        /* CREATE an Employee. */
+        if (request.getPathInfo() == null || request.getPathInfo()
+                .replace("/", "")
+                .trim().isEmpty()) {
+
             /* read the request body. */
-            Employee employee = jsonb.fromJson(request.getReader(), Employee.class);
-
-            /* employee id should be set to zero or
-             * employee id should not be included to in the request header.
-             * */
-            if (employee.getId() != 0) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        ValidationMessages.INVALID_DATA_INPUT_ID_SHOULD_NOT_BE_INCLUDED);
-                return;
-            }
-
-            /* validate user input. */
-            String errors = validateUserInput(employee);
-            if (errors != null) {
-                /* there are errors. */
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, errors);
-                return;
-            }
-
-            /* Check whether the email is already taken or not. */
-            if (isEmailUsed(employee.getEmail())) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
-                return;
-            }
-
-            /* get reference of the basic datasource from the servlet context. */
-            BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
-
+            EmployeeDTO employeeDTO = null;
             try {
-                try (Connection connection = basicDataSource.getConnection()) {
+                employeeDTO = jsonb.fromJson(request.getReader(), EmployeeDTO.class);
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an Employee object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
 
-                    PreparedStatement preparedStatement = connection
-                            .prepareStatement(
-                                    "INSERT INTO employee " +
-                                            "(name, address, dob, nic, contact,email, " +
-                                            "gender, position, status, password) " +
-                                            "VALUES(?,?,?,?,?,?,?,?,?,?)",
-                                    Statement.RETURN_GENERATED_KEYS);
-
-                    preparedStatement.setString(Number.ONE, employee.getName());
-                    preparedStatement.setString(Number.TWO, employee.getAddress());
-                    preparedStatement.setDate(Number.THREE, employee.getDateOfBirth());
-                    preparedStatement.setString(Number.FOUR, employee.getNic());
-                    preparedStatement.setString(Number.FIVE, employee.getContact());
-                    preparedStatement.setString(Number.SIX, employee.getEmail());
-                    preparedStatement.setString(Number.SEVEN, employee.getGender().toString());
-                    preparedStatement.setString(Number.EIGHT, employee.getPosition());
-                    preparedStatement.setString(Number.NINE, employee.getStatus());
-                    preparedStatement.setString(Number.TEN, employee.getPassword());
-
-                    preparedStatement.executeUpdate();
-                    ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-
-                    if (generatedKeys.next()) {
-                        /* insertion succeed. */
-                        int generatedId = generatedKeys.getInt(Number.ONE);
-                        response.setStatus(HttpServletResponse.SC_CREATED);
-                        out.println(jsonb.toJson(generatedId));
-                        logger.info(MessageFormat.format(
-                                SuccessfulMessages.CREATED_RECORD_SUCCESSFUL,
-                                Commons.EMPLOYEE, generatedId));
-                    } else {
-                        /* insertion failed. */
-                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                        logger.error(FailedMessages.SOMETHING_WENT_WRONG);
-                    }
+            try (Connection connection = bds.getConnection();) {
+                employeeAPI.setConnection(connection);
+                Integer generatedEmployeeID = employeeAPI.createEmployee(employeeDTO);
+                if (generatedEmployeeID != null && generatedEmployeeID > 0) {
+                    /* Employee created successfully. */
+                    /* response-content-type. */
+                    response.setContentType(MimeTypes.Application.JSON);
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                    out.println(jsonb.toJson(new CreatedOutputDTO(String.format("E%03d", generatedEmployeeID))));
+                } else {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
             } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
                 /* duplicate key found (integrity constraint violation). */
-                logger.error(ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
                         sqlIntegrityConstraintViolationException);
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
             } catch (SQLException sqlException) {
-                /* sql error. */
                 sqlException.printStackTrace();
-                logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
             }
 
-        } catch (JsonbException jsonbException) {
-            /* cannot parse the request header to an employee object. */
-            jsonbException.printStackTrace();
-            logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } catch (IOException ioException) {
-            /* inputStream error when reading the request object. */
-            ioException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (Exception exception) {
-            /* something went wrong. */
-            exception.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
 
     }
@@ -222,115 +187,95 @@ public class EmployeeServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        int employeeID;
+        EmployeeAPI employeeAPI = APIFactory.getInstance().getAPI(APITypes.EMPLOYEE);
 
         /* check the request content type.
          * content type should be application/json. otherwise send bad request. */
-        if (!request.getContentType().equals(MimeTypes.Application.JSON)) {
-            String errorMessage = MessageFormat.format(ValidationMessages.REQUEST_CONTENT_TYPE_INVALID,
-                    MimeTypes.Application.JSON);
-            logger.info(errorMessage);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+        if (CommonValidation.isContentTypeNotJSON(request)) {
+            CommonValidation.sendBadRequest(response, logger);
             return;
         }
 
-        try {
-            /* read the request body. */
-            Employee employee = jsonb.fromJson(request.getReader(), Employee.class);
+        /* get datasource. */
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
 
-            /* Client should specify the id in the request body only.*/
-            if (isIdNotValid(Integer.toString(employee.getId()))) {
-                /* send error - id is not an integer. */
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        MessageFormat.format(
-                                ValidationMessages.INVALID_ID,
-                                Commons.EMPLOYEE
-                        ));
+        /* UPDATE an Employee. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .replace("/", "")
+                        .matches("^e\\d{3}$")) {
 
-                return;
-            }
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
 
-            /* validate user input. */
-            String errors = validateUserInput(employee);
-            if (errors != null) {
-                /* there are errors. */
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, errors);
-                return;
-            }
+            /* extracting employee ID from URL. */
+            employeeID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "e",
+                    "Invalid Employee ID");
 
-            /* perform update operation */
-            /* get reference of the basic datasource from the servlet context. */
-            BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+            try (Connection connection = bds.getConnection();) {
 
-            try (Connection connection = basicDataSource.getConnection()) {
-                /* check whether there is a matching record. */
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("SELECT e.id FROM employee e WHERE e.id=?");
+                /* initialize the connection. */
+                employeeAPI.setConnection(connection);
 
-                preparedStatement.setInt(Number.ONE, employee.getId());
-
-                /* check whether there is a matching record for the given id. */
-                if (preparedStatement.executeQuery().next()) {
-                    /* record is available for the given id.
-                     * then, perform update. */
-                    preparedStatement =
-                            connection.prepareStatement("UPDATE employee e " +
-                                    "SET name=?, address=?, dob=?, nic=?, " +
-                                    "contact=?,email=?, gender=?, position=?, " +
-                                    "status=?, password=? WHERE e.id=?");
-
-                    preparedStatement.setString(Number.ONE, employee.getName());
-                    preparedStatement.setString(Number.TWO, employee.getAddress());
-                    preparedStatement.setDate(Number.THREE, employee.getDateOfBirth());
-                    preparedStatement.setString(Number.FOUR, employee.getNic());
-                    preparedStatement.setString(Number.FIVE, employee.getContact());
-                    preparedStatement.setString(Number.SIX, employee.getEmail());
-                    preparedStatement.setString(Number.SEVEN, employee.getGender().toString());
-                    preparedStatement.setString(Number.EIGHT, employee.getPosition());
-                    preparedStatement.setString(Number.NINE, employee.getStatus());
-                    preparedStatement.setString(Number.TEN, employee.getPassword());
-                    preparedStatement.setInt(Number.ELEVEN, employee.getId());
-
-                    if (preparedStatement.executeUpdate() > 0) {
-                        /* update successful. */
-                        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                    } else {
-                        /* update not succeed. */
-                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    }
-
-                } else {
-                    /* no record found for that given id. */
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                /* check matching record in DB. */
+                if (employeeAPI.getEmployeeByID(employeeID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.EMPLOYEE),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
                 }
 
+                /* read the request body. */
+                EmployeeDTO employeeDTO = jsonb.fromJson(request.getReader(), EmployeeDTO.class);
+                employeeDTO.setId(employeeID);
+
+                if (employeeAPI.updateEmployee(employeeDTO)) {
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an employee object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+                /* duplicate key found (integrity constraint violation). */
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                        sqlIntegrityConstraintViolationException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                /* something went wrong. */
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
-        } catch (JsonbException jsonbException) {
-            /* cannot parse the request header to an employee object. */
-            jsonbException.printStackTrace();
-            logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } catch (IOException ioException) {
-            /* inputStream error when reading the request object. */
-            ioException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
-            /* duplicate key found (integrity constraint violation). */
-            logger.error(sqlIntegrityConstraintViolationException.getMessage() +
-                            ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
-                    sqlIntegrityConstraintViolationException);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (Exception exception) {
-            /* something went wrong. */
-            exception.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+        } // end-update-employee
+
+        else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
 
     }
@@ -338,65 +283,85 @@ public class EmployeeServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        int employeeID;
+        EmployeeAPI employeeAPI = APIFactory.getInstance().getAPI(APITypes.EMPLOYEE);
 
-        String id = request.getParameter(Commons.ID);
-        if (id == null) {
-            /* send error - id is required. */
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    MessageFormat.format(
-                            ValidationMessages.ID_IS_REQUIRED +
-                                    Commons.EMPTY_SPACE +
-                                    ValidationMessages.INTEGERS_ARE_ONLY_ACCEPTED_EXCEPT_ZERO,
-                            Commons.EMPLOYEE
-                    ));
-            return;
-        }
+        /* get datasource. */
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
 
-        if (!isIdNotValid(id)) {
-            /* send error - id is not an integer. */
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    MessageFormat.format(
-                            ValidationMessages.INVALID_ID,
-                            Commons.EMPLOYEE
-                    ));
+        /* DELETE an Employee. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .replace("/", "")
+                        .matches("^e\\d{3}$")) {
 
-            return;
-        }
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
 
-        /* get reference of the basic datasource from the servlet context. */
-        BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+            /* extracting employee ID from URL. */
+            employeeID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "e",
+                    "Invalid Employee ID");
 
-        try {
-            try (Connection connection = basicDataSource.getConnection()) {
+            try (Connection connection = bds.getConnection();) {
 
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("DELETE FROM employee e WHERE e.id=?");
-                preparedStatement.setInt(Number.ONE, Integer.parseInt(id));
+                /* initialize the connection. */
+                employeeAPI.setConnection(connection);
 
-                if (preparedStatement.executeUpdate() > 0) {
-                    /* deleted successfully. */
+                /* check matching record in DB. */
+                if (employeeAPI.getEmployeeByID(employeeID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.EMPLOYEE),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
+                }
+
+                /* delete record by ID. */
+                if (employeeAPI.deleteEmployee(employeeID)) {
                     response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 } else {
-                    /* not found matching record to delete. */
-                    logger.info(MessageFormat.format(
-                            ValidationMessages.RECORD_IS_NOT_FOUND,
-                            Commons.EMPLOYEE,
-                            id,
-                            ValidationMessages.TO_DELETE
-                    ));
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
+
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an employee object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+                /* duplicate key found (integrity constraint violation). */
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                        sqlIntegrityConstraintViolationException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                /* something went wrong. */
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
-        } catch (SQLException sqlException) {
-            /* sql error. */
-            sqlException.printStackTrace();
-            logger.error(FailedMessages.SOMETHING_WENT_WRONG, sqlException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (NumberFormatException numberFormatException) {
-            numberFormatException.printStackTrace();
-            logger.error(FailedMessages.FAILED_PARSING_TO_INTEGER, numberFormatException);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+        } // end-delete-employee
+
+        else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
     }
 
@@ -409,36 +374,6 @@ public class EmployeeServlet extends HttpServlet {
      */
     private boolean isIdNotValid(String id) {
         return !id.matches("^[1-9]$|^[1-9]\\d+$");
-    }
-
-    /**
-     * Check the given email is already in use.
-     *
-     * @return true, If the given email is already in use.
-     * Otherwise false.
-     */
-    private boolean isEmailUsed(String email) {
-
-        boolean result = false;
-
-        /* get reference of the basic datasource from the servlet context. */
-        BasicDataSource basicDataSource = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
-        try {
-            try (Connection connection = basicDataSource.getConnection()) {
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT e.email FROM employee e WHERE e.email=?");
-
-                preparedStatement.setString(Number.ONE, email);
-                ResultSet resultSet = preparedStatement.executeQuery();
-
-                while (resultSet.next()) {
-                    result = true;
-                }
-            }
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-
-        return result;
     }
 
 

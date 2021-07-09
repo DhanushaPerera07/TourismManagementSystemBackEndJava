@@ -28,12 +28,14 @@
 package com.elephasvacation.tms.web.dto;
 
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -43,7 +45,8 @@ public class EmployeeDTO implements Serializable {
     private int id;
     private String name;
     private String address;
-    private Date dateOfBirth;
+    @JsonbDateFormat("yyyy-MM-dd") // dd.MM.yyyy
+    private LocalDate dateOfBirth;
     private String nic;
     private String contact;
     private String email;
@@ -51,14 +54,16 @@ public class EmployeeDTO implements Serializable {
     private String position;
     private String status;
     private String password;
+    @JsonbDateFormat("dd.MM.yyyy")
     private Date created;
+    @JsonbDateFormat("dd.MM.yyyy")
     private Date lastUpdated;
 
     /* custom constructor - without created, lastUpdated. */
     public EmployeeDTO(int id,
                        String name,
                        String address,
-                       Date dateOfBirth,
+                       LocalDate dateOfBirth,
                        String nic,
                        String contact,
                        String email,

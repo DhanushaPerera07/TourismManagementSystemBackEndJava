@@ -42,21 +42,21 @@ import java.util.List;
 public interface EntityDTOMapper {
     EntityDTOMapper instance = Mappers.getMapper(EntityDTOMapper.class);
 
-    /* Employee. */
+    /* -------------------- Employee. -------------------- */
     Employee getEmployee(EmployeeDTO employeeDTO);
 
     EmployeeDTO getEmployeeDTO(Employee employee);
 
     List<EmployeeDTO> getEmployeeDTOs(List<Employee> employeeList);
 
-    /* Customer */
+    /*  -------------------- Customer  -------------------- */
     Customer getCustomer(CustomerDTO customerDTO);
 
     CustomerDTO getCustomerDTO(Customer customer);
 
     List<CustomerDTO> getCustomerDTOs(List<Customer> customerList);
 
-    /* Tour-Details. */
+    /*  -------------------- Tour-Details.  -------------------- */
     TourDetail getTourDetail(TourDetailsDTO tourDetailsDTO);
 
     TourDetailsDTO getTourDetailsDTO(TourDetail tourDetails);

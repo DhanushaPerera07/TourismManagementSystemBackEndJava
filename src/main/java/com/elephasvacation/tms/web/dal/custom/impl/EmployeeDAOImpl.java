@@ -58,7 +58,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                 employee.getNic(),
                 employee.getContact(),
                 employee.getEmail(),
-                employee.getGender(),
+                employee.getGender().toString(),
                 employee.getPosition(),
                 employee.getStatus(),
                 employee.getPassword()
@@ -75,7 +75,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                 employee.getNic(),
                 employee.getContact(),
                 employee.getEmail(),
-                employee.getGender(),
+                employee.getGender().toString(),
                 employee.getPosition(),
                 employee.getStatus(),
                 employee.getPassword(),
