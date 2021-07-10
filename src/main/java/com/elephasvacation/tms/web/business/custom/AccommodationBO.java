@@ -23,37 +23,24 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 05/07/2021
+ * @date : 10/07/2021
  */
-package com.elephasvacation.tms.web.api;
+package com.elephasvacation.tms.web.business.custom;
 
-import com.elephasvacation.tms.web.api.accommodation.AccommodationAPIImpl;
-import com.elephasvacation.tms.web.api.customer.customerAPI.CustomerAPIImpl;
-import com.elephasvacation.tms.web.api.customer.tourDetailsAPI.TourDetailsAPIImpl;
-import com.elephasvacation.tms.web.api.employee.EmployeeAPIImpl;
+import com.elephasvacation.tms.web.business.SuperBO;
+import com.elephasvacation.tms.web.dto.AccommodationDTO;
 
-public class APIFactory {
-    private static APIFactory apiFactory = null;
+import java.util.List;
 
-    private APIFactory() {
-    }
+public interface AccommodationBO extends SuperBO {
 
-    public static APIFactory getInstance() {
-        return (apiFactory == null) ? apiFactory = new APIFactory() : apiFactory;
-    }
+    Integer createAccommodation(AccommodationDTO accommodationDTO) throws Exception;
 
-    public <T extends SuperAPI> T getAPI(APITypes apiTypes) {
-        switch (apiTypes) {
-            case CUSTOMER:
-                return (T) new CustomerAPIImpl();
-            case TOUR_DETAIL:
-                return (T) new TourDetailsAPIImpl();
-            case EMPLOYEE:
-                return (T) new EmployeeAPIImpl();
-            case ACCOMMODATION:
-                return (T) new AccommodationAPIImpl();
-            default:
-                return null;
-        }
-    }
+    boolean updateAccommodation(AccommodationDTO accommodationDTO) throws Exception;
+
+    boolean deleteAccommodation(int accommodationID) throws Exception;
+
+    AccommodationDTO getAccommodationByID(int accommodationID) throws Exception;
+
+    List<AccommodationDTO> getAllAccommodations() throws Exception;
 }

@@ -27,6 +27,8 @@
  * @date : 03/05/2021
  * @author : Dhanusha Perera
  * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -34,8 +36,15 @@
  */
 package com.elephasvacation.tms.web.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Date;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Accommodation implements SuperEntity {
     private int id;
     private String name;
@@ -50,10 +59,6 @@ public class Accommodation implements SuperEntity {
     private String remark;
     private Date created;
     private Date lastUpdated;
-
-    /* no args constructor. */
-    public Accommodation() {
-    }
 
     public Accommodation(int id,
                          String name,
@@ -79,144 +84,4 @@ public class Accommodation implements SuperEntity {
         this.remark = remark;
     }
 
-    /* full args constructor. */
-    public Accommodation(int id, String name, String situatedIn, int starRating, String type, String contact, String email, String address, String website, String specialDetails, String remark, Date created, Date lastUpdated) {
-        this.id = id;
-        this.name = name;
-        this.situatedIn = situatedIn;
-        this.starRating = starRating;
-        this.type = type;
-        this.contact = contact;
-        this.email = email;
-        this.address = address;
-        this.website = website;
-        this.specialDetails = specialDetails;
-        this.remark = remark;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
-    }
-
-    /* getters and setters. */
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSituatedIn() {
-        return situatedIn;
-    }
-
-    public void setSituatedIn(String situatedIn) {
-        this.situatedIn = situatedIn;
-    }
-
-    public int getStarRating() {
-        return starRating;
-    }
-
-    public void setStarRating(int starRating) {
-        this.starRating = starRating;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getSpecialDetails() {
-        return specialDetails;
-    }
-
-    public void setSpecialDetails(String specialDetails) {
-        this.specialDetails = specialDetails;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    @Override
-    public String toString() {
-        return "Accommodation{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", situatedIn='" + situatedIn + '\'' +
-                ", starRating=" + starRating +
-                ", type='" + type + '\'' +
-                ", contact='" + contact + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", website='" + website + '\'' +
-                ", specialDetails='" + specialDetails + '\'' +
-                ", remark='" + remark + '\'' +
-                ", created=" + created +
-                ", lastUpdated=" + lastUpdated +
-                '}';
-    }
 }

@@ -27,9 +27,11 @@
  */
 package com.elephasvacation.tms.web.business.custom.util;
 
+import com.elephasvacation.tms.web.dto.AccommodationDTO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
 import com.elephasvacation.tms.web.dto.TourDetailsDTO;
+import com.elephasvacation.tms.web.entity.Accommodation;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.TourDetail;
@@ -62,4 +64,12 @@ public interface EntityDTOMapper {
     TourDetailsDTO getTourDetailsDTO(TourDetail tourDetails);
 
     List<TourDetailsDTO> getTourDetailDTOs(List<TourDetail> tourDetailList);
+
+    /*  -------------------- Accommodation  -------------------- */
+    Accommodation getAccommodation(AccommodationDTO accommodationDTO);
+
+    AccommodationDTO getAccommodationDTO(Accommodation accommodation);
+
+    List<AccommodationDTO> getAccommodationDTOs(List<Accommodation> accommodationList);
+
 }

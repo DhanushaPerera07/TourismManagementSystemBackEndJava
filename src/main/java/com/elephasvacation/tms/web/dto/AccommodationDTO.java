@@ -23,37 +23,9 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 05/07/2021
+ * @date : 10/07/2021
  */
-package com.elephasvacation.tms.web.api;
+package com.elephasvacation.tms.web.dto;
 
-import com.elephasvacation.tms.web.api.accommodation.AccommodationAPIImpl;
-import com.elephasvacation.tms.web.api.customer.customerAPI.CustomerAPIImpl;
-import com.elephasvacation.tms.web.api.customer.tourDetailsAPI.TourDetailsAPIImpl;
-import com.elephasvacation.tms.web.api.employee.EmployeeAPIImpl;
-
-public class APIFactory {
-    private static APIFactory apiFactory = null;
-
-    private APIFactory() {
-    }
-
-    public static APIFactory getInstance() {
-        return (apiFactory == null) ? apiFactory = new APIFactory() : apiFactory;
-    }
-
-    public <T extends SuperAPI> T getAPI(APITypes apiTypes) {
-        switch (apiTypes) {
-            case CUSTOMER:
-                return (T) new CustomerAPIImpl();
-            case TOUR_DETAIL:
-                return (T) new TourDetailsAPIImpl();
-            case EMPLOYEE:
-                return (T) new EmployeeAPIImpl();
-            case ACCOMMODATION:
-                return (T) new AccommodationAPIImpl();
-            default:
-                return null;
-        }
-    }
+public class AccommodationDTO {
 }

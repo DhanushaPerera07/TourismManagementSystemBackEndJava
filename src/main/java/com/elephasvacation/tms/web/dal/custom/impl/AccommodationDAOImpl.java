@@ -39,6 +39,7 @@ import java.util.List;
 
 public class AccommodationDAOImpl implements AccommodationDAO {
 
+    private static final String COLUMN_NAMES = "(name, situated_in, star_rating, type, contact, email, address, website, special_details, remark)";
     private Connection connection;
 
     @Override
@@ -49,7 +50,7 @@ public class AccommodationDAOImpl implements AccommodationDAO {
     @Override
     public Integer save(Accommodation accommodation) throws Exception {
         return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO accommodation VALUES (?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO accommodation " + COLUMN_NAMES + " VALUES (?,?,?,?,?,?,?,?,?,?)",
                 accommodation.getName(),
                 accommodation.getSituatedIn(),
                 accommodation.getStarRating(),
