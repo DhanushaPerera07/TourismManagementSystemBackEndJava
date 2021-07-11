@@ -50,7 +50,7 @@ public class Accommodation implements SuperEntity {
     private String name;
     private String situatedIn;
     private int starRating;
-    private String type;
+    private String type; // guest house, boutique, cabana
     private String contact;
     private String email;
     private String address;

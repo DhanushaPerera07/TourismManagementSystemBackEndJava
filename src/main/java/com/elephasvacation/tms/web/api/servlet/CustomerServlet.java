@@ -2,8 +2,10 @@
 @author : Dhanusha Perera
 @date : 03/05/2021
 */
-package com.elephasvacation.tms.web.api;
+package com.elephasvacation.tms.web.api.servlet;
 
+import com.elephasvacation.tms.web.api.APIFactory;
+import com.elephasvacation.tms.web.api.APITypes;
 import com.elephasvacation.tms.web.api.customer.customerAPI.CustomerAPI;
 import com.elephasvacation.tms.web.api.customer.tourDetailsAPI.TourDetailsAPI;
 import com.elephasvacation.tms.web.api.util.IDUtil;

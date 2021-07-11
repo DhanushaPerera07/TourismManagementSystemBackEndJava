@@ -27,93 +27,28 @@
  */
 package com.elephasvacation.tms.web.entity;
 
+import lombok.*;
+
 import java.sql.Date;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccommodationPackage {
     private int id;
     private String validPeriod;
     private boolean isLatestPackage;
+    private int accommodationId;
     private Date created;
     private Date lastUpdated;
-    private int accommodationId;
 
-    /* no args constructor. */
-    public AccommodationPackage() {
-    }
-
-    /* full args constructor. */
     public AccommodationPackage(int id,
                                 String validPeriod,
                                 boolean isLatestPackage,
-                                Date created,
-                                Date lastUpdated,
                                 int accommodationId) {
         this.id = id;
         this.validPeriod = validPeriod;
         this.isLatestPackage = isLatestPackage;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
         this.accommodationId = accommodationId;
-    }
-
-    /* getters and setters. */
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getValidPeriod() {
-        return validPeriod;
-    }
-
-    public void setValidPeriod(String validPeriod) {
-        this.validPeriod = validPeriod;
-    }
-
-    public boolean isLatestPackage() {
-        return isLatestPackage;
-    }
-
-    public void setLatestPackage(boolean latestPackage) {
-        isLatestPackage = latestPackage;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public int getAccommodationId() {
-        return accommodationId;
-    }
-
-    public void setAccommodationId(int accommodationId) {
-        this.accommodationId = accommodationId;
-    }
-
-    @Override
-    public String toString() {
-        return "AccommodationPackage{" +
-                "id=" + id +
-                ", validPeriod='" + validPeriod + '\'' +
-                ", isLatestPackage=" + isLatestPackage +
-                ", created=" + created +
-                ", lastUpdated=" + lastUpdated +
-                ", accommodationId=" + accommodationId +
-                '}';
     }
 }

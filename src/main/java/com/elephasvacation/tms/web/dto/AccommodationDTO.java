@@ -27,5 +27,53 @@
  */
 package com.elephasvacation.tms.web.dto;
 
-public class AccommodationDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.sql.Date;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccommodationDTO implements Serializable {
+
+    private int id;
+    private String name;
+    private String situatedIn;
+    private int starRating;
+    private String type;
+    private String contact;
+    private String email;
+    private String address;
+    private String website;
+    private String specialDetails;
+    private String remark;
+    private Date created;
+    private Date lastUpdated;
+
+    public AccommodationDTO(int id,
+                            String name,
+                            String situatedIn,
+                            int starRating,
+                            String type,
+                            String contact,
+                            String email,
+                            String address,
+                            String website,
+                            String specialDetails,
+                            String remark) {
+        this.id = id;
+        this.name = name;
+        this.situatedIn = situatedIn;
+        this.starRating = starRating;
+        this.type = type;
+        this.contact = contact;
+        this.email = email;
+        this.address = address;
+        this.website = website;
+        this.specialDetails = specialDetails;
+        this.remark = remark;
+    }
 }
