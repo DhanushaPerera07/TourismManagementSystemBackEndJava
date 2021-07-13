@@ -28,5 +28,5 @@
 package com.elephasvacation.tms.web.api;
 
 public enum APITypes {
-    CUSTOMER, TOUR_DETAIL, EMPLOYEE, ACCOMMODATION
+    CUSTOMER, TOUR_DETAIL, EMPLOYEE, ACCOMMODATION, ROOM_TYPE
 }

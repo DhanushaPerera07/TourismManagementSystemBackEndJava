@@ -62,6 +62,7 @@ public final class Commons {
     public static final String ACCOMMODATION = "Accommodation";
     public static final String ACCOMMODATION_PACKAGE = "Accommodation Package";
     public static final String TOUR_DETAIL = "Tour Detail";
+    public static final String ROOM_TYPE = "Room Type";
 
 
     public static final String NO_RECORDS_FOUND = "No {0} records found!";

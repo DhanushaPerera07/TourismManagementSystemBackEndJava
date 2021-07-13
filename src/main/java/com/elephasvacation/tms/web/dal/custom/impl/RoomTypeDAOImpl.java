@@ -99,8 +99,8 @@ public class RoomTypeDAOImpl implements RoomTypeDAO {
         return new RoomType(
                 resultSet.getInt("id"),
                 resultSet.getString("type"),
-                resultSet.getDate("created"),
-                resultSet.getDate("last_updated")
+                resultSet.getTimestamp("created"),
+                resultSet.getTimestamp("last_updated")
         );
     }
 

@@ -27,17 +27,12 @@
  */
 package com.elephasvacation.tms.web.business.custom.util;
 
-import com.elephasvacation.tms.web.dto.AccommodationDTO;
-import com.elephasvacation.tms.web.dto.CustomerDTO;
-import com.elephasvacation.tms.web.dto.EmployeeDTO;
-import com.elephasvacation.tms.web.dto.TourDetailsDTO;
-import com.elephasvacation.tms.web.entity.Accommodation;
-import com.elephasvacation.tms.web.entity.Customer;
-import com.elephasvacation.tms.web.entity.Employee;
-import com.elephasvacation.tms.web.entity.TourDetail;
+import com.elephasvacation.tms.web.dto.*;
+import com.elephasvacation.tms.web.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -71,5 +66,12 @@ public interface EntityDTOMapper {
     AccommodationDTO getAccommodationDTO(Accommodation accommodation);
 
     List<AccommodationDTO> getAccommodationDTOs(List<Accommodation> accommodationList);
+
+    /*  -------------------- Room Type  -------------------- */
+    RoomType getRoomType(RoomTypeDTO roomTypeDTO);
+
+    RoomTypeDTO getRoomTypeDTO(RoomType roomType);
+
+    List<RoomTypeDTO> getRoomTypeDTOs(List<RoomType> roomTypeList);
 
 }

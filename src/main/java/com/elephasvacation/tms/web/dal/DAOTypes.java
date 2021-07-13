@@ -31,5 +31,6 @@ public enum DAOTypes {
     CUSTOMER,
     TOUR_DETAIL,
     ACCOMMODATION,
-    EMPLOYEE
+    EMPLOYEE,
+    ROOM_TYPE
 }

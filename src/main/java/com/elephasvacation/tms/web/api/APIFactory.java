@@ -31,6 +31,7 @@ import com.elephasvacation.tms.web.api.accommodation.AccommodationAPIImpl;
 import com.elephasvacation.tms.web.api.customer.customerAPI.CustomerAPIImpl;
 import com.elephasvacation.tms.web.api.customer.tourDetailsAPI.TourDetailsAPIImpl;
 import com.elephasvacation.tms.web.api.employee.EmployeeAPIImpl;
+import com.elephasvacation.tms.web.api.roomType.RoomTypeAPIImpl;
 
 public class APIFactory {
     private static APIFactory apiFactory = null;
@@ -52,6 +53,8 @@ public class APIFactory {
                 return (T) new EmployeeAPIImpl();
             case ACCOMMODATION:
                 return (T) new AccommodationAPIImpl();
+            case ROOM_TYPE:
+                return (T) new RoomTypeAPIImpl();
             default:
                 return null;
         }

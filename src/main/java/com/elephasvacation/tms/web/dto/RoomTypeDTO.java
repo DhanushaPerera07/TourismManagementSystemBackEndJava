@@ -23,38 +23,28 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 13/07/2021
  */
-package com.elephasvacation.tms.web.dal;
+package com.elephasvacation.tms.web.dto;
 
-import com.elephasvacation.tms.web.dal.custom.impl.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class DAOFactory {
+import java.io.Serializable;
+import java.sql.Timestamp;
 
-    private static DAOFactory daoFactory = null;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoomTypeDTO implements Serializable {
+    private int id;
+    private String type;
+    private Timestamp created;
+    private Timestamp lastUpdated;
 
-    private DAOFactory() {
+    public RoomTypeDTO(int id, String type) {
+        this.id = id;
+        this.type = type;
     }
-
-    public static DAOFactory getInstance() {
-        return (daoFactory == null) ? (daoFactory = new DAOFactory()) : daoFactory;
-    }
-
-    public <T extends SuperDAO> T getDAO(DAOTypes daoTypes) {
-        switch (daoTypes) {
-            case CUSTOMER:
-                return (T) new CustomerDAOImpl();
-            case TOUR_DETAIL:
-                return (T) new TourDetailDAOImpl();
-            case ACCOMMODATION:
-                return (T) new AccommodationDAOImpl();
-            case EMPLOYEE:
-                return (T) new EmployeeDAOImpl();
-            case ROOM_TYPE:
-                return (T) new RoomTypeDAOImpl();
-            default:
-                return null;
-        }
-    }
-
 }

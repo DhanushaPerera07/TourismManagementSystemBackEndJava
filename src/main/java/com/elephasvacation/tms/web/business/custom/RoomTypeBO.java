@@ -23,38 +23,24 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 13/07/2021
  */
-package com.elephasvacation.tms.web.dal;
+package com.elephasvacation.tms.web.business.custom;
 
-import com.elephasvacation.tms.web.dal.custom.impl.*;
+import com.elephasvacation.tms.web.business.SuperBO;
+import com.elephasvacation.tms.web.dto.RoomTypeDTO;
 
-public class DAOFactory {
+import java.util.List;
 
-    private static DAOFactory daoFactory = null;
+public interface RoomTypeBO extends SuperBO {
 
-    private DAOFactory() {
-    }
+    Integer createRoomTypeDTO(RoomTypeDTO roomTypeDTO) throws Exception;
 
-    public static DAOFactory getInstance() {
-        return (daoFactory == null) ? (daoFactory = new DAOFactory()) : daoFactory;
-    }
+    boolean updateRoomTypeDTO(RoomTypeDTO roomTypeDTO) throws Exception;
 
-    public <T extends SuperDAO> T getDAO(DAOTypes daoTypes) {
-        switch (daoTypes) {
-            case CUSTOMER:
-                return (T) new CustomerDAOImpl();
-            case TOUR_DETAIL:
-                return (T) new TourDetailDAOImpl();
-            case ACCOMMODATION:
-                return (T) new AccommodationDAOImpl();
-            case EMPLOYEE:
-                return (T) new EmployeeDAOImpl();
-            case ROOM_TYPE:
-                return (T) new RoomTypeDAOImpl();
-            default:
-                return null;
-        }
-    }
+    boolean deleteRoomTypeDTO(Integer roomTypeID) throws Exception;
 
+    RoomTypeDTO getRoomTypeByID(Integer roomTypeID) throws Exception;
+
+    List<RoomTypeDTO> getAllRoomTypes() throws Exception;
 }

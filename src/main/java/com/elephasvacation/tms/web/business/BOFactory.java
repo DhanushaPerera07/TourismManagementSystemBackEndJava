@@ -27,10 +27,7 @@
  */
 package com.elephasvacation.tms.web.business;
 
-import com.elephasvacation.tms.web.business.custom.impl.AccommodationBOImpl;
-import com.elephasvacation.tms.web.business.custom.impl.CustomerBOImpl;
-import com.elephasvacation.tms.web.business.custom.impl.EmployeeBOImpl;
-import com.elephasvacation.tms.web.business.custom.impl.TourDetailBOImpl;
+import com.elephasvacation.tms.web.business.custom.impl.*;
 
 public class BOFactory {
 
@@ -53,6 +50,8 @@ public class BOFactory {
                 return (T) new CustomerBOImpl();
             case ACCOMMODATION:
                 return (T) new AccommodationBOImpl();
+            case ROOM_TYPE:
+                return (T) new RoomTypeBOImpl();
             default:
                 return null;
         }
