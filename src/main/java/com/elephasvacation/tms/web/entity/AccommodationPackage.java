@@ -20,6 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -27,28 +30,33 @@
  */
 package com.elephasvacation.tms.web.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccommodationPackage {
+public class AccommodationPackage implements SuperEntity{
     private int id;
+    private int year;
+    private String season;
     private String validPeriod;
-    private boolean isLatestPackage;
     private int accommodationId;
     private Date created;
     private Date lastUpdated;
 
     public AccommodationPackage(int id,
+                                int year,
+                                String season,
                                 String validPeriod,
-                                boolean isLatestPackage,
                                 int accommodationId) {
         this.id = id;
+        this.year = year;
+        this.season = season;
         this.validPeriod = validPeriod;
-        this.isLatestPackage = isLatestPackage;
         this.accommodationId = accommodationId;
     }
 }
