@@ -57,9 +57,11 @@ public class RoomCategoryDAOImpl implements RoomCategoryDAO {
 
     @Override
     public boolean update(RoomCategory roomCategory) throws Exception {
+        System.out.println(roomCategory);
         return CrudUtil.execute(this.connection,
                 "UPDATE " + TABLE_NAME + " SET category=? WHERE id=?",
-                roomCategory.getCategory()
+                roomCategory.getCategory(),
+                roomCategory.getId()
         );
     }
 

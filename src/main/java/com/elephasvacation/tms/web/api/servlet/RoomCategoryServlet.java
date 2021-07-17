@@ -1,4 +1,6 @@
-package com.elephasvacation.tms.web.api.servlet;/*
+package com.elephasvacation.tms.web.api.servlet;
+
+/*
 @author : Dhanusha Perera
 @date : 16/07/2021
 */
@@ -12,6 +14,7 @@ import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.commonConstant.*;
 import com.elephasvacation.tms.web.dto.CreatedOutputDTO;
 import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
+import com.elephasvacation.tms.web.exception.HttpResponseException;
 import com.elephasvacation.tms.web.exception.ResponseExceptionUtil;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
@@ -30,6 +33,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.text.MessageFormat;
 import java.util.List;
 
 @WebServlet(name = "RoomCategoryServlet", urlPatterns = "/api/v1/room-categories/*")
@@ -186,6 +190,94 @@ public class RoomCategoryServlet extends HttpServlet {
         } else {
             /* request.getPathInfo not matched with any if condition. */
             response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int roomCategoryID;
+        RoomCategoryAPI roomCategoryAPI = APIFactory.getInstance().getAPI(APITypes.ROOM_CATEGORY);
+
+        /* check the request content type.
+         * content type should be application/json. otherwise send bad request. */
+        if (CommonValidation.isContentTypeNotJSON(request)) {
+            CommonValidation.sendBadRequest(response, logger);
+            return;
+        }
+
+        /* get datasource. */
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+        /* UPDATE a roomCategory. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .replace("/", "")
+                        .matches("^[A-Za-z]{2}\\d{3}$")) {
+
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
+
+            /* extracting RoomCategoryID from URL. */
+            roomCategoryID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "rc",
+                    "Invalid RoomCategoryID");
+
+            try (Connection connection = bds.getConnection();) {
+
+                /* initialize the connection. */
+                roomCategoryAPI.setConnection(connection);
+
+                /* check matching record in DB. */
+                if (roomCategoryAPI.getRoomCategoryByID(roomCategoryID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.ROOM_CATEGORY),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
+                }
+
+                /* read the request body. */
+                RoomCategoryDTO roomCategoryDTO = jsonb.fromJson(request.getReader(), RoomCategoryDTO.class);
+                roomCategoryDTO.setId(roomCategoryID);
+
+                if (roomCategoryAPI.updateRoomCategoryDTO(roomCategoryDTO)) {
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an RoomCategory object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+                /* duplicate key found (integrity constraint violation). */
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                        sqlIntegrityConstraintViolationException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                /* something went wrong. */
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
         }
     }
 }

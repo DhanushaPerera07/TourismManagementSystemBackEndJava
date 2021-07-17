@@ -23,6 +23,8 @@
  *
  * @author : Dhanusha Perera
  * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @since : 21/04/2021
  * @since : 21/04/2021
  * @since : 21/04/2021
  */
@@ -63,11 +65,11 @@ public final class Commons {
     public static final String ACCOMMODATION_PACKAGE = "Accommodation Package";
     public static final String TOUR_DETAIL = "Tour Detail";
     public static final String ROOM_TYPE = "Room Type";
+    public static final String ROOM_CATEGORY = "Room Category";
 
 
     public static final String NO_RECORDS_FOUND = "No {0} records found!";
     public static final String NO_MATCHING_RECORDS_FOUND = "No {0} matching record(s) found!";
-
 
 
 }
