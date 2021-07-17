@@ -280,4 +280,88 @@ public class RoomCategoryServlet extends HttpServlet {
 
         }
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int roomCategoryID;
+        RoomCategoryAPI roomCategoryAPI = APIFactory.getInstance().getAPI(APITypes.ROOM_CATEGORY);
+
+        /* get datasource. */
+        BasicDataSource bds = (BasicDataSource) getServletContext().getAttribute(Commons.CP);
+
+        /* DELETE an RoomCategory. */
+        if (request.getPathInfo() != null &&
+                request.getPathInfo()
+                        .toLowerCase()
+                        .replace("/", "")
+                        .matches("^[A-Za-z]{2}\\d{3}$")) {
+
+            String[] splitURIArray = IDUtil.getSplitArray(request.getPathInfo());
+
+            /* extracting RoomCategoryID from URL. */
+            roomCategoryID = IDUtil.extractIDFrom(splitURIArray,
+                    Number.ONE,
+                    "rc",
+                    "Invalid RoomCategoryID");
+
+            try (Connection connection = bds.getConnection();) {
+
+                /* initialize the connection. */
+                roomCategoryAPI.setConnection(connection);
+
+                /* check matching record in DB. */
+                if (roomCategoryAPI.getRoomCategoryByID(roomCategoryID) == null) {
+                    /* no matching record found. */
+                    Throwable t = new HttpResponseException(404,
+                            MessageFormat.format(Commons.NO_MATCHING_RECORDS_FOUND,
+                                    Commons.ROOM_TYPE),
+                            null);
+                    ResponseExceptionUtil.handle(t, response);
+                    return;
+                }
+
+                /* delete record by ID. */
+                if (roomCategoryAPI.deleteRoomCategoryDTO(roomCategoryID)) {
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    logger.error(FailedMessages.SOMETHING_WENT_WRONG);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+
+            } catch (JsonbException jsonbException) {
+                /* cannot parse the request header to an RoomCategory object. */
+                jsonbException.printStackTrace();
+                logger.error(ValidationMessages.INVALID_DATA_INPUT, jsonbException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (IOException ioException) {
+                /* inputStream error when reading the request object. */
+                ioException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_READING_REQUEST_BODY, ioException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+                /* duplicate key found (integrity constraint violation). */
+                logger.error(sqlIntegrityConstraintViolationException.getMessage() +
+                                ValidationMessages.SQL_INTEGRITY_CONSTRAINT_VIOLATION,
+                        sqlIntegrityConstraintViolationException);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        ValidationMessages.EMAIL_IS_ALREADY_TAKEN);
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG_DATABASE_OPERATION, sqlException);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                /* something went wrong. */
+                exception.printStackTrace();
+                logger.error(FailedMessages.SOMETHING_WENT_WRONG, exception);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
+
+        } // end-delete-RoomCategory
+
+        else {
+            /* request.getPathInfo not matched with any if condition. */
+            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+        }
+    }
 }
