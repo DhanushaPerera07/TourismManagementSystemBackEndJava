@@ -52,6 +52,8 @@ public class DAOFactory {
                 return (T) new EmployeeDAOImpl();
             case ROOM_TYPE:
                 return (T) new RoomTypeDAOImpl();
+            case ROOM_CATEGORY:
+                return (T) new RoomCategoryDAOImpl();
             default:
                 return null;
         }

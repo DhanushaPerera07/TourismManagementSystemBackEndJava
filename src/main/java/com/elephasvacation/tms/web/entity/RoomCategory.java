@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -39,8 +39,8 @@ import java.sql.Date;
 public class RoomCategory implements SuperEntity {
     private int id;
     private String category;
-    private Date created;
-    private Date lastUpdated;
+    private Timestamp created;
+    private Timestamp lastUpdated;
 
     public RoomCategory(int id, String category) {
         this.id = id;

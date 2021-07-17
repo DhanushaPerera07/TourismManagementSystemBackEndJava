@@ -34,7 +34,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.MessageFormat;
 import java.util.List;
 
-@WebServlet(name = "RoomTypeServlet", value = "/api/v1/room-types/*")
+@WebServlet(name = "RoomTypeServlet", urlPatterns = "/api/v1/room-types/*")
 public class RoomTypeServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(RoomTypeServlet.class);

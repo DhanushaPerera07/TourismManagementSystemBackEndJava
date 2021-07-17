@@ -32,7 +32,6 @@ import com.elephasvacation.tms.web.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -74,4 +73,10 @@ public interface EntityDTOMapper {
 
     List<RoomTypeDTO> getRoomTypeDTOs(List<RoomType> roomTypeList);
 
+    /*  -------------------- Room Category  -------------------- */
+    RoomCategory getRoomCategory(RoomCategoryDTO roomCategoryDTO);
+
+    RoomCategoryDTO getRoomCategoryDTO(RoomCategory roomCategory);
+
+    List<RoomCategoryDTO> getRoomCategoryDTOs(List<RoomCategory> roomCategoryList);
 }

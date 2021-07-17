@@ -23,15 +23,24 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 15/07/2021
  */
-package com.elephasvacation.tms.web.dal;
+package com.elephasvacation.tms.web.business.custom;
 
-public enum DAOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
+import com.elephasvacation.tms.web.business.SuperBO;
+import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
+
+import java.util.List;
+
+public interface RoomCategoryBO extends SuperBO {
+
+    Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception;
+
+    boolean updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception;
+
+    boolean deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception;
+
+    RoomCategoryDTO getRoomCategoryByID(Integer roomCategoryID) throws Exception;
+
+    List<RoomCategoryDTO> getAllRoomCategories() throws Exception;
 }

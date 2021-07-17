@@ -28,5 +28,10 @@
 package com.elephasvacation.tms.web.business;
 
 public enum BOTypes {
-    CUSTOMER, TOUR_DETAIL, ACCOMMODATION, EMPLOYEE, ROOM_TYPE
+    CUSTOMER,
+    TOUR_DETAIL,
+    ACCOMMODATION,
+    EMPLOYEE,
+    ROOM_TYPE,
+    ROOM_CATEGORY
 }

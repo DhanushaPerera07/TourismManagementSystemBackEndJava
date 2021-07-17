@@ -23,15 +23,22 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 15/07/2021
  */
-package com.elephasvacation.tms.web.dal;
+package com.elephasvacation.tms.web.dto;
 
-public enum DAOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoomCategoryDTO {
+    private int id;
+    private String category;
+    private Timestamp created;
+    private Timestamp lastUpdated;
 }

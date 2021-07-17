@@ -23,15 +23,12 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 15/07/2021
  */
-package com.elephasvacation.tms.web.dal;
+package com.elephasvacation.tms.web.dal.custom;
 
-public enum DAOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
+import com.elephasvacation.tms.web.dal.CrudDAO;
+import com.elephasvacation.tms.web.entity.RoomCategory;
+
+public interface RoomCategoryDAO extends CrudDAO<RoomCategory, Integer> {
 }
