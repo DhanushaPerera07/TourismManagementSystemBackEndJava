@@ -23,16 +23,24 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 18/07/2021
  */
-package com.elephasvacation.tms.web.business;
+package com.elephasvacation.tms.web.business.custom;
 
-public enum BOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
-    MEAL_PLAN
+import com.elephasvacation.tms.web.business.SuperBO;
+import com.elephasvacation.tms.web.dto.MealPlanDTO;
+
+import java.util.List;
+
+public interface MealPlanBO extends SuperBO {
+
+    Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception;
+
+    boolean updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception;
+
+    boolean deleteMealPlan(Integer mealPlanID) throws Exception;
+
+    MealPlanDTO getMealPlanByID(Integer mealPlanID) throws Exception;
+
+    List<MealPlanDTO> getAllMealPlans() throws Exception;
 }

@@ -23,16 +23,28 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 18/07/2021
  */
-package com.elephasvacation.tms.web.business;
+package com.elephasvacation.tms.web.dto;
 
-public enum BOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
-    MEAL_PLAN
+import com.elephasvacation.tms.web.entity.SuperEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MealPlanDTO implements SuperEntity {
+    private int id;
+    private String mealPlan;
+    private Timestamp created;
+    private Timestamp lastUpdated;
+
+    public MealPlanDTO(int id, String mealPlan) {
+        this.id = id;
+        this.mealPlan = mealPlan;
+    }
 }

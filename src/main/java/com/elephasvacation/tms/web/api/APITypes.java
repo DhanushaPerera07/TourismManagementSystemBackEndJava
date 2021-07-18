@@ -33,5 +33,6 @@ public enum APITypes {
     EMPLOYEE,
     ACCOMMODATION,
     ROOM_TYPE,
-    ROOM_CATEGORY
+    ROOM_CATEGORY,
+    MEAL_PLAN
 }

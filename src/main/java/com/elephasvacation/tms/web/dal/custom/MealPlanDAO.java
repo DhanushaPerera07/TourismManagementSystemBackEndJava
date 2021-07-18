@@ -23,16 +23,12 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 18/07/2021
  */
-package com.elephasvacation.tms.web.business;
+package com.elephasvacation.tms.web.dal.custom;
 
-public enum BOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
-    MEAL_PLAN
+import com.elephasvacation.tms.web.dal.CrudDAO;
+import com.elephasvacation.tms.web.entity.MealPlan;
+
+public interface MealPlanDAO extends CrudDAO<MealPlan, Integer> {
 }

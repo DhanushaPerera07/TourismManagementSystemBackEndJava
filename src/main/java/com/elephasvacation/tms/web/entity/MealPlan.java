@@ -27,6 +27,8 @@
  * @date : 03/05/2021
  * @author : Dhanusha Perera
  * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -38,16 +40,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MealPlan implements SuperEntity{
+public class MealPlan implements SuperEntity {
     private int id;
     private String mealPlan;
-    private Date created;
-    private Date lastUpdated;
+    private Timestamp created;
+    private Timestamp lastUpdated;
 
     public MealPlan(int id, String mealPlan) {
         this.id = id;

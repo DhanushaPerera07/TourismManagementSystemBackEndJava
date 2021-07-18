@@ -34,4 +34,5 @@ public enum DAOTypes {
     EMPLOYEE,
     ROOM_TYPE,
     ROOM_CATEGORY,
+    MEAL_PLAN
 }

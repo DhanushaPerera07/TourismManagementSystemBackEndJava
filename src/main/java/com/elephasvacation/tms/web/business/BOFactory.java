@@ -54,6 +54,8 @@ public class BOFactory {
                 return (T) new RoomTypeBOImpl();
             case ROOM_CATEGORY:
                 return (T) new RoomCategoryBOImpl();
+            case MEAL_PLAN:
+                return (T) new MealPlanBOImpl();
             default:
                 return null;
         }

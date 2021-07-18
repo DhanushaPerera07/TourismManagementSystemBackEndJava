@@ -54,6 +54,8 @@ public class DAOFactory {
                 return (T) new RoomTypeDAOImpl();
             case ROOM_CATEGORY:
                 return (T) new RoomCategoryDAOImpl();
+            case MEAL_PLAN:
+                return (T) new MealPlanDAOImpl();
             default:
                 return null;
         }

@@ -23,13 +23,13 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 15/07/2021
+ * @date : 18/07/2021
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
 import com.elephasvacation.tms.web.dal.CrudUtil;
-import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
-import com.elephasvacation.tms.web.entity.RoomCategory;
+import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
+import com.elephasvacation.tms.web.entity.MealPlan;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,11 +37,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomCategoryDAOImpl implements RoomCategoryDAO {
+public class MealPlanDAOImpl implements MealPlanDAO {
 
-    private static final String TABLE_NAME = "room_category";
-    private static String COLUMN_NAMES = "(category)";
-    Connection connection;
+    private static final String TABLE_NAME = "meal_plan";
+    private static String COLUMN_NAMES = "(meal_plan)";
+    private Connection connection;
 
     @Override
     public void setConnection(Connection connection) throws Exception {
@@ -49,59 +49,58 @@ public class RoomCategoryDAOImpl implements RoomCategoryDAO {
     }
 
     @Override
-    public Integer save(RoomCategory roomCategory) throws Exception {
+    public Integer save(MealPlan mealPlan) throws Exception {
         return CrudUtil.executeAndReturnGeneratedKey(this.connection,
                 "INSERT INTO " + TABLE_NAME + " " + COLUMN_NAMES + " VALUES (?)",
-                roomCategory.getCategory());
+                mealPlan.getMealPlan());
     }
 
     @Override
-    public boolean update(RoomCategory roomCategory) throws Exception {
+    public boolean update(MealPlan mealPlan) throws Exception {
         return CrudUtil.execute(this.connection,
-                "UPDATE " + TABLE_NAME + " SET category=? WHERE id=?",
-                roomCategory.getCategory(),
-                roomCategory.getId()
+                "UPDATE " + TABLE_NAME + " SET meal_plan=? WHERE id=?",
+                mealPlan.getMealPlan(),
+                mealPlan.getId()
         );
     }
 
     @Override
-    public boolean delete(Integer roomCategoryID) throws Exception {
+    public boolean delete(Integer mealPlanID) throws Exception {
         return CrudUtil.execute(connection,
                 "DELETE FROM " + TABLE_NAME + " WHERE id=?",
-                roomCategoryID);
+                mealPlanID);
     }
 
     @Override
-    public RoomCategory get(Integer roomCategoryID) throws Exception {
+    public MealPlan get(Integer mealPlanID) throws Exception {
         ResultSet resultSet = CrudUtil.execute(this.connection,
                 "SELECT * FROM " + TABLE_NAME + " WHERE id=?",
-                roomCategoryID);
+                mealPlanID);
 
         if (resultSet.next()) {
-            return getRoomCategoryObject(resultSet);
+            return getMealPlanObject(resultSet);
         } else {
             return null;
         }
     }
 
     @Override
-    public List<RoomCategory> getAll() throws Exception {
-            List<RoomCategory> RoomCategoryList = new ArrayList<>();
-            ResultSet resultSet = CrudUtil.execute(this.connection,
-                    "SELECT * FROM " + TABLE_NAME);
-            while (resultSet.next()) {
-                RoomCategoryList.add(getRoomCategoryObject(resultSet));
-            }
-            return RoomCategoryList;
+    public List<MealPlan> getAll() throws Exception {
+        List<MealPlan> mealPlanList = new ArrayList<>();
+        ResultSet resultSet = CrudUtil.execute(this.connection,
+                "SELECT * FROM " + TABLE_NAME);
+        while (resultSet.next()) {
+            mealPlanList.add(getMealPlanObject(resultSet));
+        }
+        return mealPlanList;
     }
 
-    private RoomCategory getRoomCategoryObject(ResultSet resultSet) throws SQLException {
-        return new RoomCategory(
+    private MealPlan getMealPlanObject(ResultSet resultSet) throws SQLException {
+        return new MealPlan(
                 resultSet.getInt("id"),
-                resultSet.getString("category"),
+                resultSet.getString("meal_plan"),
                 resultSet.getTimestamp("created"),
                 resultSet.getTimestamp("last_updated")
         );
     }
-
 }

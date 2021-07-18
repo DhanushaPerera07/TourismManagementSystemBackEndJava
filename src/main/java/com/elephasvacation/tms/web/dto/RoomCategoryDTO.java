@@ -31,14 +31,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomCategoryDTO {
+public class RoomCategoryDTO implements Serializable {
     private int id;
     private String category;
     private Timestamp created;
     private Timestamp lastUpdated;
+
+    public RoomCategoryDTO(int id, String category) {
+        this.id = id;
+        this.category = category;
+    }
 }

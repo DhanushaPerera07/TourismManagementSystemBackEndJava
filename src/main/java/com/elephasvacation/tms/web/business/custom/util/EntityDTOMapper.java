@@ -79,4 +79,11 @@ public interface EntityDTOMapper {
     RoomCategoryDTO getRoomCategoryDTO(RoomCategory roomCategory);
 
     List<RoomCategoryDTO> getRoomCategoryDTOs(List<RoomCategory> roomCategoryList);
+
+    /*  -------------------- Meal Plan  -------------------- */
+    MealPlan getMealPlan(MealPlanDTO mealPlanDTO);
+
+    MealPlanDTO getMealPlanDTO(MealPlan mealPlan);
+
+    List<MealPlanDTO> getMealPlanDTOs(List<MealPlan> mealPlan);
 }
