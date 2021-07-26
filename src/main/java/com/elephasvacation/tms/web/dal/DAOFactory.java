@@ -56,6 +56,8 @@ public class DAOFactory {
                 return (T) new RoomCategoryDAOImpl();
             case MEAL_PLAN:
                 return (T) new MealPlanDAOImpl();
+            case MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE:
+                return (T) new MealPlanAccommodationPackageDAOImpl();
             default:
                 return null;
         }

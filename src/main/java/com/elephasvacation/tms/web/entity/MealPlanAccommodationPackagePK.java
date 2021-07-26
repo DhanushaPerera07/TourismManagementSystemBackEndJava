@@ -23,17 +23,21 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 26/07/2021
  */
-package com.elephasvacation.tms.web.dal;
+package com.elephasvacation.tms.web.entity;
 
-public enum DAOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
-    MEAL_PLAN,
-    MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MealPlanAccommodationPackagePK implements Serializable {
+    private int id;
+    private int mealPlanID;
+    private int accommodationPackageID;
 }

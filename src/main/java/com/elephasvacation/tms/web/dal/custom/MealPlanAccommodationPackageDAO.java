@@ -23,17 +23,17 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 04/07/2021
+ * @date : 26/07/2021
  */
-package com.elephasvacation.tms.web.dal;
+package com.elephasvacation.tms.web.dal.custom;
 
-public enum DAOTypes {
-    CUSTOMER,
-    TOUR_DETAIL,
-    ACCOMMODATION,
-    EMPLOYEE,
-    ROOM_TYPE,
-    ROOM_CATEGORY,
-    MEAL_PLAN,
-    MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE
+import com.elephasvacation.tms.web.dal.CrudDAO;
+import com.elephasvacation.tms.web.entity.MealPlanAccommodationPackage;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public interface MealPlanAccommodationPackageDAO extends CrudDAO<MealPlanAccommodationPackage, Integer> {
+
+    List<MealPlanAccommodationPackage> getAllMealPlansByAccommodationPackageID(Integer accommodationPackageID) throws SQLException;
 }
