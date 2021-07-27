@@ -23,25 +23,17 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 13/07/2021
+ * @date : 27/07/2021
  */
-package com.elephasvacation.tms.web.entity;
+package com.elephasvacation.tms.web.dal.custom;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.elephasvacation.tms.web.dal.CrudDAO;
+import com.elephasvacation.tms.web.entity.RoomCategoryAccommodationPackage;
 
-import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class AccommodationRatePK implements Serializable {
-
-    private int id;
-    private int accommodationPackageID;
-    private int roomTypeAccommodationPackageID;
-    private int roomCategoryAccommodationPackageID;
-    private int mealPlanAccommodationPackageID;
-
+public interface RoomCategoryAccommodationPackageDAO extends CrudDAO<RoomCategoryAccommodationPackage,Integer> {
+    List<RoomCategoryAccommodationPackage> getAllRoomCategoriesByAccommodationPackageID(Integer accommodationPackageID)
+            throws SQLException;
 }

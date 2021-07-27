@@ -31,31 +31,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccommodationRate implements SuperEntity{
+public class AccommodationRate implements SuperEntity {
     private AccommodationRatePK accommodationRatePK;
-    private Date created;
-    private Date lastUpdated;
+    private Timestamp created;
+    private Timestamp lastUpdated;
 
     public AccommodationRate(AccommodationRatePK accommodationRatePK) {
         this.accommodationRatePK = accommodationRatePK;
     }
 
     public AccommodationRate(int id,
-                             int roomTypeID,
-                             int roomCategoryID,
-                             int mealPlanID,
                              int accommodationPackageID,
-                             Date created,
-                             Date lastUpdated) {
-        this.accommodationRatePK = new AccommodationRatePK(id, roomTypeID,
-                roomCategoryID,
-                mealPlanID,
-                accommodationPackageID);
+                             int roomTypeAccommodationPackageID,
+                             int roomCategoryAccommodationPackageID,
+                             int mealPlanAccommodationPackageID,
+                             Timestamp created,
+                             Timestamp lastUpdated) {
+        this.accommodationRatePK = new AccommodationRatePK(id,
+                accommodationPackageID,
+                roomTypeAccommodationPackageID,
+                roomCategoryAccommodationPackageID,
+                mealPlanAccommodationPackageID
+        );
         this.created = created;
         this.lastUpdated = lastUpdated;
     }
