@@ -27,5 +27,38 @@
  */
 package com.elephasvacation.tms.web.util;
 
+import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
+
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.io.IOException;
+import java.util.Properties;
+
+/* JPA Bootstrapping and build EntityManagerFactory */
 public class HibernateUtil {
+    private static EntityManagerFactory entityManagerFactory = buildEntityManagerFactory();
+
+    /** Expose the EntityManagerFactory instance.
+    * @return EntityManagerFactory */
+    public static EntityManagerFactory getEntityManagerFactory() {
+        return entityManagerFactory;
+    }
+
+    /** Build the EntityManagerFactory.
+     * @return EntityManagerFactory instance */
+    private static EntityManagerFactory buildEntityManagerFactory() {
+        EntityManagerFactory entityManagerFactory = null;
+
+        Properties properties = new Properties();
+        try {
+            properties.load(HibernateUtil.class.getResourceAsStream(HibernateConstant.APPLICATION_PROPERTIES_FILE_NAME));
+
+            entityManagerFactory = Persistence
+                    .createEntityManagerFactory(HibernateConstant.PERSISTENCE_UNIT_NAME, properties);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return entityManagerFactory;
+    }
 }

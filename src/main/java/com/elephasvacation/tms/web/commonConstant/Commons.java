@@ -25,6 +25,8 @@
  * @author : Dhanusha Perera
  * @author : Dhanusha Perera
  * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @since : 21/04/2021
  * @since : 21/04/2021
  * @since : 21/04/2021
  * @since : 21/04/2021
@@ -46,6 +48,7 @@ public final class Commons {
     public static final String CP = "cp";
     public static final String MESSAGES_PROPERTIES = "messages_properties";
     public static final String APPLICATION_PROPERTIES_FILE_NAME = "/application.properties";
+    public static final String PERSISTENCE_UNIT_NAME = "TMS";
     public static final String USER_DIR = "user.dir";
 
     /* logger file related. */
