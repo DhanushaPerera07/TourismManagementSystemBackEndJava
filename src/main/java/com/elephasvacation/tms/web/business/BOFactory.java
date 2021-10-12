@@ -50,6 +50,8 @@ public class BOFactory {
                 return (T) new CustomerBOImpl();
             case ACCOMMODATION:
                 return (T) new AccommodationBOImpl();
+            case ACCOMMODATION_PACKAGE:
+                return (T) new AccommodationPackageBOImpl();
             case ROOM_TYPE:
                 return (T) new RoomTypeBOImpl();
             case ROOM_CATEGORY:

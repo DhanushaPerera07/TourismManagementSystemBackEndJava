@@ -23,16 +23,37 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 26/07/2021
+ * @date : 28/07/2021
  */
-package com.elephasvacation.tms.web.dal.custom;
+package com.elephasvacation.tms.web.dto;
 
-import com.elephasvacation.tms.web.dal.CrudDAO;
-import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.sql.SQLException;
-import java.util.List;
+import java.sql.Timestamp;
 
-public interface AccommodationPackageDAO extends CrudDAO<AccommodationPackage, Integer> {
-    List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID) throws SQLException;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccommodationPackageDTO {
+    private int id;
+    private int year;
+    private String season;
+    private String validPeriod;
+    private int accommodationId; // hotelID /// {URL}/accommodations/A001
+    private Timestamp created;
+    private Timestamp lastUpdated;
+
+    public AccommodationPackageDTO(int id,
+                                   int year,
+                                   String season,
+                                   String validPeriod,
+                                   int accommodationId) {
+        this.id = id;
+        this.year = year;
+        this.season = season;
+        this.validPeriod = validPeriod;
+        this.accommodationId = accommodationId;
+    }
 }

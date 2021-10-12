@@ -48,6 +48,8 @@ public class DAOFactory {
                 return (T) new TourDetailDAOImpl();
             case ACCOMMODATION:
                 return (T) new AccommodationDAOImpl();
+            case ACCOMMODATION_PACKAGE:
+                return (T) new AccommodationPackageDAOImpl();
             case EMPLOYEE:
                 return (T) new EmployeeDAOImpl();
             case ROOM_TYPE:

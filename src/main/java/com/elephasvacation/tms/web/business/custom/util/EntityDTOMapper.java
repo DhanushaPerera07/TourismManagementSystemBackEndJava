@@ -86,4 +86,11 @@ public interface EntityDTOMapper {
     MealPlanDTO getMealPlanDTO(MealPlan mealPlan);
 
     List<MealPlanDTO> getMealPlanDTOs(List<MealPlan> mealPlan);
+
+    /*  -------------------- Accommodation Package  -------------------- */
+    AccommodationPackage getAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
+
+    AccommodationPackageDTO getAccommodationPackageDTO(AccommodationPackage accommodationPackage);
+
+    List<AccommodationPackageDTO> getAccommodationPackageDTOs(List<AccommodationPackage> accommodationPackageList);
 }

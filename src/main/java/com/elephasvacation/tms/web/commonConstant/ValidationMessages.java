@@ -37,14 +37,19 @@ package com.elephasvacation.tms.web.commonConstant;
 public final class ValidationMessages {
     public static final String INVALID_DATA_INPUT = "Invalid data input";
     public static final String INVALID_DATA_INPUT_CUSTOMIZED = "Invalid data input: {0} is invalid.\n";
-    public static final String INVALID_DATA_INPUT_ID_SHOULD_NOT_BE_INCLUDED = "Invalid data input: id should not be included or set the id to zero";
-    public static final String INVALID_ID = "Invalid input detected. {0} id should only be an integer (except zero).";
-    public static final String SQL_INTEGRITY_CONSTRAINT_VIOLATION = "An integrity constraint (foreign key, primary key or unique key) has been violated.";
+    public static final String INVALID_DATA_INPUT_ID_SHOULD_NOT_BE_INCLUDED
+            = "Invalid data input: id should not be included or set the id to zero";
+    public static final String INVALID_ID
+            = "Invalid input detected. {0} id should only be an integer (except zero).";
+    public static final String SQL_INTEGRITY_CONSTRAINT_VIOLATION
+            = "An integrity constraint (foreign key, primary key or unique key) has been violated.";
     public static final String EMAIL_IS_ALREADY_TAKEN_CUSTOMIZED = "{0} email is already taken.";
     public static final String EMAIL_IS_ALREADY_TAKEN = "Given email is already taken.";
 
-    public static final String ID_IS_REQUIRED = "{0} ID is required.";
-    public static final String INTEGERS_ARE_ONLY_ACCEPTED_EXCEPT_ZERO = "Integers are only accepted (except zero).";
+    public static final String ID_IS_REQUIRED
+            = "{0} ID is required.";
+    public static final String INTEGERS_ARE_ONLY_ACCEPTED_EXCEPT_ZERO
+            = "Integers are only accepted (except zero).";
 
     public static final String RECORD_IS_NOT_FOUND = "{0} record is not found for user input({1}) {2}";
     public static final String TO_RETRIEVE = "to retrieve.";
@@ -52,11 +57,18 @@ public final class ValidationMessages {
     public static final String TO_DELETE = "to delete.";
 
 
-    public static final String REQUEST_CONTENT_TYPE_INVALID = "Invalid Content Type: Request Content Type is invalid. Request Content Type should be: {0} only.";
+    public static final String REQUEST_CONTENT_TYPE_INVALID
+            = "Invalid Content Type: Request Content Type is invalid. Request Content Type should be: {0} only.";
 
-    public static final String ID_AND_FOREIGN_KEY_ID_BOTH_NOT_ALLOWED = "Invalid input: Both {0} id and {1} id are not allowed. Only one of them is allowed.";
+    public static final String ID_AND_FOREIGN_KEY_ID_BOTH_NOT_ALLOWED
+            = "Invalid input: Both {0} id and {1} id are not allowed. Only one of them is allowed.";
 
-    public static final String DATES_NOT_ACCEPTABLE = "Invalid input: No of days, arrival date and departure date not acceptable (Departure date - Arrival date difference should be at least a day).\n";
+    public static final String DATES_NOT_ACCEPTABLE
+            = "Invalid input: No of days, arrival date and departure date not acceptable " +
+            "(Departure date - Arrival date difference should be at least a day).\n";
 
-    public static final String RECORD_NOT_FOUND_FOR_THE_ID = "Invalid input: No matching {0} record found for the given {0} id.\n";
+    public static final String RECORD_NOT_FOUND_FOR_THE_ID
+            = "Invalid input: No matching {0} record found for the given {0} id.\n";
+
+    public static final String DUPLICATE_RECORD_FOUND = "Duplicate record found for the {0}.\n";
 }

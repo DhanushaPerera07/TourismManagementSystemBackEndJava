@@ -23,16 +23,28 @@
  */
 /*
  * @author : Dhanusha Perera
- * @date : 26/07/2021
+ * @date : 28/07/2021
  */
-package com.elephasvacation.tms.web.dal.custom;
+package com.elephasvacation.tms.web.business.custom;
 
-import com.elephasvacation.tms.web.dal.CrudDAO;
-import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import com.elephasvacation.tms.web.business.SuperBO;
+import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public interface AccommodationPackageDAO extends CrudDAO<AccommodationPackage, Integer> {
-    List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID) throws SQLException;
+public interface AccommodationPackageBO extends SuperBO {
+
+    Integer createAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception;
+
+    boolean updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception;
+
+    boolean deleteAccommodationPackage(Integer accommodationPackageID) throws Exception;
+
+    AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID) throws Exception;
+
+    List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID) throws SQLException;
+
+    List<AccommodationPackageDTO> getAllAccommodationPackages() throws Exception;
+
 }

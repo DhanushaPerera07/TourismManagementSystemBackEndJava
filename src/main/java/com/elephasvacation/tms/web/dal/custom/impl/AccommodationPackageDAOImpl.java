@@ -41,6 +41,7 @@ public class AccommodationPackageDAOImpl implements AccommodationPackageDAO {
 
     private static final String TABLE_NAME = "accommodation_package";
     private static String COLUMN_NAMES = "(year, season, valid_period, accommodation_id)";
+    private static String ACCOMMODATION_ID_COL = "accommodation_id";
     private Connection connection;
 
     @Override
@@ -89,6 +90,19 @@ public class AccommodationPackageDAOImpl implements AccommodationPackageDAO {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
+            throws SQLException {
+        List<AccommodationPackage> accommodationPackageList = new ArrayList<>();
+        ResultSet resultSet = CrudUtil.execute(this.connection,
+                "SELECT * FROM " + TABLE_NAME + " WHERE " + ACCOMMODATION_ID_COL + "=?",
+                accommodationID);
+        while (resultSet.next()) {
+            accommodationPackageList.add(getAccommodationPackageObject(resultSet));
+        }
+        return accommodationPackageList;
     }
 
     @Override
