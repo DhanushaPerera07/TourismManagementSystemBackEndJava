@@ -31,4 +31,5 @@ package com.elephasvacation.tms.web.commonConstant;
 public final class HibernateConstant {
     public static final String APPLICATION_PROPERTIES_FILE_NAME = "/application.properties";
     public static final String PERSISTENCE_UNIT_NAME = "TMS";
+    public static final String ENTITY_MANAGER_FACTORY = "EMF";
 }
