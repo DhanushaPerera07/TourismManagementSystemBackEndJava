@@ -24,6 +24,16 @@
  * @author : Dhanusha Perera
  * @author : Dhanusha Perera
  * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @author : Dhanusha Perera
+ * @since : 21/04/2021
+ * @since : 21/04/2021
+ * @since : 21/04/2021
+ * @since : 21/04/2021
+ * @since : 21/04/2021
  * @since : 21/04/2021
  * @since : 21/04/2021
  * @since : 21/04/2021
@@ -34,28 +44,21 @@
  */
 package com.elephasvacation.tms.web.listener;
 
-import com.elephasvacation.tms.web.commonConstant.ApplicationProperties;
-import com.elephasvacation.tms.web.commonConstant.Commons;
+import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
 import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
-import com.elephasvacation.tms.web.util.ApplicationPropertiesUtil;
+import com.elephasvacation.tms.web.util.HibernateUtil;
 import com.elephasvacation.tms.web.util.LogConfig;
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.sql.SQLException;
-import java.util.Properties;
 
 @WebListener
 public class MyContextListener implements ServletContextListener {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(MyContextListener.class);
-
-    Properties properties = ApplicationPropertiesUtil
-            .getInstance()
-            .loadPropertyFile(Commons.APPLICATION_PROPERTIES_FILE_NAME);
 
     /* default constructor */
     public MyContextListener() {
@@ -67,53 +70,24 @@ public class MyContextListener implements ServletContextListener {
         (when the Web application is deployed). */
         LogConfig.initLogging();
         logger.info(SuccessfulMessages.CONTEXT_INITIALIZED_SUCCESSFUL);
-        sce.getServletContext().setAttribute(Commons.CP, basicDataSource());
+        EntityManagerFactory entityManagerFactory = HibernateUtil.getEntityManagerFactory();
+        // let's set an attribute for EntityManagerFactory, and pass the EMF object.
+        sce.getServletContext().setAttribute(HibernateConstant.ENTITY_MANAGER_FACTORY, entityManagerFactory);
 
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        /* This method is called when the servlet Context is undeployed or
+        /* This method is called when the servlet Context is undeploy or
         Application Server shuts down. */
-        BasicDataSource basicDataSource = (BasicDataSource) sce.getServletContext().getAttribute(Commons.CP);
-        try {
-            basicDataSource.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        EntityManagerFactory entityManagerFactory = (EntityManagerFactory) sce.getServletContext()
+                .getAttribute(HibernateConstant.ENTITY_MANAGER_FACTORY);
+
+        if (entityManagerFactory != null) {
+            entityManagerFactory.close();
         }
 
     }
 
 
-    /** config the basic configurations for the database connection pool
-     * by reading application.properties file.
-     * @return BasicDataSource instance.
-     */
-    private BasicDataSource basicDataSource() {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        /* set user name. */
-        basicDataSource.setUsername(properties.getProperty(ApplicationProperties.DATABASE_USER_NAME));
-
-        /* set password. */
-        basicDataSource.setPassword(properties.getProperty(ApplicationProperties.DATABASE_PASSWORD));
-
-        /* set url. */
-        basicDataSource.setUrl(properties.getProperty(ApplicationProperties.DATABASE_URL));
-
-        /* set database driver class name. */
-        basicDataSource.setDriverClassName(properties.getProperty(ApplicationProperties.DATABASE_DRIVER));
-
-        /* set initial connection size.
-         * The initial number of connections that are created when the pool is started.*/
-        basicDataSource.setInitialSize(Integer
-                .parseInt(properties.getProperty(ApplicationProperties.DATABASE_INITIAL_SIZE)));
-
-        /* set max connection size.
-         * The maximum number of active connections
-         * that can be allocated from this pool at the same time, or negative for no limit. */
-        basicDataSource.setMaxTotal(Integer
-                .parseInt(properties.getProperty(ApplicationProperties.DATABASE_MAX_TOTAL)));
-
-        return basicDataSource;
-    }
 }
