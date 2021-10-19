@@ -30,20 +30,35 @@ package com.elephasvacation.tms.web.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Data
+@Entity
+@Table(name = "room_category")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class RoomCategory implements SuperEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String category;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
     public RoomCategory(int id, String category) {
         this.id = id;
+        this.category = category;
+    }
+
+    public RoomCategory(String category) {
         this.category = category;
     }
 }
