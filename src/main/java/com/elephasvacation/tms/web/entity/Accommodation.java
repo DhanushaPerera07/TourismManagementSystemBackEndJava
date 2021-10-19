@@ -23,12 +23,6 @@
  *
  * @author : Dhanusha Perera
  * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -39,13 +33,20 @@ package com.elephasvacation.tms.web.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "accommodation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Accommodation implements SuperEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String name;
     private String situatedIn;
@@ -55,13 +56,17 @@ public class Accommodation implements SuperEntity {
     private String email;
     private String address;
     private String website;
+    @Column(name = "special_details")
     private String specialDetails;
     private String remark;
-    private Date created;
-    private Date lastUpdated;
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
-    public Accommodation(int id,
-                         String name,
+    public Accommodation(String name,
                          String situatedIn,
                          int starRating,
                          String type,
@@ -71,7 +76,6 @@ public class Accommodation implements SuperEntity {
                          String website,
                          String specialDetails,
                          String remark) {
-        this.id = id;
         this.name = name;
         this.situatedIn = situatedIn;
         this.starRating = starRating;
@@ -83,5 +87,4 @@ public class Accommodation implements SuperEntity {
         this.specialDetails = specialDetails;
         this.remark = remark;
     }
-
 }
