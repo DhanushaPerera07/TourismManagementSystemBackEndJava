@@ -20,19 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
- * @author : Dhanusha Perera
- * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
- * @author : Dhanusha Perera
- * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -62,7 +49,7 @@ public class MealPlan implements SuperEntity {
     private String mealPlan;
     @CreationTimestamp
     @Column(name = "created_date")
-    private LocalDateTime addedDate;
+    private LocalDateTime createdDate;
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
