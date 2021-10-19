@@ -29,6 +29,10 @@
  * @date : 03/05/2021
  * @author : Dhanusha Perera
  * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -39,20 +43,36 @@ package com.elephasvacation.tms.web.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Data
+@Entity
+@Table(name = "meal_plan")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class MealPlan implements SuperEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
+    @Column(name = "meal_plan")
     private String mealPlan;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime addedDate;
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
     public MealPlan(int id, String mealPlan) {
         this.id = id;
+        this.mealPlan = mealPlan;
+    }
+
+    public MealPlan(String mealPlan) {
         this.mealPlan = mealPlan;
     }
 }
