@@ -25,6 +25,8 @@
  * @date : 03/05/2021
  * @author : Dhanusha Perera
  * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -35,30 +37,41 @@ package com.elephasvacation.tms.web.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "accommodation_package")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccommodationPackage implements SuperEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private int year;
     private String season;
+    @Column(name = "valid_period")
     private String validPeriod;
-    private int accommodationId;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    @ManyToOne
+    @JoinColumn(name = "accommodation_id")
+    private Accommodation accommodation; // FK - OneToMany
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
-    public AccommodationPackage(int id,
-                                int year,
-                                String season,
-                                String validPeriod,
-                                int accommodationId) {
-        this.id = id;
+    public AccommodationPackage(int year, String season, String validPeriod, Accommodation accommodation) {
         this.year = year;
         this.season = season;
         this.validPeriod = validPeriod;
-        this.accommodationId = accommodationId;
+        this.accommodation = accommodation;
     }
+
+
 }

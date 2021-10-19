@@ -23,6 +23,8 @@
  *
  * @author : Dhanusha Perera
  * @date : 03/05/2021
+ * @author : Dhanusha Perera
+ * @date : 03/05/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -38,6 +40,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "accommodation")
@@ -59,6 +62,8 @@ public class Accommodation implements SuperEntity {
     @Column(name = "special_details")
     private String specialDetails;
     private String remark;
+    @OneToMany(mappedBy = "accommodation")
+    private List<AccommodationPackage> accommodationPackageList;
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createdDate;
