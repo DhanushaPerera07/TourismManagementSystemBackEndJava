@@ -41,47 +41,54 @@ package com.elephasvacation.tms.web.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Data
+@Entity
+@Table(name = "customer")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Customer implements SuperEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE) // TODO: check the generation type works fine here
     private int id;
     private String name;
     private String nationality;
     private String passportNo;
     private String email;
-    private String countryCallingCode;
     private String contactNo;
     private String country;
     private String description;
+    @Column(name = "additional_notes")
     private String additionalNotes;
-    private Date addedDate;
-    private Date lastUpdated;
+    @Column(name = "created_date")
+    private LocalDateTime addedDate;
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
     /* constructor without addedDate and lastUpdated properties. */
-    public Customer(int id,
-                    String name,
+    public Customer(String name,
                     String nationality,
                     String passportNo,
                     String email,
-                    String countryCallingCode,
                     String contactNo,
                     String country,
                     String description,
                     String additionalNotes) {
-        this.id = id;
         this.name = name;
         this.nationality = nationality;
         this.passportNo = passportNo;
         this.email = email;
-        this.countryCallingCode = countryCallingCode;
         this.contactNo = contactNo;
         this.country = country;
         this.description = description;
         this.additionalNotes = additionalNotes;
     }
+
 
 }

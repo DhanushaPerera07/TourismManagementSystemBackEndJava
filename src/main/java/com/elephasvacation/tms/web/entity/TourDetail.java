@@ -36,31 +36,52 @@ import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
-@Data
+@Entity
+@Table(name = "tour_detail")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class TourDetail implements SuperEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
+    @Column(name = "no_of_days")
     private int noOfDays;
+    @Column(name = "no_of_people")
     private int noOfPeople;
+    @Column(name = "no_of_children")
     private int noOfChildren;
+    @Column(name = "star_category")
     private int starCategory;
+    @Column(name = "arrivale_date")
     private Date arrivalDate;
+    @Column(name = "departure_date")
     private Date departureDate;
     private TourDetailStatusTypes status;
+    @Column(name = "exchange_rate")
     private BigDecimal exchangeRate;
+    @Column(name = "tour_agent")
     private String tourAgent;
+    @Column(name = "tour_profit")
     private BigDecimal agentProfit;
-    private int customerId;
-    private Date created;
-    private Date lastUpdated;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer; // FK - OneToMany
+    @Column(name = "created_date")
+    private LocalDateTime addedDate;
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
-    public TourDetail(int id,
-                      int noOfDays,
+
+    public TourDetail(int noOfDays,
                       int noOfPeople,
                       int noOfChildren,
                       int starCategory,
@@ -69,9 +90,7 @@ public class TourDetail implements SuperEntity {
                       TourDetailStatusTypes status,
                       BigDecimal exchangeRate,
                       String tourAgent,
-                      BigDecimal agentProfit,
-                      int customerId) {
-        this.id = id;
+                      BigDecimal agentProfit) {
         this.noOfDays = noOfDays;
         this.noOfPeople = noOfPeople;
         this.noOfChildren = noOfChildren;
@@ -82,7 +101,5 @@ public class TourDetail implements SuperEntity {
         this.exchangeRate = exchangeRate;
         this.tourAgent = tourAgent;
         this.agentProfit = agentProfit;
-        this.customerId = customerId;
     }
-
 }
