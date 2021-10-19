@@ -9,6 +9,8 @@
       </description>
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
+        <class>com.elephasvacation.tms.web.entity.Customer</class>
+        <class>com.elephasvacation.tms.web.entity.Employee</class>
+        <class>com.elephasvacation.tms.web.entity.Credential</class>
     </persistence-unit>
 </persistence>
