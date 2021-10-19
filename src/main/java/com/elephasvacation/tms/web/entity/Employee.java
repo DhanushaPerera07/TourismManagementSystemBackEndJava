@@ -38,30 +38,43 @@ import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
-@Data
+@Entity
+@Table(name = "employee")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Employee implements SuperEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String name;
     private String address;
+    @Column(name = "date_of_birth")
     private Date dateOfBirth;
     private String nic;
     private String contact;
+    @Column(unique = true)
     private String email;
     private GenderTypes gender;
     private String position;
     private String status;
-    private String password;
-    private Date created;
-    private Date lastUpdated;
+//    private String password;
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime addedDate;
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
     /* custom constructor - without created, lastUpdated. */
-    public Employee(int id,
-                    String name,
+    public Employee(String name,
                     String address,
                     Date dateOfBirth,
                     String nic,
@@ -69,9 +82,7 @@ public class Employee implements SuperEntity {
                     String email,
                     GenderTypes gender,
                     String position,
-                    String status,
-                    String password) {
-        this.id = id;
+                    String status) {
         this.name = name;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
@@ -81,7 +92,5 @@ public class Employee implements SuperEntity {
         this.gender = gender;
         this.position = position;
         this.status = status;
-        this.password = password;
     }
-
 }
