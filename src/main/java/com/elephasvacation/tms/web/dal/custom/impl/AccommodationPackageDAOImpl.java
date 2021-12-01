@@ -27,105 +27,66 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
+import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AccommodationPackageDAOImpl implements AccommodationPackageDAO {
 
-    private static final String TABLE_NAME = "accommodation_package";
-    private static String COLUMN_NAMES = "(year, season, valid_period, accommodation_id)";
-    private static String ACCOMMODATION_ID_COL = "accommodation_id";
-    private Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
+
+
+    // CrudDAO ======================================================================================================
 
     @Override
     public Integer save(AccommodationPackage accommodationPackage) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO " + TABLE_NAME + " " + COLUMN_NAMES + " VALUES (?,?,?,?)",
-                accommodationPackage.getYear(),
-                accommodationPackage.getSeason(),
-                accommodationPackage.getValidPeriod(),
-                accommodationPackage.getAccommodationId()
-        );
+        this.entityManager.persist(accommodationPackage);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return accommodationPackage.getId();
     }
 
     @Override
-    public boolean update(AccommodationPackage accommodationPackage) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE " + TABLE_NAME + " SET year=?, season=?, valid_period=?, accommodation_id=? WHERE id=?",
-                accommodationPackage.getYear(),
-                accommodationPackage.getSeason(),
-                accommodationPackage.getValidPeriod(),
-                accommodationPackage.getAccommodationId(),
-                accommodationPackage.getId()
-        );
+    public void update(AccommodationPackage accommodationPackage) throws Exception {
+        this.entityManager.merge(accommodationPackage);
     }
 
     @Override
-    public boolean delete(Integer accommodationPackageID) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM " + TABLE_NAME + " WHERE id=?",
-                accommodationPackageID);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(AccommodationPackage.class, key));
     }
 
     @Override
-    public AccommodationPackage get(Integer accommodationPackageID) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME + " WHERE id=?",
-                accommodationPackageID);
-
-        if (resultSet.next()) {
-            return getAccommodationPackageObject(resultSet);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
-            throws SQLException {
-        List<AccommodationPackage> accommodationPackageList = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME + " WHERE " + ACCOMMODATION_ID_COL + "=?",
-                accommodationID);
-        while (resultSet.next()) {
-            accommodationPackageList.add(getAccommodationPackageObject(resultSet));
-        }
-        return accommodationPackageList;
+    public AccommodationPackage get(Integer key) throws Exception {
+        return this.entityManager.find(AccommodationPackage.class, key);
     }
 
     @Override
     public List<AccommodationPackage> getAll() throws Exception {
-        List<AccommodationPackage> accommodationPackageList = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME);
-        while (resultSet.next()) {
-            accommodationPackageList.add(getAccommodationPackageObject(resultSet));
-        }
-        return accommodationPackageList;
+        Query allAccommodationPackage = this.entityManager.createQuery("SELECT pkg FROM AccommodationPackage pkg");
+        return (List<AccommodationPackage>) allAccommodationPackage.getResultList();
     }
 
-    private AccommodationPackage getAccommodationPackageObject(ResultSet resultSet)
+
+    // AccommodationPackageDAO ======================================================================================
+
+    @Override
+    public List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
             throws SQLException {
-        return new AccommodationPackage(
-                resultSet.getInt("id"),
-                resultSet.getInt("year"),
-                resultSet.getString("season"),
-                resultSet.getString("valid_period"),
-                resultSet.getInt("accommodation_id"),
-                resultSet.getTimestamp("created"),
-                resultSet.getTimestamp("last_updated")
-        );
+        // TODO: Tried to use JPA Query Parameters
+        Query allAccommodationPackage = this.entityManager
+                .createQuery("SELECT pkg FROM AccommodationPackage pkg WHERE pkg.accommodation.id=?1");
+        allAccommodationPackage.setParameter(Number.ONE, accommodationID);
+        return (List<AccommodationPackage>) allAccommodationPackage.getResultList();
     }
 }

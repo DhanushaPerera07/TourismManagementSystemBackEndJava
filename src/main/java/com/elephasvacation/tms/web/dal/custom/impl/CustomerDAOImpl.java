@@ -27,104 +27,54 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public class CustomerDAOImpl implements CustomerDAO {
 
-    private static final String COLUMN_NAMES = "(name, nationality, passport_no,email, country_calling_code, contact_no, country, description, additional_notes)";
-    private Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
+    /**
+     * Persist the new customer record to the database.
+     *
+     * @returns Integer: generated primary key of the customer.
+     */
     @Override
     public Integer save(Customer customer) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO customer " + COLUMN_NAMES + " VALUES (?,?,?,?,?,?,?,?,?)",
-                customer.getName(),
-                customer.getNationality(),
-                customer.getPassportNo(),
-                customer.getEmail(),
-                customer.getCountryCallingCode(),
-                customer.getContactNo(),
-                customer.getCountry(),
-                customer.getDescription(),
-                customer.getAdditionalNotes()
-        );
+        this.entityManager.persist(customer);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return customer.getId();
     }
 
     @Override
-    public boolean update(Customer customer) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE customer SET name=?, nationality=?, passport_no=?, email=?, country_calling_code=?, contact_no=?, country=?, description=?, additional_notes=? WHERE id=?",
-                customer.getName(),
-                customer.getNationality(),
-                customer.getPassportNo(),
-                customer.getEmail(),
-                customer.getCountryCallingCode(),
-                customer.getContactNo(),
-                customer.getCountry(),
-                customer.getDescription(),
-                customer.getAdditionalNotes(),
-                customer.getId()
-        );
+    public void update(Customer customer) throws Exception {
+        this.entityManager.merge(customer);
     }
 
     @Override
-    public boolean delete(Integer key) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM customer WHERE id=?",
-                key);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(Customer.class, key));
     }
 
     @Override
     public Customer get(Integer key) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM customer WHERE id=?",
-                key);
-
-        if (resultSet.next()) {
-            return getCustomerObject(resultSet);
-        } else {
-            return null;
-        }
+        return this.entityManager.find(Customer.class, key);
     }
 
     @Override
     public List<Customer> getAll() throws Exception {
-        List<Customer> customers = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM customer");
-        while (resultSet.next()) {
-            customers.add(getCustomerObject(resultSet));
-        }
-        return customers;
+        Query allCustomersQuery = this.entityManager.createQuery("SELECT c FROM customer c");
+        return (List<Customer>) allCustomersQuery.getResultList();
     }
 
-    private Customer getCustomerObject(ResultSet resultSet) throws SQLException {
-        return new Customer(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getString("nationality"),
-                resultSet.getString("passport_no"),
-                resultSet.getString("email"),
-                resultSet.getString("country_calling_code"),
-                resultSet.getString("contact_no"),
-                resultSet.getString("country"),
-                resultSet.getString("description"),
-                resultSet.getString("additional_notes"),
-                resultSet.getDate("added_date"),
-                resultSet.getDate("last_updated")
-        );
-    }
 }

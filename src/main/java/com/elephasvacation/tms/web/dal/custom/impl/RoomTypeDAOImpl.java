@@ -27,81 +27,50 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
 import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
 import com.elephasvacation.tms.web.entity.RoomType;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class RoomTypeDAOImpl implements RoomTypeDAO {
 
-    private static final String COLUMN_NAMES = "(type)";
-    private static final String TABLE_NAME = "room_type";
-    private Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
     public Integer save(RoomType roomType) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(connection,
-                "INSERT INTO " + TABLE_NAME + " " + COLUMN_NAMES + " VALUES (?)",
-                roomType.getType());
+        this.entityManager.persist(roomType);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return roomType.getId();
     }
 
     @Override
-    public boolean update(RoomType roomType) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE " + TABLE_NAME + " SET type=? WHERE id=?",
-                roomType.getType(),
-                roomType.getId()
-        );
+    public void update(RoomType roomType) throws Exception {
+        this.entityManager.merge(roomType);
     }
 
     @Override
-    public boolean delete(Integer roomTypeID) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM " + TABLE_NAME + " WHERE id=?",
-                roomTypeID);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(RoomType.class, key));
     }
 
     @Override
-    public RoomType get(Integer roomTypeID) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME + " WHERE id=?",
-                roomTypeID);
-
-        if (resultSet.next()) {
-            return getRoomTypeObject(resultSet);
-        } else {
-            return null;
-        }
+    public RoomType get(Integer key) throws Exception {
+        return this.entityManager.find(RoomType.class, key);
     }
 
     @Override
     public List<RoomType> getAll() throws Exception {
-        List<RoomType> roomTypeList = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME);
-        while (resultSet.next()) {
-            roomTypeList.add(getRoomTypeObject(resultSet));
-        }
-        return roomTypeList;
-    }
+        TypedQuery<RoomType> selectRoomTypeTypedQuery =
+                this.entityManager.createQuery("SELECT rt FROM RoomType rt", RoomType.class);
 
-    private RoomType getRoomTypeObject(ResultSet resultSet) throws SQLException {
-        return new RoomType(
-                resultSet.getInt("id"),
-                resultSet.getString("type"),
-                resultSet.getTimestamp("created"),
-                resultSet.getTimestamp("last_updated")
-        );
+        return selectRoomTypeTypedQuery.getResultList();
     }
-
 }

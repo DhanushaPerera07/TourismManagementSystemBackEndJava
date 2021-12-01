@@ -27,8 +27,9 @@
  */
 package com.elephasvacation.tms.web.dal;
 
+import javax.persistence.EntityManager;
 import java.sql.Connection;
 
 public interface SuperDAO {
-    public abstract void setConnection(Connection connection) throws Exception;
+    void setEntityManager(EntityManager entityManager);
 }

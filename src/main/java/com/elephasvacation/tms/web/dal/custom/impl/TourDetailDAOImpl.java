@@ -27,138 +27,66 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
+import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
 import com.elephasvacation.tms.web.entity.TourDetail;
-import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public class TourDetailDAOImpl implements TourDetailDAO {
 
-    private static final String COLUMN_NAMES =
-            "(no_of_days, no_of_people, no_of_children, star_category, " +
-                    "arrival_date, departure_date, status, exchange_rate, " +
-                    "tour_agent, agent_profit, customer_id)";
-    private Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
     public Integer save(TourDetail tourDetail) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO tour_detail " + COLUMN_NAMES + " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                tourDetail.getNoOfDays(),
-                tourDetail.getNoOfPeople(),
-                tourDetail.getNoOfChildren(),
-                tourDetail.getStarCategory(),
-                tourDetail.getArrivalDate(),
-                tourDetail.getDepartureDate(),
-                tourDetail.getStatus().toString(),
-                tourDetail.getExchangeRate(),
-                tourDetail.getTourAgent(),
-                tourDetail.getAgentProfit(),
-                tourDetail.getCustomerId()
-        );
+        this.entityManager.persist(tourDetail);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return tourDetail.getId();
     }
 
     @Override
-    public boolean update(TourDetail tourDetail) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE tour_detail SET no_of_days=?, no_of_people=?, no_of_children=?, star_category=?, arrival_date=?, departure_date=?, status=?, exchange_rate=?, tour_agent=?, agent_profit=?, customer_id=?  WHERE id=?",
-                tourDetail.getNoOfDays(),
-                tourDetail.getNoOfPeople(),
-                tourDetail.getNoOfChildren(),
-                tourDetail.getStarCategory(),
-                tourDetail.getArrivalDate(),
-                tourDetail.getDepartureDate(),
-                tourDetail.getStatus().toString(),
-                tourDetail.getExchangeRate(),
-                tourDetail.getTourAgent(),
-                tourDetail.getAgentProfit(),
-                tourDetail.getCustomerId(),
-                tourDetail.getId()
-        );
+    public void update(TourDetail tourDetail) throws Exception {
+        this.entityManager.merge(tourDetail);
     }
 
     @Override
-    public boolean delete(Integer key) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM tour_detail WHERE id=?",
-                key);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(TourDetail.class, key));
     }
 
     @Override
     public TourDetail get(Integer key) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM tour_detail WHERE id=?",
-                key);
-
-        if (resultSet.next()) {
-            return getTourDetailObject(resultSet);
-        } else {
-            return null;
-        }
+        return this.entityManager.find(TourDetail.class, key);
     }
 
     @Override
     public List<TourDetail> getAll() throws Exception {
-        List<TourDetail> tourDetailArr = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM tour_detail");
-        while (resultSet.next()) {
-            tourDetailArr.add(getTourDetailObject(resultSet));
-        }
-        return tourDetailArr;
+        Query allTourDetailsQuery = this.entityManager.createQuery("SELECT t FROM TourDetail t");
+        return (List<TourDetail>) allTourDetailsQuery.getResultList();
     }
 
     @Override
-    public List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws SQLException {
-        List<TourDetail> tourDetailArr = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM tour_detail WHERE customer_id=?", customerID);
-        while (resultSet.next()) {
-            tourDetailArr.add(getTourDetailObject(resultSet));
-        }
-        return tourDetailArr;
-    }
-
-    private TourDetail getTourDetailObject(ResultSet resultSet) throws SQLException {
-        return new TourDetail(resultSet.getInt("id"),
-                resultSet.getInt("no_of_days"),
-                resultSet.getInt("no_of_people"),
-                resultSet.getInt("no_of_children"),
-                resultSet.getInt("star_category"),
-                resultSet.getDate("arrival_date"),
-                resultSet.getDate("departure_date"),
-                TourDetailStatusTypes.valueOf(resultSet.getString("status")),
-                resultSet.getBigDecimal("exchange_rate"),
-                resultSet.getString("tour_agent"),
-                resultSet.getBigDecimal("agent_profit"),
-                resultSet.getInt("customer_id"),
-                resultSet.getDate("created"),
-                resultSet.getDate("last_updated")
-        );
+    public List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws Exception {
+        Query query = this.entityManager.createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1");
+        query.setParameter(Number.ONE, customerID);
+        return (List<TourDetail>) query.getResultList();
     }
 
     @Override
     public TourDetail getTourDetailByCustomerIDAndTourDetailID(int customerID,
-                                                               int tourDetailID) throws SQLException {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM tour_detail WHERE id=? AND customer_id=?",
-                tourDetailID, customerID);
-
-        if (resultSet.next()) {
-            return getTourDetailObject(resultSet);
-        } else {
-            return null;
-        }
+                                                               int tourDetailID) throws Exception {
+        Query query = this.entityManager
+                .createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1 AND t.id=?2");
+        query.setParameter(Number.ONE, customerID);
+        query.setParameter(Number.TWO, tourDetailID);
+        return (TourDetail) query.getSingleResult();
     }
 }

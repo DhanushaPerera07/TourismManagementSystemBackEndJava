@@ -36,9 +36,9 @@ public interface CrudDAO<T extends SuperEntity, PK extends Serializable> extends
 
     Integer save(T entity) throws Exception;
 
-    boolean update(T entity) throws Exception;
+    void update(T entity) throws Exception;
 
-    boolean delete(PK key) throws Exception;
+    void delete(PK key) throws Exception;
 
     T get(PK key) throws Exception;
 

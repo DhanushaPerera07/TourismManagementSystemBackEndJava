@@ -30,11 +30,11 @@ package com.elephasvacation.tms.web.dal.custom;
 import com.elephasvacation.tms.web.dal.CrudDAO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface TourDetailDAO extends CrudDAO<TourDetail, Integer> {
-    TourDetail getTourDetailByCustomerIDAndTourDetailID(int customerID, int tourDetailID) throws SQLException;
 
-    List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws SQLException;
+    TourDetail getTourDetailByCustomerIDAndTourDetailID(int customerID, int tourDetailID) throws Exception;
+
+    List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws Exception;
 }

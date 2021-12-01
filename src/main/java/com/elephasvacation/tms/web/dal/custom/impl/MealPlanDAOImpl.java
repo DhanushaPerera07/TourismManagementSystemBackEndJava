@@ -27,80 +27,55 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.entity.MealPlan;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class MealPlanDAOImpl implements MealPlanDAO {
 
-    private static final String TABLE_NAME = "meal_plan";
-    private static String COLUMN_NAMES = "(meal_plan)";
-    private Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
     public Integer save(MealPlan mealPlan) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO " + TABLE_NAME + " " + COLUMN_NAMES + " VALUES (?)",
-                mealPlan.getMealPlan());
+        this.entityManager.persist(mealPlan);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return mealPlan.getId();
     }
 
     @Override
-    public boolean update(MealPlan mealPlan) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE " + TABLE_NAME + " SET meal_plan=? WHERE id=?",
-                mealPlan.getMealPlan(),
-                mealPlan.getId()
-        );
+    public void update(MealPlan mealPlan) throws Exception {
+        this.entityManager.merge(mealPlan);
     }
 
     @Override
-    public boolean delete(Integer mealPlanID) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM " + TABLE_NAME + " WHERE id=?",
-                mealPlanID);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(MealPlan.class, key));
     }
 
     @Override
-    public MealPlan get(Integer mealPlanID) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME + " WHERE id=?",
-                mealPlanID);
-
-        if (resultSet.next()) {
-            return getMealPlanObject(resultSet);
-        } else {
-            return null;
-        }
+    public MealPlan get(Integer key) throws Exception {
+        return this.entityManager.find(MealPlan.class, key);
     }
 
     @Override
     public List<MealPlan> getAll() throws Exception {
-        List<MealPlan> mealPlanList = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME);
-        while (resultSet.next()) {
-            mealPlanList.add(getMealPlanObject(resultSet));
-        }
-        return mealPlanList;
-    }
+//        This is how you can do the same thing using 'Query', but if you do that you have to cast it.
+//        Query allMealPlanQuery = this.entityManager.createQuery("SELECT mp FROM MealPlan mp");
+//        return (List<MealPlan>) allMealPlanQuery.getResultList();
 
-    private MealPlan getMealPlanObject(ResultSet resultSet) throws SQLException {
-        return new MealPlan(
-                resultSet.getInt("id"),
-                resultSet.getString("meal_plan"),
-                resultSet.getTimestamp("created"),
-                resultSet.getTimestamp("last_updated")
-        );
+        TypedQuery<MealPlan> selectMpFromMealPlanMpTypedQuery = this.entityManager
+                .createQuery("SELECT mp FROM MealPlan mp", MealPlan.class);
+
+        return selectMpFromMealPlanMpTypedQuery.getResultList();
+
     }
 }
