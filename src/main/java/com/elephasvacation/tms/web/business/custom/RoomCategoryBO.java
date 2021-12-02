@@ -36,9 +36,9 @@ public interface RoomCategoryBO extends SuperBO {
 
     Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception;
 
-    boolean updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception;
+    void updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception;
 
-    boolean deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception;
+    void deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception;
 
     RoomCategoryDTO getRoomCategoryByID(Integer roomCategoryID) throws Exception;
 

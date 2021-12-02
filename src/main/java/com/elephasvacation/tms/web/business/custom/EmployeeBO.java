@@ -36,9 +36,9 @@ public interface EmployeeBO extends SuperBO {
 
     Integer createEmployee(EmployeeDTO dto) throws Exception;
 
-    boolean updateEmployee(EmployeeDTO dto) throws Exception;
+    void updateEmployee(EmployeeDTO dto) throws Exception;
 
-    boolean deleteEmployee(int employeeID) throws Exception;
+    void deleteEmployee(int employeeID) throws Exception;
 
     EmployeeDTO getEmployeeByID(int employeeID) throws Exception;
 

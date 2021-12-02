@@ -27,8 +27,8 @@
  */
 package com.elephasvacation.tms.web.business;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 
 public interface SuperBO {
-    void setConnection(Connection connection) throws Exception;
+    void setEntityManager(EntityManager entityManager);
 }

@@ -28,24 +28,24 @@
 package com.elephasvacation.tms.web.business.custom;
 
 import com.elephasvacation.tms.web.business.SuperBO;
+import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface TourDetailBO extends SuperBO {
 
-    Integer createTourDetail(TourDetail tourDetail) throws Exception;
+    Integer createTourDetail(TourDetailDTO tourDetailDTO) throws Exception;
 
-    boolean updateTourDetail(TourDetail tourDetail) throws Exception;
+    void updateTourDetail(TourDetailDTO tourDetailDTO) throws Exception;
 
-    boolean deleteTourDetail(int tourDetailID) throws Exception;
+    void deleteTourDetail(Integer tourDetailID) throws Exception;
 
-    TourDetail getTourDetailByID(int tourDetailID) throws Exception;
+    TourDetail getTourDetailByID(Integer tourDetailID) throws Exception;
 
-    TourDetail getTourDetailByIDAndCustomerID(int customerID, int tourDetailID) throws Exception;
+    TourDetail getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception;
 
     List<TourDetail> getAllTourDetails() throws Exception;
 
-    List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws SQLException;
+    List<TourDetail> getAllTourDetailsByCustomerID(Integer customerID) throws Exception;
 }

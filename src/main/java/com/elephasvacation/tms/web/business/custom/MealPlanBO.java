@@ -36,9 +36,9 @@ public interface MealPlanBO extends SuperBO {
 
     Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception;
 
-    boolean updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception;
+    void updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception;
 
-    boolean deleteMealPlan(Integer mealPlanID) throws Exception;
+    void deleteMealPlan(Integer mealPlanID) throws Exception;
 
     MealPlanDTO getMealPlanByID(Integer mealPlanID) throws Exception;
 

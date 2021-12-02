@@ -28,42 +28,42 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.RoomCategoryBO;
-import com.elephasvacation.tms.web.business.custom.util.EntityDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.RoomCategoryDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class RoomCategoryBOImpl implements RoomCategoryBO {
 
-    private RoomCategoryDAO roomCategoryDAO = DAOFactory
-            .getInstance()
-            .getDAO(DAOTypes.ROOM_CATEGORY);
-    private EntityDTOMapper mapper = EntityDTOMapper.instance;
+    private RoomCategoryDAO roomCategoryDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_CATEGORY);
+    private RoomCategoryDTOMapper mapper = RoomCategoryDTOMapper.instance;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.roomCategoryDAO.setConnection(connection);
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+
+        /* Set Entity Manager to the DAL. */
+        this.roomCategoryDAO.setEntityManager(this.entityManager);
     }
 
     @Override
     public Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception {
-        return this.roomCategoryDAO
-                .save(this.mapper.getRoomCategory(roomCategoryDTO));
+        return this.roomCategoryDAO.save(this.mapper.getRoomCategory(roomCategoryDTO));
     }
 
     @Override
-    public boolean updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception {
-        return this.roomCategoryDAO
-                .update(this.mapper.getRoomCategory(roomCategoryDTO));
+    public void updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception {
+        this.roomCategoryDAO.update(this.mapper.getRoomCategory(roomCategoryDTO));
     }
 
     @Override
-    public boolean deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception {
-        return this.roomCategoryDAO.delete(roomCategoryID);
+    public void deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception {
+        this.roomCategoryDAO.delete(roomCategoryID);
     }
 
     @Override
