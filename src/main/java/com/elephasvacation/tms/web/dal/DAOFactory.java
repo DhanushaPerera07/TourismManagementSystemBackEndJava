@@ -50,8 +50,12 @@ public class DAOFactory {
                 return (T) new AccommodationDAOImpl();
             case ACCOMMODATION_PACKAGE:
                 return (T) new AccommodationPackageDAOImpl();
+            case ACCOMMODATION_RATE:
+                return (T) new AccommodationRateDAOImpl();
             case EMPLOYEE:
                 return (T) new EmployeeDAOImpl();
+            case EMPLOYEE_CREDENTIAL:
+                return (T) new EmployeeCredentialDAOImpl();
             case ROOM_TYPE:
                 return (T) new RoomTypeDAOImpl();
             case ROOM_CATEGORY:
@@ -59,7 +63,11 @@ public class DAOFactory {
             case MEAL_PLAN:
                 return (T) new MealPlanDAOImpl();
             case MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE:
-                return (T) new MealPlanAccommodationPackageDAOImpl();
+                return (T) new AccommodationPackageMealPlanDAOImpl();
+            case ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE:
+                return (T) new AccommodationPackageRoomCategoryDAOImpl();
+            case ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE:
+                return (T) new AccommodationPackageRoomTypeDAOImpl();
             default:
                 return null;
         }

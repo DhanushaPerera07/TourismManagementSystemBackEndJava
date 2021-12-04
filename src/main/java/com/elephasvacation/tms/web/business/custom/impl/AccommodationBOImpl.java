@@ -28,23 +28,27 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationBO;
-import com.elephasvacation.tms.web.business.custom.util.EntityDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.AccommodationDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
 import com.elephasvacation.tms.web.dto.AccommodationDTO;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class AccommodationBOImpl implements AccommodationBO {
 
     AccommodationDAO accommodationDAO = DAOFactory.getInstance().getDAO(DAOTypes.ACCOMMODATION);
-    EntityDTOMapper mapper = EntityDTOMapper.instance;
+    AccommodationDTOMapper mapper = AccommodationDTOMapper.instance;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.accommodationDAO.setConnection(connection);
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+
+        /* Set Entity Manager to the DAL. */
+        this.accommodationDAO.setEntityManager(this.entityManager);
     }
 
 
@@ -54,13 +58,13 @@ public class AccommodationBOImpl implements AccommodationBO {
     }
 
     @Override
-    public boolean updateAccommodation(AccommodationDTO accommodationDTO) throws Exception {
-        return this.accommodationDAO.update(this.mapper.getAccommodation(accommodationDTO));
+    public void updateAccommodation(AccommodationDTO accommodationDTO) throws Exception {
+        this.accommodationDAO.update(this.mapper.getAccommodation(accommodationDTO));
     }
 
     @Override
-    public boolean deleteAccommodation(int accommodationID) throws Exception {
-        return this.accommodationDAO.delete(accommodationID);
+    public void deleteAccommodation(int accommodationID) throws Exception {
+        this.accommodationDAO.delete(accommodationID);
     }
 
     @Override
@@ -70,6 +74,6 @@ public class AccommodationBOImpl implements AccommodationBO {
 
     @Override
     public List<AccommodationDTO> getAllAccommodations() throws Exception {
-        return this.mapper.getAccommodationDTOs(this.accommodationDAO.getAll());
+        return this.mapper.getAccommodationDTOList(this.accommodationDAO.getAll());
     }
 }

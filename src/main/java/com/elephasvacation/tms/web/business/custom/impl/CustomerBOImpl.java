@@ -28,29 +28,27 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
-import com.elephasvacation.tms.web.business.custom.util.EntityDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.CustomerDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class CustomerBOImpl implements CustomerBO {
 
-    private final CustomerDAO customerDAO;
-    private final EntityDTOMapper mapper = EntityDTOMapper.instance;
-    private Connection connection;
-
-    public CustomerBOImpl() {
-        this.customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
-    }
+    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
+    private final CustomerDTOMapper mapper = CustomerDTOMapper.instance;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
-        this.customerDAO.setConnection(connection);
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+
+        /* Set Entity Manager to the DAL. */
+        this.customerDAO.setEntityManager(this.entityManager);
     }
 
     @Override
@@ -59,13 +57,13 @@ public class CustomerBOImpl implements CustomerBO {
     }
 
     @Override
-    public boolean updateCustomer(CustomerDTO customerDTO) throws Exception {
-        return this.customerDAO.update(mapper.getCustomer(customerDTO));
+    public void updateCustomer(CustomerDTO customerDTO) throws Exception {
+        this.customerDAO.update(mapper.getCustomer(customerDTO));
     }
 
     @Override
-    public boolean deleteCustomer(int customerID) throws Exception {
-        return this.customerDAO.delete(customerID);
+    public void deleteCustomer(int customerID) throws Exception {
+        this.customerDAO.delete(customerID);
     }
 
     @Override

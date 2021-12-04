@@ -38,14 +38,20 @@ import java.util.Properties;
 public class HibernateUtil {
     private static EntityManagerFactory entityManagerFactory = buildEntityManagerFactory();
 
-    /** Expose the EntityManagerFactory instance.
-    * @return EntityManagerFactory */
+    /**
+     * Expose the EntityManagerFactory instance.
+     *
+     * @return EntityManagerFactory
+     */
     public static EntityManagerFactory getEntityManagerFactory() {
         return entityManagerFactory;
     }
 
-    /** Build the EntityManagerFactory.
-     * @return EntityManagerFactory instance */
+    /**
+     * Build the EntityManagerFactory.
+     *
+     * @return EntityManagerFactory instance
+     */
     private static EntityManagerFactory buildEntityManagerFactory() {
         EntityManagerFactory entityManagerFactory = null;
 

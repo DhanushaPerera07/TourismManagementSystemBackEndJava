@@ -22,42 +22,6 @@
  * SOFTWARE.
  *
  * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
- * @since : 21/04/2021
  * @since : 21/04/2021
  */
 /**
@@ -102,7 +66,8 @@ public class LogConfig {
     public static void createLoggingPath() {
         File file = new File(Commons.LOGGER_FILE_FULL_PATH);
         if (!file.exists()) {
-            File fileLogFileDir = new File(System.getProperty(Commons.USER_DIR) + File.separator + Commons.LOGGER_FILE_DIRECTORY);
+            File fileLogFileDir = new File(System.getProperty(Commons.USER_DIR) + File.separator +
+                    Commons.LOGGER_FILE_DIRECTORY);
             fileLogFileDir.mkdir();
             try {
                 createAFile(file);

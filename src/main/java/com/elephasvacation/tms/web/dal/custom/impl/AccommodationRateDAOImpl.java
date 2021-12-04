@@ -27,100 +27,71 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
+import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAO;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AccommodationRateDAOImpl implements AccommodationRateDAO {
 
-    private static final String TABLE_NAME = "accommodation_rate";
-    private static String COLUMN_NAMES = "(accommodation_package_id, room_type_accommodation_package_id, room_category_accommodation_package_id, meal_plan_accommodation_package_id)";
-    private static String ACCOMMODATION_PACKAGE_ID = "accommodation_package_id";
-    private Connection connection;
-
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
+
+    // CrudDAO ===================================================================================
 
     @Override
     public Integer save(AccommodationRate accommodationRate) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO " + TABLE_NAME + " " + COLUMN_NAMES + " VALUES (?,?,?,?)",
-                accommodationRate.getAccommodationRatePK().getAccommodationPackageID(),
-                accommodationRate.getAccommodationRatePK().getRoomTypeAccommodationPackageID(),
-                accommodationRate.getAccommodationRatePK().getRoomCategoryAccommodationPackageID(),
-                accommodationRate.getAccommodationRatePK().getMealPlanAccommodationPackageID()
-        );
+        this.entityManager.persist(accommodationRate);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        // TODO: Check the returning: getAccommodationPackageId
+        return accommodationRate.getId().getAccommodationPackageId();
     }
 
     @Override
-    public boolean update(AccommodationRate accommodationRate) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE " + TABLE_NAME + " SET accommodation_package_id=?, room_type_accommodation_package_id=?, room_category_accommodation_package_id=?, meal_plan_accommodation_package_id=?  WHERE id=?",
-                accommodationRate.getAccommodationRatePK().getAccommodationPackageID(),
-                accommodationRate.getAccommodationRatePK().getRoomTypeAccommodationPackageID(),
-                accommodationRate.getAccommodationRatePK().getRoomCategoryAccommodationPackageID(),
-                accommodationRate.getAccommodationRatePK().getMealPlanAccommodationPackageID(),
-                accommodationRate.getAccommodationRatePK().getId()
-        );
+    public void update(AccommodationRate accommodationRate) throws Exception {
+        this.entityManager.merge(accommodationRate);
     }
 
     @Override
-    public boolean delete(Integer accommodationRateID) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM " + TABLE_NAME + " WHERE id=?",
-                accommodationRateID);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(AccommodationRate.class, key));
     }
 
     @Override
-    public AccommodationRate get(Integer accommodationRateID) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME + " WHERE id=?",
-                accommodationRateID);
-
-        return (resultSet.next()) ? getAccommodationRateObject(resultSet) : null;
+    public AccommodationRate get(Integer key) throws Exception {
+        return this.entityManager.find(AccommodationRate.class, key);
     }
 
     @Override
     public List<AccommodationRate> getAll() throws Exception {
-        List<AccommodationRate> accommodationRateList = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME);
-        while (resultSet.next()) {
-            accommodationRateList.add(getAccommodationRateObject(resultSet));
-        }
-        return accommodationRateList;
+        TypedQuery<AccommodationRate> selectAccommodationRateTypedQuery =
+                this.entityManager.createQuery("SELECT ar FROM AccommodationRate ar", AccommodationRate.class);
+
+        return selectAccommodationRateTypedQuery.getResultList();
     }
+
+    // AccommodationRateDAO ===================================================================================
 
     @Override
-    public List<AccommodationRate> getAllAccommodationRatesByAccommodationPackageID(Integer accommodationPackageID) throws SQLException {
-        List<AccommodationRate> accommodationRateList = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME + " WHERE " + ACCOMMODATION_PACKAGE_ID + "=?",
-                accommodationPackageID);
-        while (resultSet.next()) {
-            accommodationRateList.add(getAccommodationRateObject(resultSet));
-        }
-        return accommodationRateList;
-    }
+    public List<AccommodationRate> getAllAccommodationRatesByAccommodationPackageID(Integer accommodationPackageID)
+            throws SQLException {
 
-    private AccommodationRate getAccommodationRateObject(ResultSet resultSet) throws SQLException {
-        return new AccommodationRate(
-                resultSet.getInt("id"),
-                resultSet.getInt("accommodation_package_id"),
-                resultSet.getInt("room_type_accommodation_package_id"),
-                resultSet.getInt("room_category_accommodation_package_id"),
-                resultSet.getInt("meal_plan_accommodation_package_id"),
-                resultSet.getTimestamp("created"),
-                resultSet.getTimestamp("last_updated")
-        );
+        TypedQuery<AccommodationRate> selectAccommodationRateByAccommodationPackageTypedQuery =
+                this.entityManager
+                        .createQuery("SELECT ar FROM AccommodationRate ar WHERE ar.id.accommodationPackageId=?1",
+                                AccommodationRate.class);
+
+        selectAccommodationRateByAccommodationPackageTypedQuery.setParameter(Number.ONE, accommodationPackageID);
+
+        return selectAccommodationRateByAccommodationPackageTypedQuery.getResultList();
     }
 }

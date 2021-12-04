@@ -28,51 +28,53 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.TourDetailBO;
+import com.elephasvacation.tms.web.business.custom.util.TourDetailDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
+import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class TourDetailBOImpl implements TourDetailBO {
 
-    private final TourDetailDAO tourDetailDAO;
-    private Connection connection;
+    private final TourDetailDAO tourDetailDAO = DAOFactory.getInstance().getDAO(DAOTypes.TOUR_DETAIL);
+    TourDetailDTOMapper mapper = TourDetailDTOMapper.instance;
+    private EntityManager entityManager;
 
-    public TourDetailBOImpl() {
-        this.tourDetailDAO = DAOFactory.getInstance().getDAO(DAOTypes.TOUR_DETAIL);
+
+    @Override
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+
+        /* Set Entity Manager to the DAL. */
+        this.tourDetailDAO.setEntityManager(this.entityManager);
     }
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.tourDetailDAO.setConnection(connection);
+    public Integer createTourDetail(TourDetailDTO tourDetailDTO) throws Exception {
+        return this.tourDetailDAO.save(this.mapper.getTourDetail(tourDetailDTO));
     }
 
     @Override
-    public Integer createTourDetail(TourDetail tourDetail) throws Exception {
-        return this.tourDetailDAO.save(tourDetail);
+    public void updateTourDetail(TourDetailDTO tourDetailDTO) throws Exception {
+        this.tourDetailDAO.update(this.mapper.getTourDetail(tourDetailDTO));
     }
 
     @Override
-    public boolean updateTourDetail(TourDetail tourDetail) throws Exception {
-        return this.tourDetailDAO.update(tourDetail);
+    public void deleteTourDetail(Integer tourDetailID) throws Exception {
+        this.tourDetailDAO.delete(tourDetailID);
     }
 
     @Override
-    public boolean deleteTourDetail(int tourDetailID) throws Exception {
-        return this.tourDetailDAO.delete(tourDetailID);
-    }
-
-    @Override
-    public TourDetail getTourDetailByID(int tourDetailID) throws Exception {
+    public TourDetail getTourDetailByID(Integer tourDetailID) throws Exception {
         return this.tourDetailDAO.get(tourDetailID);
     }
 
     @Override
-    public TourDetail getTourDetailByIDAndCustomerID(int customerID, int tourDetailID) throws Exception {
+    public TourDetail getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception {
         return this.tourDetailDAO.getTourDetailByCustomerIDAndTourDetailID(customerID, tourDetailID);
     }
 
@@ -82,7 +84,7 @@ public class TourDetailBOImpl implements TourDetailBO {
     }
 
     @Override
-    public List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws SQLException {
+    public List<TourDetail> getAllTourDetailsByCustomerID(Integer customerID) throws Exception {
         return this.tourDetailDAO.getAllTourDetailsByCustomerID(customerID);
     }
 }

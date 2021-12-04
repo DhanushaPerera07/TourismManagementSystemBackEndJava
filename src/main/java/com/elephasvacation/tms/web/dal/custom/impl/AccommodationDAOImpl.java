@@ -27,107 +27,48 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
 import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public class AccommodationDAOImpl implements AccommodationDAO {
 
-    private static final String COLUMN_NAMES = "(name, situated_in, star_rating, type, contact, email, address, website, special_details, remark)";
-    private Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
     public Integer save(Accommodation accommodation) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO accommodation " + COLUMN_NAMES + " VALUES (?,?,?,?,?,?,?,?,?,?)",
-                accommodation.getName(),
-                accommodation.getSituatedIn(),
-                accommodation.getStarRating(),
-                accommodation.getType(),
-                accommodation.getContact(),
-                accommodation.getEmail(),
-                accommodation.getAddress(),
-                accommodation.getWebsite(),
-                accommodation.getSpecialDetails(),
-                accommodation.getRemark()
-        );
+        this.entityManager.persist(accommodation);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return accommodation.getId();
     }
 
     @Override
-    public boolean update(Accommodation accommodation) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE accommodation SET name=?, situated_in=?, star_rating=?, type=?, contact=?, email=?, address=?, website=?, special_details=?, remark=? WHERE id=?",
-                accommodation.getName(),
-                accommodation.getSituatedIn(),
-                accommodation.getStarRating(),
-                accommodation.getType(),
-                accommodation.getContact(),
-                accommodation.getEmail(),
-                accommodation.getAddress(),
-                accommodation.getWebsite(),
-                accommodation.getSpecialDetails(),
-                accommodation.getRemark(),
-                accommodation.getId()
-        );
+    public void update(Accommodation accommodation) throws Exception {
+        this.entityManager.merge(accommodation);
     }
 
     @Override
-    public boolean delete(Integer key) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM accommodation WHERE id=?",
-                key);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(Accommodation.class, key));
     }
 
     @Override
     public Accommodation get(Integer key) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM accommodation WHERE id=?",
-                key);
-
-        if (resultSet.next()) {
-            return getAccommodationObject(resultSet);
-        } else {
-            return null;
-        }
+        return this.entityManager.find(Accommodation.class, key);
     }
 
     @Override
     public List<Accommodation> getAll() throws Exception {
-        List<Accommodation> accommodations = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM accommodation");
-        while (resultSet.next()) {
-            accommodations.add(getAccommodationObject(resultSet));
-        }
-        return accommodations;
-    }
-
-    private Accommodation getAccommodationObject(ResultSet resultSet) throws SQLException {
-        return new Accommodation(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getString("situated_in"),
-                resultSet.getInt("star_rating"),
-                resultSet.getString("type"),
-                resultSet.getString("contact"),
-                resultSet.getString("email"),
-                resultSet.getString("address"),
-                resultSet.getString("website"),
-                resultSet.getString("special_details"),
-                resultSet.getString("remark"),
-                resultSet.getDate("created"),
-                resultSet.getDate("last_updated")
-        );
+        Query allAccommodationQuery = this.entityManager.createQuery("SELECT acc FROM Accommodation acc");
+        return (List<Accommodation>) allAccommodationQuery.getResultList();
     }
 }

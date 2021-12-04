@@ -32,7 +32,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -40,11 +40,15 @@ import java.sql.Timestamp;
 public class RoomCategoryDTO implements Serializable {
     private int id;
     private String category;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     public RoomCategoryDTO(int id, String category) {
         this.id = id;
+        this.category = category;
+    }
+
+    public RoomCategoryDTO(String category) {
         this.category = category;
     }
 }

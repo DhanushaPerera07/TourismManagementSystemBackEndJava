@@ -28,30 +28,28 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeBO;
-import com.elephasvacation.tms.web.business.custom.util.EntityDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.EmployeeDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class EmployeeBOImpl implements EmployeeBO {
 
-    final EntityDTOMapper mapper = EntityDTOMapper.instance;
-    private final EmployeeDAO employeeDAO;
-    private Connection connection;
+    final EmployeeDTOMapper mapper = EmployeeDTOMapper.instance;
+    private final EmployeeDAO employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
+    private EntityManager entityManager;
 
-    public EmployeeBOImpl() {
-        this.employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
-
-    }
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
-        this.employeeDAO.setConnection(this.connection);
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+
+        /* Set Entity Manager to the DAL. */
+        this.employeeDAO.setEntityManager(this.entityManager);
     }
 
     @Override
@@ -60,13 +58,13 @@ public class EmployeeBOImpl implements EmployeeBO {
     }
 
     @Override
-    public boolean updateEmployee(EmployeeDTO employeeDTO) throws Exception {
-        return this.employeeDAO.update(mapper.getEmployee(employeeDTO));
+    public void updateEmployee(EmployeeDTO employeeDTO) throws Exception {
+        this.employeeDAO.update(mapper.getEmployee(employeeDTO));
     }
 
     @Override
-    public boolean deleteEmployee(int employeeID) throws Exception {
-        return this.employeeDAO.delete(employeeID);
+    public void deleteEmployee(int employeeID) throws Exception {
+        this.employeeDAO.delete(employeeID);
     }
 
     @Override

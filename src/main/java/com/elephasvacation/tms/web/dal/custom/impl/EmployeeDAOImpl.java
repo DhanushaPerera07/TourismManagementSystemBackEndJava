@@ -27,109 +27,50 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
-import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-    private static final String COLUMN_NAMES = "(name, address, dob, nic, contact, email, gender, position, status, password)";
-    private Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
     public Integer save(Employee employee) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO employee " + COLUMN_NAMES + " VALUES (?,?,?,?,?,?,?,?,?,?)",
-                employee.getName(),
-                employee.getAddress(),
-                employee.getDateOfBirth(),
-                employee.getNic(),
-                employee.getContact(),
-                employee.getEmail(),
-                employee.getGender().toString(),
-                employee.getPosition(),
-                employee.getStatus(),
-                employee.getPassword()
-        );
+        this.entityManager.persist(employee);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return employee.getId();
     }
 
     @Override
-    public boolean update(Employee employee) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE employee SET name=?, address=?, dob=?, nic=?, contact=?, email=?, gender=?, position=?, status=?, password=? WHERE id=?",
-                employee.getName(),
-                employee.getAddress(),
-                employee.getDateOfBirth(),
-                employee.getNic(),
-                employee.getContact(),
-                employee.getEmail(),
-                employee.getGender().toString(),
-                employee.getPosition(),
-                employee.getStatus(),
-                employee.getPassword(),
-                employee.getId()
-        );
+    public void update(Employee employee) throws Exception {
+        this.entityManager.merge(employee);
     }
 
     @Override
-    public boolean delete(Integer key) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM employee WHERE id=?",
-                key);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(Employee.class, key));
     }
 
     @Override
     public Employee get(Integer key) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM employee WHERE id=?",
-                key);
-
-        if (resultSet.next()) {
-            return getEmployeeObject(resultSet);
-        } else {
-            return null;
-        }
+        return this.entityManager.find(Employee.class, key);
     }
 
 
     @Override
     public List<Employee> getAll() throws Exception {
-        List<Employee> employees = new ArrayList<>();
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM employee");
-        while (resultSet.next()) {
-            employees.add(getEmployeeObject(resultSet));
-        }
-        return employees;
+        Query allEmployeesQuery = this.entityManager.createQuery("SELECT e FROM Employee e");
+        return (List<Employee>) allEmployeesQuery.getResultList();
     }
 
-    private Employee getEmployeeObject(ResultSet resultSet) throws SQLException {
-        return new Employee(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getString("address"),
-                resultSet.getDate("dob"),
-                resultSet.getString("nic"),
-                resultSet.getString("contact"),
-                resultSet.getString("email"),
-                GenderTypes.valueOf(resultSet.getString("gender")),
-                resultSet.getString("position"),
-                resultSet.getString("status"),
-                resultSet.getString("password"),
-                resultSet.getDate("created"),
-                resultSet.getDate("last_updated")
-        );
-    }
 }
