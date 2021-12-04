@@ -39,7 +39,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TourDetailsDTO implements Serializable {
+public class TourDetailDTO implements Serializable {
 
     private int id;
     private int noOfDays;
@@ -54,9 +54,9 @@ public class TourDetailsDTO implements Serializable {
     private BigDecimal agentProfit;
     private int customerId;
     private LocalDateTime created;
-    private LocalDateTime lastUpdated;
+    private LocalDateTime updated;
 
-    public TourDetailsDTO(
+    public TourDetailDTO(
             int id,
             int noOfDays,
             int noOfPeople,

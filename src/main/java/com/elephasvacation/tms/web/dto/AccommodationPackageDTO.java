@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -42,8 +42,8 @@ public class AccommodationPackageDTO {
     private String season;
     private String validPeriod;
     private int accommodationId; // hotelID /// {URL}/accommodations/A001
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    private LocalDateTime created;
+    private LocalDateTime lastUpdated;
 
     public AccommodationPackageDTO(int id,
                                    int year,
@@ -51,6 +51,16 @@ public class AccommodationPackageDTO {
                                    String validPeriod,
                                    int accommodationId) {
         this.id = id;
+        this.year = year;
+        this.season = season;
+        this.validPeriod = validPeriod;
+        this.accommodationId = accommodationId;
+    }
+
+    public AccommodationPackageDTO(int year,
+                                   String season,
+                                   String validPeriod,
+                                   int accommodationId) {
         this.year = year;
         this.season = season;
         this.validPeriod = validPeriod;
