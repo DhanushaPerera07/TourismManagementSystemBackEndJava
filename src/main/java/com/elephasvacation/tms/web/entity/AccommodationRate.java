@@ -58,8 +58,18 @@ public class AccommodationRate implements SuperEntity {
         this.rate = rate;
     }
 
-    public AccommodationRate(AccommodationRateId id, BigDecimal rate) {
+    public AccommodationRate(AccommodationRateId id,
+                             BigDecimal rate) {
         this.id = id;
+        this.rate = rate;
+    }
+
+    public AccommodationRate(Integer pkgRoomTypeId,
+                             Integer pkgRoomCategoryId,
+                             Integer pkgMealPlanId,
+                             Integer accommodationPackageId,
+                             BigDecimal rate) {
+        this.id = new AccommodationRateId(pkgRoomTypeId, pkgRoomCategoryId, pkgMealPlanId, accommodationPackageId);
         this.rate = rate;
     }
 
@@ -67,7 +77,6 @@ public class AccommodationRate implements SuperEntity {
     public void creationTimeStamps() {
         created = LocalDateTime.now();
     }
-
 
     @PreUpdate
     public void updateTimeStamps() {

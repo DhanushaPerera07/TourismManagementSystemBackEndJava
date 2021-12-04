@@ -66,6 +66,10 @@ public class Accommodation implements SuperEntity {
     private String address;
 
     @Lob
+    @Column(name = "website")
+    private String website;
+
+    @Lob
     @Column(name = "special_details")
     private String specialDetails;
 
@@ -86,6 +90,7 @@ public class Accommodation implements SuperEntity {
                          String contact,
                          String email,
                          String address,
+                         String website,
                          String specialDetails,
                          String remark) {
         this.name = name;
@@ -95,6 +100,7 @@ public class Accommodation implements SuperEntity {
         this.contact = contact;
         this.email = email;
         this.address = address;
+        this.website = website;
         this.specialDetails = specialDetails;
         this.remark = remark;
     }
