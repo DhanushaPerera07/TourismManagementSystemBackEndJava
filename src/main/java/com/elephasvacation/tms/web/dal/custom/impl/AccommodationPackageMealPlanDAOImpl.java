@@ -1,6 +1,8 @@
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
+import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
 
@@ -47,5 +49,18 @@ public class AccommodationPackageMealPlanDAOImpl implements AccommodationPackage
                         AccommodationPackageMealPlan.class);
 
         return accommodationPackageMealPlanTypedQuery.getResultList();
+    }
+
+    @Override
+    public List<AccommodationPackageMealPlan> getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage) {
+        TypedQuery<AccommodationPackageMealPlan> query = this.entityManager
+                .createQuery("SELECT pkgMp " +
+                                "FROM AccommodationPackageMealPlan pkgMp " +
+                                "WHERE pkgMp.id.accommodationPackageId=?1",
+                        AccommodationPackageMealPlan.class);
+        /* set the numbered parameter. */
+        query.setParameter(Number.ONE, accommodationPackage.getId());
+
+        return query.getResultList();
     }
 }

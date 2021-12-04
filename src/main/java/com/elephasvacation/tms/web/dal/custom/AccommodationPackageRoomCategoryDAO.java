@@ -25,9 +25,15 @@
 package com.elephasvacation.tms.web.dal.custom;
 
 import com.elephasvacation.tms.web.dal.CrudDAO;
+import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategoryId;
 
+import java.util.List;
+
 public interface AccommodationPackageRoomCategoryDAO extends
         CrudDAO<AccommodationPackageRoomCategory, AccommodationPackageRoomCategoryId> {
+
+    List<AccommodationPackageRoomCategory>
+    getAllRoomCategoriesForAccommodationPackage(AccommodationPackage accommodationPackage);
 }
