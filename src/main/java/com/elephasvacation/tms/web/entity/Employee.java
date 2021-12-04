@@ -1,18 +1,18 @@
-/**
+/*
  * MIT License
- * <p>
+ *
  * Copyright (c) 2021 Dhanusha Perera
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,58 +20,74 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @author : Dhanusha Perera
- * @since : 26/04/2021
- * @since : 26/04/2021
- * @since : 26/04/2021
  */
-/**
- * @author : Dhanusha Perera
- * @since : 26/04/2021
- */
+
 package com.elephasvacation.tms.web.entity;
 
-import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.implementation.bind.annotation.Super;
 
-import java.sql.Date;
+import javax.persistence.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "employee")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee implements SuperEntity {
-    private int id;
-    private String name;
-    private String address;
-    private Date dateOfBirth;
-    private String nic;
-    private String contact;
-    private String email;
-    private GenderTypes gender;
-    private String position;
-    private String status;
-    private String password;
-    private Date created;
-    private Date lastUpdated;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-    /* custom constructor - without created, lastUpdated. */
-    public Employee(int id,
-                    String name,
+    @Column(name = "name", nullable = false, length = 200)
+    private String name;
+
+    @Lob
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "nic", length = 45)
+    private String nic;
+
+    @Column(name = "contact", length = 45)
+    private String contact;
+
+    @Column(name = "email", length = 200)
+    private String email;
+
+    @Column(name = "gender", length = 20)
+    private String gender;
+
+    @Column(name = "position", length = 45)
+    private String position;
+
+    @Column(name = "status", length = 45)
+    private String status;
+
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @Column(name = "updated")
+    private LocalDateTime updated;
+
+    public Employee(String name,
                     String address,
-                    Date dateOfBirth,
+                    LocalDate dateOfBirth,
                     String nic,
                     String contact,
                     String email,
-                    GenderTypes gender,
+                    String gender,
                     String position,
-                    String status,
-                    String password) {
-        this.id = id;
+                    String status) {
         this.name = name;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
@@ -81,7 +97,16 @@ public class Employee implements SuperEntity {
         this.gender = gender;
         this.position = position;
         this.status = status;
-        this.password = password;
     }
 
+    @PrePersist
+    public void creationTimeStamps() {
+        created = LocalDateTime.now();
+    }
+
+
+    @PreUpdate
+    public void updateTimeStamps() {
+        updated = LocalDateTime.now();
+    }
 }

@@ -28,26 +28,29 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.MealPlanBO;
-import com.elephasvacation.tms.web.business.custom.util.EntityDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.MealPlanDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class MealPlanBOImpl implements MealPlanBO {
 
     private MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
             .getDAO(DAOTypes.MEAL_PLAN);
-    private EntityDTOMapper mapper = EntityDTOMapper.instance;
+    private MealPlanDTOMapper mapper = MealPlanDTOMapper.instance;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.mealPlanDAO.setConnection(connection);
-    }
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
 
+        /* Set Entity Manager to the DAL. */
+        this.mealPlanDAO.setEntityManager(this.entityManager);
+    }
 
     @Override
     public Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
@@ -55,13 +58,13 @@ public class MealPlanBOImpl implements MealPlanBO {
     }
 
     @Override
-    public boolean updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
-        return this.mealPlanDAO.update(this.mapper.getMealPlan(mealPlanDTO));
+    public void updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
+        this.mealPlanDAO.update(this.mapper.getMealPlan(mealPlanDTO));
     }
 
     @Override
-    public boolean deleteMealPlan(Integer mealPlanID) throws Exception {
-        return this.mealPlanDAO.delete(mealPlanID);
+    public void deleteMealPlan(Integer mealPlanID) throws Exception {
+        this.mealPlanDAO.delete(mealPlanID);
     }
 
     @Override
@@ -71,6 +74,6 @@ public class MealPlanBOImpl implements MealPlanBO {
 
     @Override
     public List<MealPlanDTO> getAllMealPlans() throws Exception {
-        return this.mapper.getMealPlanDTOs(this.mealPlanDAO.getAll());
+        return this.mapper.getMealPlanDTOList(this.mealPlanDAO.getAll());
     }
 }

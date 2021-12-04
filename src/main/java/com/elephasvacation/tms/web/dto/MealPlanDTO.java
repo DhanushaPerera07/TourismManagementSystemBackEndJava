@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -40,11 +40,15 @@ import java.sql.Timestamp;
 public class MealPlanDTO implements SuperEntity {
     private int id;
     private String mealPlan;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     public MealPlanDTO(int id, String mealPlan) {
         this.id = id;
+        this.mealPlan = mealPlan;
+    }
+
+    public MealPlanDTO(String mealPlan) {
         this.mealPlan = mealPlan;
     }
 }

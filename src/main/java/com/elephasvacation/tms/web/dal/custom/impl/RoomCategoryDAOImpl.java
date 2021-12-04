@@ -27,81 +27,49 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.CrudUtil;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class RoomCategoryDAOImpl implements RoomCategoryDAO {
 
-    private static final String TABLE_NAME = "room_category";
-    private static String COLUMN_NAMES = "(category)";
-    Connection connection;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.connection = connection;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
     public Integer save(RoomCategory roomCategory) throws Exception {
-        return CrudUtil.executeAndReturnGeneratedKey(this.connection,
-                "INSERT INTO " + TABLE_NAME + " " + COLUMN_NAMES + " VALUES (?)",
-                roomCategory.getCategory());
+        this.entityManager.persist(roomCategory);
+        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+        this.entityManager.flush();
+        return roomCategory.getId();
     }
 
     @Override
-    public boolean update(RoomCategory roomCategory) throws Exception {
-        return CrudUtil.execute(this.connection,
-                "UPDATE " + TABLE_NAME + " SET category=? WHERE id=?",
-                roomCategory.getCategory(),
-                roomCategory.getId()
-        );
+    public void update(RoomCategory roomCategory) throws Exception {
+        this.entityManager.merge(roomCategory);
     }
 
     @Override
-    public boolean delete(Integer roomCategoryID) throws Exception {
-        return CrudUtil.execute(connection,
-                "DELETE FROM " + TABLE_NAME + " WHERE id=?",
-                roomCategoryID);
+    public void delete(Integer key) throws Exception {
+        this.entityManager.remove(this.entityManager.find(RoomCategory.class, key));
     }
 
     @Override
-    public RoomCategory get(Integer roomCategoryID) throws Exception {
-        ResultSet resultSet = CrudUtil.execute(this.connection,
-                "SELECT * FROM " + TABLE_NAME + " WHERE id=?",
-                roomCategoryID);
-
-        if (resultSet.next()) {
-            return getRoomCategoryObject(resultSet);
-        } else {
-            return null;
-        }
+    public RoomCategory get(Integer key) throws Exception {
+        return this.entityManager.find(RoomCategory.class, key);
     }
 
     @Override
     public List<RoomCategory> getAll() throws Exception {
-            List<RoomCategory> RoomCategoryList = new ArrayList<>();
-            ResultSet resultSet = CrudUtil.execute(this.connection,
-                    "SELECT * FROM " + TABLE_NAME);
-            while (resultSet.next()) {
-                RoomCategoryList.add(getRoomCategoryObject(resultSet));
-            }
-            return RoomCategoryList;
+        TypedQuery<RoomCategory> selectRoomCategoryTypedQuery =
+                this.entityManager.createQuery("SELECT rc FROM RoomCategory rc", RoomCategory.class);
+        return selectRoomCategoryTypedQuery.getResultList();
     }
-
-    private RoomCategory getRoomCategoryObject(ResultSet resultSet) throws SQLException {
-        return new RoomCategory(
-                resultSet.getInt("id"),
-                resultSet.getString("category"),
-                resultSet.getTimestamp("created"),
-                resultSet.getTimestamp("last_updated")
-        );
-    }
-
 }

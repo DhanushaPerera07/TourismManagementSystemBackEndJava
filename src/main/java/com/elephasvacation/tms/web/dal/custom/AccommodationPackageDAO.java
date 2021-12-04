@@ -34,5 +34,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface AccommodationPackageDAO extends CrudDAO<AccommodationPackage, Integer> {
-    List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID) throws SQLException;
+    List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
+            throws SQLException;
 }

@@ -28,25 +28,29 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageBO;
-import com.elephasvacation.tms.web.business.custom.util.EntityDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.sql.SQLException;
 import java.util.List;
 
 public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
-    private AccommodationPackageDAO accommodationPackageDAO =
-            DAOFactory.getInstance().getDAO(DAOTypes.ACCOMMODATION_PACKAGE);
-    private EntityDTOMapper mapper = EntityDTOMapper.instance;
+    private AccommodationPackageDAO accommodationPackageDAO = DAOFactory.getInstance()
+            .getDAO(DAOTypes.ACCOMMODATION_PACKAGE);
+    private AccommodationPackageDTOMapper mapper = AccommodationPackageDTOMapper.instance;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.accommodationPackageDAO.setConnection(connection);
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+
+        /* Set Entity Manager to the DAL. */
+        this.accommodationPackageDAO.setEntityManager(this.entityManager);
     }
 
     @Override
@@ -55,13 +59,13 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
     }
 
     @Override
-    public boolean updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception {
-        return this.accommodationPackageDAO.update(this.mapper.getAccommodationPackage(accommodationPackageDTO));
+    public void updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception {
+        this.accommodationPackageDAO.update(this.mapper.getAccommodationPackage(accommodationPackageDTO));
     }
 
     @Override
-    public boolean deleteAccommodationPackage(Integer accommodationPackageID) throws Exception {
-        return this.accommodationPackageDAO.delete(accommodationPackageID);
+    public void deleteAccommodationPackage(Integer accommodationPackageID) throws Exception {
+        this.accommodationPackageDAO.delete(accommodationPackageID);
     }
 
     @Override
@@ -70,14 +74,15 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
     }
 
     @Override
-    public List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID) throws SQLException {
+    public List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
+            throws SQLException {
         return this.mapper
-                .getAccommodationPackageDTOs(this.accommodationPackageDAO
+                .getAccommodationPackageDTOList(this.accommodationPackageDAO
                         .getAllAccommodationPackagesByAccommodationID(accommodationID));
     }
 
     @Override
     public List<AccommodationPackageDTO> getAllAccommodationPackages() throws Exception {
-        return this.mapper.getAccommodationPackageDTOs(this.accommodationPackageDAO.getAll());
+        return this.mapper.getAccommodationPackageDTOList(this.accommodationPackageDAO.getAll());
     }
 }

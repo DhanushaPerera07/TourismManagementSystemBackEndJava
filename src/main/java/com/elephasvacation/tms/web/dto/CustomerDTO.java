@@ -32,7 +32,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -44,20 +44,19 @@ public class CustomerDTO implements Serializable {
     private String nationality;
     private String passportNo;
     private String email;
-    private String countryCallingCode;
+    //    private String countryCallingCode;
     private String contactNo;
     private String country;
     private String description;
     private String additionalNotes;
-    private Date addedDate;
-    private Date lastUpdated;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     public CustomerDTO(int id,
                        String name,
                        String nationality,
                        String passportNo,
                        String email,
-                       String countryCallingCode,
                        String contactNo,
                        String country,
                        String description,
@@ -67,11 +66,27 @@ public class CustomerDTO implements Serializable {
         this.nationality = nationality;
         this.passportNo = passportNo;
         this.email = email;
-        this.countryCallingCode = countryCallingCode;
         this.contactNo = contactNo;
         this.country = country;
         this.description = description;
         this.additionalNotes = additionalNotes;
     }
 
+    public CustomerDTO(String name,
+                       String nationality,
+                       String passportNo,
+                       String email,
+                       String contactNo,
+                       String country,
+                       String description,
+                       String additionalNotes) {
+        this.name = name;
+        this.nationality = nationality;
+        this.passportNo = passportNo;
+        this.email = email;
+        this.contactNo = contactNo;
+        this.country = country;
+        this.description = description;
+        this.additionalNotes = additionalNotes;
+    }
 }

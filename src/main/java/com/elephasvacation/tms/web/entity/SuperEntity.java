@@ -27,7 +27,9 @@
  */
 package com.elephasvacation.tms.web.entity;
 
+import javax.persistence.PrePersist;
 import java.io.Serializable;
 
 public interface SuperEntity extends Serializable {
+
 }

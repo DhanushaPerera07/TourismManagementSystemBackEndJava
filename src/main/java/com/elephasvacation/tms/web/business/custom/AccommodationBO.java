@@ -36,9 +36,9 @@ public interface AccommodationBO extends SuperBO {
 
     Integer createAccommodation(AccommodationDTO accommodationDTO) throws Exception;
 
-    boolean updateAccommodation(AccommodationDTO accommodationDTO) throws Exception;
+    void updateAccommodation(AccommodationDTO accommodationDTO) throws Exception;
 
-    boolean deleteAccommodation(int accommodationID) throws Exception;
+    void deleteAccommodation(int accommodationID) throws Exception;
 
     AccommodationDTO getAccommodationByID(int accommodationID) throws Exception;
 

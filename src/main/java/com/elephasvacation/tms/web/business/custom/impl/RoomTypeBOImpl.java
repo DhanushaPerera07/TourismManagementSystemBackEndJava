@@ -28,23 +28,27 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.RoomTypeBO;
-import com.elephasvacation.tms.web.business.custom.util.EntityDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.RoomTypeDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
 import com.elephasvacation.tms.web.dto.RoomTypeDTO;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class RoomTypeBOImpl implements RoomTypeBO {
 
     private RoomTypeDAO roomTypeDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_TYPE);
-    private EntityDTOMapper mapper = EntityDTOMapper.instance;
+    private RoomTypeDTOMapper mapper = RoomTypeDTOMapper.instance;
+    private EntityManager entityManager;
 
     @Override
-    public void setConnection(Connection connection) throws Exception {
-        this.roomTypeDAO.setConnection(connection);
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+
+        /* Set Entity Manager to the DAL. */
+        this.roomTypeDAO.setEntityManager(this.entityManager);
     }
 
     @Override
@@ -53,13 +57,13 @@ public class RoomTypeBOImpl implements RoomTypeBO {
     }
 
     @Override
-    public boolean updateRoomTypeDTO(RoomTypeDTO roomTypeDTO) throws Exception {
-        return this.roomTypeDAO.update(this.mapper.getRoomType(roomTypeDTO));
+    public void updateRoomTypeDTO(RoomTypeDTO roomTypeDTO) throws Exception {
+        this.roomTypeDAO.update(this.mapper.getRoomType(roomTypeDTO));
     }
 
     @Override
-    public boolean deleteRoomTypeDTO(Integer roomTypeID) throws Exception {
-        return this.roomTypeDAO.delete(roomTypeID);
+    public void deleteRoomTypeDTO(Integer roomTypeID) throws Exception {
+        this.roomTypeDAO.delete(roomTypeID);
     }
 
     @Override

@@ -32,7 +32,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -50,8 +50,8 @@ public class AccommodationDTO implements Serializable {
     private String website;
     private String specialDetails;
     private String remark;
-    private Date created;
-    private Date lastUpdated;
+    private LocalDateTime created;
+    private LocalDateTime lastUpdated;
 
     public AccommodationDTO(int id,
                             String name,
@@ -65,6 +65,28 @@ public class AccommodationDTO implements Serializable {
                             String specialDetails,
                             String remark) {
         this.id = id;
+        this.name = name;
+        this.situatedIn = situatedIn;
+        this.starRating = starRating;
+        this.type = type;
+        this.contact = contact;
+        this.email = email;
+        this.address = address;
+        this.website = website;
+        this.specialDetails = specialDetails;
+        this.remark = remark;
+    }
+
+    public AccommodationDTO(String name,
+                            String situatedIn,
+                            int starRating,
+                            String type,
+                            String contact,
+                            String email,
+                            String address,
+                            String website,
+                            String specialDetails,
+                            String remark) {
         this.name = name;
         this.situatedIn = situatedIn;
         this.starRating = starRating;

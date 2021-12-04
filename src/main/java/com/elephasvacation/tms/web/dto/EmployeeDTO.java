@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -53,11 +53,11 @@ public class EmployeeDTO implements Serializable {
     private GenderTypes gender;
     private String position;
     private String status;
-    private String password;
+    //    private String password;
     @JsonbDateFormat("dd.MM.yyyy")
-    private Date created;
+    private LocalDateTime created;
     @JsonbDateFormat("dd.MM.yyyy")
-    private Date lastUpdated;
+    private LocalDateTime lastUpdated;
 
     /* custom constructor - without created, lastUpdated. */
     public EmployeeDTO(int id,
@@ -69,8 +69,7 @@ public class EmployeeDTO implements Serializable {
                        String email,
                        GenderTypes gender,
                        String position,
-                       String status,
-                       String password) {
+                       String status) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -81,6 +80,25 @@ public class EmployeeDTO implements Serializable {
         this.gender = gender;
         this.position = position;
         this.status = status;
-        this.password = password;
+    }
+
+    public EmployeeDTO(String name,
+                       String address,
+                       LocalDate dateOfBirth,
+                       String nic,
+                       String contact,
+                       String email,
+                       GenderTypes gender,
+                       String position,
+                       String status) {
+        this.name = name;
+        this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.nic = nic;
+        this.contact = contact;
+        this.email = email;
+        this.gender = gender;
+        this.position = position;
+        this.status = status;
     }
 }

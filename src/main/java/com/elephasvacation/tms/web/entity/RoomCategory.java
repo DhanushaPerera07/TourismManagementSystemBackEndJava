@@ -21,29 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/*
- * @author : Dhanusha Perera
- * @date : 13/07/2021
- */
+
 package com.elephasvacation.tms.web.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
+@Table(name = "room_category")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomCategory implements SuperEntity {
-    private int id;
-    private String category;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-    public RoomCategory(int id, String category) {
-        this.id = id;
-        this.category = category;
+    @Column(name = "room_category", nullable = false, length = 45)
+    private String roomCategory;
+
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @Column(name = "updated")
+    private LocalDateTime updated;
+
+    @PrePersist
+    public void creationTimeStamps() {
+        created = LocalDateTime.now();
+    }
+
+
+    @PreUpdate
+    public void updateTimeStamps() {
+        updated = LocalDateTime.now();
     }
 }

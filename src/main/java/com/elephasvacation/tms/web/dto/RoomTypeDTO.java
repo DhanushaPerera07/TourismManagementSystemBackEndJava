@@ -32,7 +32,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -40,11 +40,15 @@ import java.sql.Timestamp;
 public class RoomTypeDTO implements Serializable {
     private int id;
     private String type;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     public RoomTypeDTO(int id, String type) {
         this.id = id;
+        this.type = type;
+    }
+
+    public RoomTypeDTO(String type) {
         this.type = type;
     }
 }

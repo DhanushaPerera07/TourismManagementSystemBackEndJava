@@ -9,6 +9,21 @@
       </description>
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.elephasvacation.tms.web.entity.Customer</class>
+        <class>com.elephasvacation.tms.web.entity.TourDetail</class>
 
+        <class>com.elephasvacation.tms.web.entity.Employee</class>
+        <class>com.elephasvacation.tms.web.entity.EmployeeCredential</class>
+
+        <class>com.elephasvacation.tms.web.entity.Accommodation</class>
+        <class>com.elephasvacation.tms.web.entity.AccommodationPackage</class>
+        <class>com.elephasvacation.tms.web.entity.AccommodationRate</class>
+        <class>com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan</class>
+        <class>com.elephasvacation.tms.web.entity.AccommodationPackageRoomType</class>
+        <class>com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory</class>
+
+        <class>com.elephasvacation.tms.web.entity.MealPlan</class>
+        <class>com.elephasvacation.tms.web.entity.RoomType</class>
+        <class>com.elephasvacation.tms.web.entity.RoomCategory</class>
     </persistence-unit>
 </persistence>

@@ -21,44 +21,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/*
- * @author : Dhanusha Perera
- * @date : 13/07/2021
- */
+
 package com.elephasvacation.tms.web.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+@Table(name = "accommodation_rate", indexes = {
+        @Index(name = "fk_accommodation_rate_accommodation_package_idx", columnList = "accommodation_package_id"),
+        @Index(name = "fk_accommodation_rate_pkg_room_type_idx", columnList = "pkg_room_type_id"),
+        @Index(name = "fk_accommodation_rate_pkg_room_category_idx", columnList = "pkg_room_category_id")
+})
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccommodationRate implements SuperEntity {
-    private AccommodationRatePK accommodationRatePK;
-    private Timestamp created;
-    private Timestamp lastUpdated;
+    @EmbeddedId
+    private AccommodationRateId id;
 
-    public AccommodationRate(AccommodationRatePK accommodationRatePK) {
-        this.accommodationRatePK = accommodationRatePK;
+    @Column(name = "rate", nullable = false, precision = 19, scale = 2)
+    private BigDecimal rate;
+
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @Column(name = "updated")
+    private LocalDateTime updated;
+
+    public AccommodationRate(BigDecimal rate) {
+        this.rate = rate;
     }
 
-    public AccommodationRate(int id,
-                             int accommodationPackageID,
-                             int roomTypeAccommodationPackageID,
-                             int roomCategoryAccommodationPackageID,
-                             int mealPlanAccommodationPackageID,
-                             Timestamp created,
-                             Timestamp lastUpdated) {
-        this.accommodationRatePK = new AccommodationRatePK(id,
-                accommodationPackageID,
-                roomTypeAccommodationPackageID,
-                roomCategoryAccommodationPackageID,
-                mealPlanAccommodationPackageID
-        );
-        this.created = created;
-        this.lastUpdated = lastUpdated;
+    public AccommodationRate(AccommodationRateId id,
+                             BigDecimal rate) {
+        this.id = id;
+        this.rate = rate;
+    }
+
+    public AccommodationRate(Integer pkgRoomTypeId,
+                             Integer pkgRoomCategoryId,
+                             Integer pkgMealPlanId,
+                             Integer accommodationPackageId,
+                             BigDecimal rate) {
+        this.id = new AccommodationRateId(pkgRoomTypeId, pkgRoomCategoryId, pkgMealPlanId, accommodationPackageId);
+        this.rate = rate;
+    }
+
+    @PrePersist
+    public void creationTimeStamps() {
+        created = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void updateTimeStamps() {
+        updated = LocalDateTime.now();
     }
 }

@@ -35,5 +35,6 @@ import java.util.List;
 
 public interface AccommodationRateDAO extends CrudDAO<AccommodationRate, Integer> {
 
-    List<AccommodationRate> getAllAccommodationRatesByAccommodationPackageID(Integer accommodationPackageID) throws SQLException;
+    List<AccommodationRate> getAllAccommodationRatesByAccommodationPackageID(Integer accommodationPackageID)
+            throws SQLException;
 }
