@@ -1,6 +1,8 @@
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomTypeDAO;
+import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomTypeId;
 
@@ -47,5 +49,18 @@ public class AccommodationPackageRoomTypeDAOImpl implements AccommodationPackage
                         AccommodationPackageRoomType.class);
 
         return selectPkgRoomTypeQuery.getResultList();
+    }
+
+    @Override
+    public List<AccommodationPackageRoomType> getAllPackageRoomTypesForAccommodationPackage(AccommodationPackage accommodationPackage) {
+        TypedQuery<AccommodationPackageRoomType> query = this.entityManager
+                .createQuery("SELECT accRt " +
+                                "FROM AccommodationPackageRoomType accRt " +
+                                "WHERE accRt.id.accommodationPackageId=?1",
+                        AccommodationPackageRoomType.class);
+
+        query.setParameter(Number.ONE, accommodationPackage.getId());
+
+        return query.getResultList();
     }
 }

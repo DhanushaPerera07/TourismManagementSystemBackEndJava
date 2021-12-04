@@ -49,4 +49,8 @@ public class AccommodationPackageRoomType implements SuperEntity {
     public AccommodationPackageRoomType(AccommodationPackageRoomTypeId id) {
         this.id = id;
     }
+
+    public AccommodationPackageRoomType(Integer accommodationPackageId, Integer roomType) {
+        this.id = new AccommodationPackageRoomTypeId(accommodationPackageId, roomType);
+    }
 }

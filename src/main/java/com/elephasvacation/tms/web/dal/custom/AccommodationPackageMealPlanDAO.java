@@ -25,9 +25,16 @@
 package com.elephasvacation.tms.web.dal.custom;
 
 import com.elephasvacation.tms.web.dal.CrudDAO;
+import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
+import com.elephasvacation.tms.web.entity.MealPlan;
+
+import java.util.List;
 
 public interface AccommodationPackageMealPlanDAO extends
         CrudDAO<AccommodationPackageMealPlan, AccommodationPackageMealPlanId> {
+
+    List<AccommodationPackageMealPlan>
+    getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage);
 }

@@ -50,4 +50,8 @@ public class AccommodationPackageMealPlan implements SuperEntity {
     public AccommodationPackageMealPlan(AccommodationPackageMealPlanId id) {
         this.id = id;
     }
+
+    public AccommodationPackageMealPlan(Integer AccommodationPackageId, Integer mealPlanId) {
+        this.id = new AccommodationPackageMealPlanId(AccommodationPackageId, mealPlanId);
+    }
 }

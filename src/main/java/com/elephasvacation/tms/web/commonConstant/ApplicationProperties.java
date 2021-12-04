@@ -1,4 +1,4 @@
-/**
+/*
  * MIT License
  * <p>
  * Copyright (c) 2021 Dhanusha Perera
@@ -24,7 +24,7 @@
  * @author : Dhanusha Perera
  * @since : 21/04/2021
  */
-/**
+/*
  * @author : Dhanusha Perera
  * @since : 21/04/2021
  */
