@@ -24,8 +24,11 @@
 package com.elephasvacation.tms.web.business.custom.util;
 
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
+import com.elephasvacation.tms.web.entity.Accommodation;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -35,9 +38,23 @@ public interface AccommodationPackageDTOMapper {
     AccommodationPackageDTOMapper instance = Mappers.getMapper(AccommodationPackageDTOMapper.class);
 
     /*  -------------------- Accommodation Package  -------------------- */
+    @Mapping(source = ".", target = "accommodation", qualifiedByName = "toAccommodationQBN")
     AccommodationPackage getAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
 
+    @Named(value = "toAccommodationQBN")
+    default Accommodation toAccommodation(AccommodationPackageDTO accommodationPackageDTO) {
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(accommodationPackageDTO.getAccommodationId());
+        return accommodation;
+    }
+
+    @Mapping(target = "accommodationId", source = ".", qualifiedByName = "toAccommodationPackageId")
     AccommodationPackageDTO getAccommodationPackageDTO(AccommodationPackage accommodationPackage);
+
+    @Named(value = "toAccommodationPackageId")
+    default Integer toAccommodationId(AccommodationPackage accommodationPackage) {
+        return accommodationPackage.getAccommodation().getId();
+    }
 
     List<AccommodationPackageDTO> getAccommodationPackageDTOList(List<AccommodationPackage> accommodationPackageList);
 }

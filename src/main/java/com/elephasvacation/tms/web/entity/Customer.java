@@ -61,8 +61,6 @@ public class Customer implements SuperEntity {
     @Column(name = "country", length = 45)
     private String country;
 
-
-
     @Lob
     @Column(name = "description")
     private String description;
@@ -80,6 +78,30 @@ public class Customer implements SuperEntity {
     @Column(name = "gender", length = 6)
     private GenderTypes gender;
 
+    /* constructor with ID. */
+    public Customer(Integer id,
+                    String name,
+                    String nationality,
+                    GenderTypes gender,
+                    String passportNo,
+                    String email,
+                    String contactNo,
+                    String country,
+                    String description,
+                    String additionalNotes) {
+        this.id = id;
+        this.name = name;
+        this.nationality = nationality;
+        this.passportNo = passportNo;
+        this.email = email;
+        this.contactNo = contactNo;
+        this.country = country;
+        this.description = description;
+        this.additionalNotes = additionalNotes;
+        this.gender = gender;
+    }
+
+    /* constructor without ID. */
     public Customer(String name,
                     String nationality,
                     String passportNo,

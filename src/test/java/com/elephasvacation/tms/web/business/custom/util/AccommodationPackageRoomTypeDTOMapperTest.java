@@ -25,31 +25,36 @@ package com.elephasvacation.tms.web.business.custom.util;
 
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
+import com.elephasvacation.tms.web.entity.AccommodationPackageRoomTypeId;
+import org.junit.Test;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
-@Mapper
-public interface AccommodationPackageRoomTypeDTOMapper {
-    AccommodationPackageRoomTypeDTOMapper instance = Mappers.getMapper(AccommodationPackageRoomTypeDTOMapper.class);
+public class AccommodationPackageRoomTypeDTOMapperTest {
+    AccommodationPackageRoomTypeDTOMapper mapper = AccommodationPackageRoomTypeDTOMapper.instance;
 
-    @Mappings(value = {
-            @Mapping( source = "id.accommodationPackageId", target = "accommodationPackageId"),
-            @Mapping( source = "id.roomTypeId", target = "roomTypeId")
-    })
-    AccommodationPackageRoomTypeDTO
-    getAccommodationPackageRoomTypeDTO(AccommodationPackageRoomType accommodationPackageRoomType);
+    @Test
+    public void getAccommodationPackageRoomTypeDTO() {
 
-    @Mappings( value = {
-            @Mapping( source = "accommodationPackageId", target = "id.accommodationPackageId"),
-            @Mapping( source = "roomTypeId", target = "id.roomTypeId")
-    })
-    AccommodationPackageRoomType
-    getAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO);
+        AccommodationPackageRoomType pkgRoomType = new AccommodationPackageRoomType(
+                new AccommodationPackageRoomTypeId(1, 1)
+        );
 
-    List<AccommodationPackageRoomTypeDTO>
-    getAccommodationPackageRoomTypeDTOList(List<AccommodationPackageRoomType> accommodationPackageRoomTypeList);
+        AccommodationPackageRoomTypeDTO pkgRoomTypeDTO =
+                this.mapper.getAccommodationPackageRoomTypeDTO(pkgRoomType);
+
+        assertEquals(new Integer("1"), pkgRoomTypeDTO.getAccommodationPackageId());
+        assertEquals(new Integer("1"), pkgRoomTypeDTO.getRoomTypeId());
+    }
+
+    @Test
+    public void getAccommodationPackageRoomType() {
+        AccommodationPackageRoomTypeDTO pkgRoomTypeDTO =
+                new AccommodationPackageRoomTypeDTO(1, 1);
+
+        AccommodationPackageRoomType pkgRoomType = this.mapper.getAccommodationPackageRoomType(pkgRoomTypeDTO);
+
+        assertEquals(new Integer("1"), pkgRoomType.getId().getAccommodationPackageId());
+        assertEquals(new Integer("1"), pkgRoomType.getId().getRoomTypeId());
+    }
 }

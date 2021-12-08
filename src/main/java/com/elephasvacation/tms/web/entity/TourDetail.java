@@ -87,7 +87,34 @@ public class TourDetail implements SuperEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    /* constructor with ID. */
+    public TourDetail(Integer id,
+                      BigDecimal noOfDays,
+                      Integer noOfAdults,
+                      Integer noOfChildren,
+                      Integer starCategory,
+                      LocalDateTime arrivalDate,
+                      LocalDateTime departureDate,
+                      TourDetailStatusTypes status,
+                      BigDecimal exchangeRate,
+                      String tourAgent,
+                      BigDecimal agentProfit,
+                      Customer customer) {
+        this.id = id;
+        this.noOfDays = noOfDays;
+        this.noOfAdults = noOfAdults;
+        this.noOfChildren = noOfChildren;
+        this.starCategory = starCategory;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
+        this.status = status;
+        this.exchangeRate = exchangeRate;
+        this.tourAgent = tourAgent;
+        this.agentProfit = agentProfit;
+        this.customer = customer;
+    }
 
+    /* constructor without ID. */
     public TourDetail(BigDecimal noOfDays,
                       Integer noOfAdults,
                       Integer noOfChildren,

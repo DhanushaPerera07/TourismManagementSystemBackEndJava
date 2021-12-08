@@ -51,6 +51,15 @@ public class RoomType implements SuperEntity {
     @Column(name = "updated")
     private LocalDateTime updated;
 
+    public RoomType(Integer id, String roomType) {
+        this.id = id;
+        this.roomType = roomType;
+    }
+
+    public RoomType(String roomType) {
+        this.roomType = roomType;
+    }
+
     @PrePersist
     public void creationTimeStamps() {
         created = LocalDateTime.now();

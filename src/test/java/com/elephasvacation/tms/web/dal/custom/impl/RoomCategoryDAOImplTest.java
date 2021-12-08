@@ -23,15 +23,14 @@
  */
 /*
 @author : Dhanusha Perera
-@date : 04/07/2021
+@date : 13/07/2021
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
-import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
-import com.elephasvacation.tms.web.entity.Customer;
-import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
+import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
+import com.elephasvacation.tms.web.entity.RoomCategory;
 import com.elephasvacation.tms.web.util.HibernateUtil;
 import org.junit.After;
 import org.junit.Before;
@@ -40,12 +39,14 @@ import org.junit.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-public class CustomerDAOImplTest {
+import static org.junit.Assert.*;
+
+public class RoomCategoryDAOImplTest {
 
     EntityManagerFactory emf = null;
     EntityManager em = null;
 
-    CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
+    RoomCategoryDAO roomCategoryDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_CATEGORY);
 
     @Before
     public void setEntityManager() {
@@ -69,21 +70,51 @@ public class CustomerDAOImplTest {
     @Test
     public void save() {
         this.em.getTransaction().begin();
-        this.customerDAO.setEntityManager(this.em);
+        this.roomCategoryDAO.setEntityManager(this.em);
 
-        Customer customer = new Customer(
-                "John Doe",
-                "UK",
-                "112233445566",
-                "john.doe@gmail.com",
-                "+441632960417",
-                "UK",
-                "None",
-                "None",
-                GenderTypes.MALE
-        );
+        RoomCategory singleRoomCategory = new RoomCategory("Single");
         try {
-            this.customerDAO.save(customer);
+            this.roomCategoryDAO.save(singleRoomCategory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.em.getTransaction().commit();
+    }
+
+    @Test
+    public void update() {
+        String single = "SGL";
+        this.em.getTransaction().begin();
+        this.roomCategoryDAO.setEntityManager(this.em);
+
+        try {
+            RoomCategory roomCategory = this.roomCategoryDAO.get(1);
+            assertNotNull(roomCategory);
+            roomCategory.setRoomCategory(single);
+            this.roomCategoryDAO.update(roomCategory);
+
+            RoomCategory roomCategoryAfter = this.roomCategoryDAO.get(1);
+            assertEquals(single, roomCategoryAfter.getRoomCategory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.em.getTransaction().commit();
+    }
+
+    @Test
+    public void delete() {
+        this.em.getTransaction().begin();
+        this.roomCategoryDAO.setEntityManager(this.em);
+
+        try {
+            RoomCategory roomCategory = this.roomCategoryDAO.get(1);
+            assertNotNull(roomCategory);
+            this.roomCategoryDAO.delete(1);
+
+            RoomCategory roomCategoryAfter = this.roomCategoryDAO.get(1);
+            assertNull(roomCategoryAfter);
         } catch (Exception e) {
             e.printStackTrace();
         }

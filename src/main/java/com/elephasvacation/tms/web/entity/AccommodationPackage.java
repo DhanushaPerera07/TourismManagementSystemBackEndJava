@@ -63,6 +63,18 @@ public class AccommodationPackage implements SuperEntity {
     @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
 
+    public AccommodationPackage(Integer id,
+                                Integer year,
+                                String season,
+                                String validPeriod,
+                                Accommodation accommodation) {
+        this.id = id;
+        this.year = year;
+        this.season = season;
+        this.validPeriod = validPeriod;
+        this.accommodation = accommodation;
+    }
+
     public AccommodationPackage(Integer year,
                                 String season,
                                 String validPeriod,
