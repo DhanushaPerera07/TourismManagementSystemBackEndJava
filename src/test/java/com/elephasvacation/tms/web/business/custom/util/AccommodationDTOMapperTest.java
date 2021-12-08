@@ -41,12 +41,17 @@ public class AccommodationDTOMapperTest {
                 "011212345667",
                 "abc@hotel.com",
                 "Colombo",
-                "abchotels.com",
+                "abc.hotels.com",
                 "None",
                 "None");
 
         Accommodation accommodation = this.mapper.getAccommodation(accommodationDTO);
 
         Assert.assertEquals("ABC", accommodation.getName());
+        Assert.assertEquals(new Integer(4), accommodation.getStarRating());
+        Assert.assertEquals("Hotel", accommodation.getType());
+        Assert.assertEquals("011212345667", accommodation.getContact());
+        Assert.assertEquals("abc@hotel.com", accommodation.getEmail());
+        Assert.assertEquals("Colombo", accommodation.getAddress());
     }
 }

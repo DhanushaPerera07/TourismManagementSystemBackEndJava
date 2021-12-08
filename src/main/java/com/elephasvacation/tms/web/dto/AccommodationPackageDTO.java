@@ -43,7 +43,7 @@ public class AccommodationPackageDTO {
     private String validPeriod;
     private int accommodationId; // hotelID /// {URL}/accommodations/A001
     private LocalDateTime created;
-    private LocalDateTime lastUpdated;
+    private LocalDateTime updated;
 
     public AccommodationPackageDTO(int id,
                                    int year,

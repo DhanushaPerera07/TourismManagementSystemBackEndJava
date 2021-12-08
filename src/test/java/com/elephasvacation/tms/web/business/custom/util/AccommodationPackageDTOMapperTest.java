@@ -21,37 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.dto;
+package com.elephasvacation.tms.web.business.custom.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
+import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import org.junit.Test;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import static org.junit.Assert.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class AccommodationRateDTO implements Serializable {
-    private Integer accommodationPackageId;
-    private Integer pkgMealPlanId;
-    private Integer pkgRoomCategoryId;
-    private Integer pkgRoomTypeId;
-    private BigDecimal rate;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+public class AccommodationPackageDTOMapperTest {
+    AccommodationPackageDTOMapper mapper = AccommodationPackageDTOMapper.instance;
 
-    public AccommodationRateDTO(Integer accommodationPackageId,
-                                Integer pkgMealPlanId,
-                                Integer pkgRoomCategoryId,
-                                Integer pkgRoomTypeId,
-                                BigDecimal rate) {
-        this.accommodationPackageId = accommodationPackageId;
-        this.pkgMealPlanId = pkgMealPlanId;
-        this.pkgRoomCategoryId = pkgRoomCategoryId;
-        this.pkgRoomTypeId = pkgRoomTypeId;
-        this.rate = rate;
+
+
+    @Test
+    public void getAccommodationPackage() {
+        AccommodationPackageDTO accommodationPackageDTO = new AccommodationPackageDTO(2021,
+                "Summer",
+                "Summer",
+                1);
+
+        AccommodationPackage accommodationPackage = this.mapper.getAccommodationPackage(accommodationPackageDTO);
+
+        assertEquals(new Integer("2021"), accommodationPackage.getYear());
+        assertEquals("Summer", accommodationPackage.getSeason());
+        assertEquals(new Integer("1"), accommodationPackage.getAccommodation().getId());
+
+    }
+
+    @Test
+    public void getAccommodationPackageDTO() {
+    }
+
+    @Test
+    public void getAccommodationPackageDTOList() {
     }
 }
