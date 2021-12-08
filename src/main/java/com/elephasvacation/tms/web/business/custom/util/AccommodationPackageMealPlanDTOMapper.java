@@ -26,6 +26,7 @@ package com.elephasvacation.tms.web.business.custom.util;
 import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -34,9 +35,14 @@ import java.util.List;
 public interface AccommodationPackageMealPlanDTOMapper {
     AccommodationPackageMealPlanDTOMapper instance = Mappers.getMapper(AccommodationPackageMealPlanDTOMapper.class);
 
+    @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId")
+    @Mapping(source = "id.mealPlanId", target = "mealPlanId")
     AccommodationPackageMealPlanDTO
     getAccommodationPackageMealPlanDTO(AccommodationPackageMealPlan accommodationPackageMealPlan);
 
+
+    @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId")
+    @Mapping(source = "mealPlanId", target = "id.mealPlanId")
     AccommodationPackageMealPlan
     getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
