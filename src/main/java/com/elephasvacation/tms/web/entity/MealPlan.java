@@ -58,6 +58,11 @@ public class MealPlan implements SuperEntity{
         this.mealPlan = mealPlan;
     }
 
+    public MealPlan(Integer id, String mealPlan) {
+        this.id = id;
+        this.mealPlan = mealPlan;
+    }
+
     @PrePersist
     public void creationTimeStamps() {
         created = LocalDateTime.now();

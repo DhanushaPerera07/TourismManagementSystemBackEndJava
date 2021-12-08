@@ -27,10 +27,8 @@ package com.elephasvacation.tms.web.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.implementation.bind.annotation.Super;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -78,6 +76,28 @@ public class Employee implements SuperEntity {
 
     @Column(name = "updated")
     private LocalDateTime updated;
+
+    public Employee(Integer id,
+                    String name,
+                    String address,
+                    LocalDate dateOfBirth,
+                    String nic,
+                    String contact,
+                    String email,
+                    String gender,
+                    String position,
+                    String status) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.nic = nic;
+        this.contact = contact;
+        this.email = email;
+        this.gender = gender;
+        this.position = position;
+        this.status = status;
+    }
 
     public Employee(String name,
                     String address,

@@ -83,6 +83,30 @@ public class Accommodation implements SuperEntity {
     @Column(name = "updated")
     private LocalDateTime updated;
 
+    public Accommodation(Integer id,
+                         String name,
+                         String situatedIn,
+                         Integer starRating,
+                         String type,
+                         String contact,
+                         String email,
+                         String address,
+                         String website,
+                         String specialDetails,
+                         String remark) {
+        this.id = id;
+        this.name = name;
+        this.situatedIn = situatedIn;
+        this.starRating = starRating;
+        this.type = type;
+        this.contact = contact;
+        this.email = email;
+        this.address = address;
+        this.website = website;
+        this.specialDetails = specialDetails;
+        this.remark = remark;
+    }
+
     public Accommodation(String name,
                          String situatedIn,
                          Integer starRating,

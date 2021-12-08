@@ -64,6 +64,12 @@ public class EmployeeCredential implements SuperEntity {
         this.password = password;
     }
 
+    public EmployeeCredential(String email,
+                              String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     @PrePersist
     public void creationTimeStamps() {
         created = LocalDateTime.now();
