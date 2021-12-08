@@ -23,35 +23,37 @@
  */
 package com.elephasvacation.tms.web.business.custom.util;
 
-import com.elephasvacation.tms.web.dto.AccommodationDTO;
-import com.elephasvacation.tms.web.entity.Accommodation;
-import org.junit.Assert;
+import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
+import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
 
-public class AccommodationDTOMapperTest {
-    AccommodationDTOMapper mapper = AccommodationDTOMapper.instance;
+public class AccommodationPackageDTOMapperTest {
+    AccommodationPackageDTOMapper mapper = AccommodationPackageDTOMapper.instance;
+
+
 
     @Test
-    public void getAccommodation() {
-        AccommodationDTO accommodationDTO = new AccommodationDTO("ABC",
-                "Colombo",
-                4,
-                "Hotel",
-                "011212345667",
-                "abc@hotel.com",
-                "Colombo",
-                "abc.hotels.com",
-                "None",
-                "None");
+    public void getAccommodationPackage() {
+        AccommodationPackageDTO accommodationPackageDTO = new AccommodationPackageDTO(2021,
+                "Summer",
+                "Summer",
+                1);
 
-        Accommodation accommodation = this.mapper.getAccommodation(accommodationDTO);
+        AccommodationPackage accommodationPackage = this.mapper.getAccommodationPackage(accommodationPackageDTO);
 
-        Assert.assertEquals("ABC", accommodation.getName());
-        Assert.assertEquals(new Integer(4), accommodation.getStarRating());
-        Assert.assertEquals("Hotel", accommodation.getType());
-        Assert.assertEquals("011212345667", accommodation.getContact());
-        Assert.assertEquals("abc@hotel.com", accommodation.getEmail());
-        Assert.assertEquals("Colombo", accommodation.getAddress());
+        assertEquals(new Integer("2021"), accommodationPackage.getYear());
+        assertEquals("Summer", accommodationPackage.getSeason());
+        assertEquals(new Integer("1"), accommodationPackage.getAccommodation().getId());
+
+    }
+
+    @Test
+    public void getAccommodationPackageDTO() {
+    }
+
+    @Test
+    public void getAccommodationPackageDTOList() {
     }
 }
