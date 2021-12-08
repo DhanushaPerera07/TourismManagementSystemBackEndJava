@@ -1,47 +1,124 @@
-package com.elephasvacation.tms.web.dal.custom.impl;
-
-import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 Dhanusha Perera
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 /*
 @author : Dhanusha Perera
 @date : 13/07/2021
-*/public class RoomTypeDAOImplTest {
+*/
+package com.elephasvacation.tms.web.dal.custom.impl;
 
-//    RoomTypeDAO roomTypeDAO = new RoomTypeDAOImpl();
-//    Connection connection;
-//
-//    @Before
-//    public void setConnection() throws Exception {
-//        Class.forName("com.mysql.cj.jdbc.Driver");
-//        this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tms",
-//                "root", "root");
-//        this.connection.setAutoCommit(false);
-//        roomTypeDAO.setConnection(this.connection);
-//    }
-//
-//    @After
-//    public void closeConnection() throws SQLException {
-//        this.connection.rollback();
-//        this.connection.close();
-//    }
-//
-//    @Test
-//    public void get() throws Exception {
-//        RoomType roomTypeDB = this.roomTypeDAO.get(4);
-//        Assert.assertTrue("Luxury".equals(roomTypeDB.getType()));
-//    }
-//
-//    @Test
-//    public void getAll() throws Exception {
-//        this.roomTypeDAO.getAll().forEach(System.out::println);
-//        Assert.assertEquals(4, this.roomTypeDAO.getAll().size());
-//    }
+import com.elephasvacation.tms.web.dal.DAOFactory;
+import com.elephasvacation.tms.web.dal.DAOTypes;
+import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
+import com.elephasvacation.tms.web.entity.RoomType;
+import com.elephasvacation.tms.web.util.HibernateUtil;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
+import static org.junit.Assert.*;
+
+public class RoomTypeDAOImplTest {
+
+    EntityManagerFactory emf = null;
+    EntityManager em = null;
+
+    RoomTypeDAO roomTypeDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_TYPE);
+
+    @Before
+    public void setEntityManager() {
+        try {
+            this.emf = HibernateUtil.getEntityManagerFactory();
+            this.em = emf.createEntityManager();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @After
+    public void closeEntityManager() {
+        if (em != null) {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Test
+    public void save() {
+        this.em.getTransaction().begin();
+        this.roomTypeDAO.setEntityManager(this.em);
+
+        RoomType standardRoomType = new RoomType("Standard");
+        try {
+            this.roomTypeDAO.save(standardRoomType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.em.getTransaction().commit();
+    }
+
+    @Test
+    public void update() {
+        String std = "STD";
+        this.em.getTransaction().begin();
+        this.roomTypeDAO.setEntityManager(this.em);
+
+        try {
+            RoomType roomType = this.roomTypeDAO.get(1);
+            assertNotNull(roomType);
+            roomType.setRoomType(std);
+            this.roomTypeDAO.update(roomType);
+
+            RoomType roomTypeAfter = this.roomTypeDAO.get(1);
+            assertEquals(std, roomTypeAfter.getRoomType());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.em.getTransaction().commit();
+    }
+
+    @Test
+    public void delete() {
+        this.em.getTransaction().begin();
+        this.roomTypeDAO.setEntityManager(this.em);
+
+        try {
+            RoomType roomType = this.roomTypeDAO.get(1);
+            assertNotNull(roomType);
+            this.roomTypeDAO.delete(1);
+
+            RoomType roomTypeAfter = this.roomTypeDAO.get(1);
+            assertNull(roomTypeAfter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.em.getTransaction().commit();
+    }
 }
