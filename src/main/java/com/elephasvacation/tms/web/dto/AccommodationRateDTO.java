@@ -43,4 +43,15 @@ public class AccommodationRateDTO implements Serializable {
     private LocalDateTime created;
     private LocalDateTime updated;
 
+    public AccommodationRateDTO(Integer accommodationPackageId,
+                                Integer pkgMealPlanId,
+                                Integer pkgRoomCategoryId,
+                                Integer pkgRoomTypeId,
+                                BigDecimal rate) {
+        this.accommodationPackageId = accommodationPackageId;
+        this.pkgMealPlanId = pkgMealPlanId;
+        this.pkgRoomCategoryId = pkgRoomCategoryId;
+        this.pkgRoomTypeId = pkgRoomTypeId;
+        this.rate = rate;
+    }
 }
