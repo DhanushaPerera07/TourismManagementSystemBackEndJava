@@ -24,7 +24,9 @@
 package com.elephasvacation.tms.web.business.custom.util;
 
 import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
+import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
+import com.elephasvacation.tms.web.entity.AccommodationRateId;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -37,20 +39,24 @@ public interface AccommodationRateDTOMapper {
     AccommodationRateDTOMapper instance = Mappers.getMapper(AccommodationRateDTOMapper.class);
 
     @Mappings(value = {
-            @Mapping(source = "id.pkgRoomTypeId", target = "pkgRoomTypeId"),
-            @Mapping(source = "id.pkgRoomCategoryId", target = "pkgRoomCategoryId"),
-            @Mapping(source = "id.pkgMealPlanId", target = "pkgMealPlanId"),
-            @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId"),
+            @Mapping(source = "id.pkgRoomTypeId", target = "accommodationRateId.pkgRoomTypeId"),
+            @Mapping(source = "id.pkgRoomCategoryId", target = "accommodationRateId.pkgRoomCategoryId"),
+            @Mapping(source = "id.pkgMealPlanId", target = "accommodationRateId.pkgMealPlanId"),
+            @Mapping(source = "id.accommodationPackageId", target = "accommodationRateId.accommodationPackageId"),
     })
     AccommodationRateDTO getAccommodationRateDTO(AccommodationRate accommodationRate);
 
     @Mappings(value = {
-            @Mapping(source = "pkgRoomTypeId", target = "id.pkgRoomTypeId"),
-            @Mapping(source = "pkgRoomCategoryId", target = "id.pkgRoomCategoryId"),
-            @Mapping(source = "pkgMealPlanId", target = "id.pkgMealPlanId"),
-            @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId"),
+            @Mapping(source = "accommodationRateId.pkgRoomTypeId", target = "id.pkgRoomTypeId"),
+            @Mapping(source = "accommodationRateId.pkgRoomCategoryId", target = "id.pkgRoomCategoryId"),
+            @Mapping(source = "accommodationRateId.pkgMealPlanId", target = "id.pkgMealPlanId"),
+            @Mapping(source = "accommodationRateId.accommodationPackageId", target = "id.accommodationPackageId"),
     })
     AccommodationRate getAccommodationRate(AccommodationRateDTO accommodationRateDTO);
 
     List<AccommodationRateDTO> getAccommodationRateDTOList(List<AccommodationRate> accommodationRateList);
+
+    AccommodationRateDTOId getAccommodationRateDTOId(AccommodationRateId accommodationPackageId);
+
+    AccommodationRateId getAccommodationRateId(AccommodationRateDTOId accommodationRateDTOId);
 }
