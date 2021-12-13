@@ -31,46 +31,6 @@ import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
-
 public class AccommodationDAOImpl extends CrudDAOImpl<Accommodation, Integer> implements AccommodationDAO {
 
-//    private EntityManager entityManager;
-//
-//    @Override
-//    public void setEntityManager(EntityManager entityManager) {
-//        this.entityManager = entityManager;
-//    }
-//
-//    @Override
-//    public Accommodation save(Accommodation accommodation) throws Exception {
-//        this.entityManager.persist(accommodation);
-//        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-//        this.entityManager.flush();
-////        return accommodation.getId();
-//        return accommodation;
-//    }
-//
-//    @Override
-//    public void update(Accommodation accommodation) throws Exception {
-//        this.entityManager.merge(accommodation);
-//    }
-//
-//    @Override
-//    public void delete(Integer key) throws Exception {
-//        this.entityManager.remove(this.entityManager.find(Accommodation.class, key));
-//    }
-//
-//    @Override
-//    public Accommodation get(Integer key) throws Exception {
-//        return this.entityManager.find(Accommodation.class, key);
-//    }
-//
-//    @Override
-//    public List<Accommodation> getAll() throws Exception {
-//        Query allAccommodationQuery = this.entityManager.createQuery("SELECT acc FROM Accommodation acc");
-//        return (List<Accommodation>) allAccommodationQuery.getResultList();
-//    }
 }

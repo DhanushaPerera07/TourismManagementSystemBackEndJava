@@ -37,46 +37,6 @@ public class AccommodationPackageMealPlanDAOImpl
         extends CrudDAOImpl<AccommodationPackageMealPlan, AccommodationPackageMealPlanId>
         implements AccommodationPackageMealPlanDAO {
 
-    /*private EntityManager entityManager;
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    @Override
-    public AccommodationPackageMealPlan save(AccommodationPackageMealPlan pkgMealPlan) throws Exception {
-        this.entityManager.persist(pkgMealPlan);
-        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-        this.entityManager.flush();
-//        return pkgMealPlan.getIndexId(); // TODO: Check the return of the indexID
-        return pkgMealPlan; // TODO: Check the return of the indexID
-    }
-
-    @Override
-    public void update(AccommodationPackageMealPlan pkgMealPlan) throws Exception {
-        this.entityManager.merge(pkgMealPlan);
-    }
-
-    @Override
-    public void delete(AccommodationPackageMealPlanId key) throws Exception {
-        this.entityManager.remove(this.entityManager.find(AccommodationPackageMealPlan.class, key));
-    }
-
-    @Override
-    public AccommodationPackageMealPlan get(AccommodationPackageMealPlanId key) throws Exception {
-        return this.entityManager.find(AccommodationPackageMealPlan.class, key);
-    }
-
-    @Override
-    public List<AccommodationPackageMealPlan> getAll() throws Exception {
-        TypedQuery<AccommodationPackageMealPlan> accommodationPackageMealPlanTypedQuery = this.entityManager
-                .createQuery("SELECT accMp FROM AccommodationPackageMealPlan accMp",
-                        AccommodationPackageMealPlan.class);
-
-        return accommodationPackageMealPlanTypedQuery.getResultList();
-    }*/
-
     @Override
     public List<AccommodationPackageMealPlan> getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage) {
         TypedQuery<AccommodationPackageMealPlan> query = this.getEntityManager().

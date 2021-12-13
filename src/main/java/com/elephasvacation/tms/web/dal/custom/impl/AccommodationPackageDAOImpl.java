@@ -36,47 +36,9 @@ import javax.persistence.Query;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AccommodationPackageDAOImpl extends CrudDAOImpl<AccommodationPackage, Integer> implements AccommodationPackageDAO {
-
-    //    private EntityManager entityManager;
-//
-//    @Override
-//    public void setEntityManager(EntityManager entityManager) {
-//        this.entityManager = entityManager;
-//    }
-//
-//
-//    // CrudDAO ======================================================================================================
-//
-//    @Override
-//    public AccommodationPackage save(AccommodationPackage accommodationPackage) throws Exception {
-//        this.entityManager.persist(accommodationPackage);
-//        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-//        this.entityManager.flush();
-////        return accommodationPackage.getId();
-//        return accommodationPackage;
-//    }
-//
-//    @Override
-//    public void update(AccommodationPackage accommodationPackage) throws Exception {
-//        this.entityManager.merge(accommodationPackage);
-//    }
-//
-//    @Override
-//    public void delete(Integer key) throws Exception {
-//        this.entityManager.remove(this.entityManager.find(AccommodationPackage.class, key));
-//    }
-//
-//    @Override
-//    public AccommodationPackage get(Integer key) throws Exception {
-//        return this.entityManager.find(AccommodationPackage.class, key);
-//    }
-//
-//    @Override
-//    public List<AccommodationPackage> getAll() throws Exception {
-//        Query allAccommodationPackage = this.entityManager.createQuery("SELECT pkg FROM AccommodationPackage pkg");
-//        return (List<AccommodationPackage>) allAccommodationPackage.getResultList();
-//    }
+public class AccommodationPackageDAOImpl
+        extends CrudDAOImpl<AccommodationPackage, Integer>
+        implements AccommodationPackageDAO {
 
     // AccommodationPackageDAO ======================================================================================
 
