@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -39,25 +39,28 @@ import java.util.List;
 
 public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageRoomTypeBO {
 
+    private final AccommodationPackageRoomTypeDAO packageRoomTypeDAO = DAOFactory.getInstance().
+            getDAO(DAOTypes.ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE);
     AccommodationPackageRoomTypeDTOMapper mapper = AccommodationPackageRoomTypeDTOMapper.instance;
     AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
-    private AccommodationPackageRoomTypeDAO packageRoomTypeDAO = DAOFactory.getInstance()
-            .getDAO(DAOTypes.ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE);
     private EntityManager entityManager;
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
 
+        /* Set Entity Manager to the DAL. */
         this.packageRoomTypeDAO.setEntityManager(this.entityManager);
     }
 
     @Override
-    public Integer createAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
+    public AccommodationPackageRoomTypeDTO
+    createAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
             throws Exception {
-        AccommodationPackageRoomType packageRoomType = this.mapper
-                .getAccommodationPackageRoomType(accommodationPackageRoomTypeDTO);
-        return this.packageRoomTypeDAO.save(packageRoomType);
+        AccommodationPackageRoomType packageRoomType = this.mapper.
+                getAccommodationPackageRoomType(accommodationPackageRoomTypeDTO);
+        AccommodationPackageRoomType packageRT = this.packageRoomTypeDAO.save(packageRoomType);
+        return this.mapper.getAccommodationPackageRoomTypeDTO(packageRT);
     }
 
     @Override
@@ -69,7 +72,8 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
     }
 
     @Override
-    public List<AccommodationPackageRoomTypeDTO> getAllPackageRoomTypesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
+    public List<AccommodationPackageRoomTypeDTO>
+    getAllPackageRoomTypesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
         AccommodationPackage accommodationPackage = this.packageDTOMapper.getAccommodationPackage(packageDTO);
         return this.mapper.getAccommodationPackageRoomTypeDTOList(
                 this.packageRoomTypeDAO.getAllPackageRoomTypesForAccommodationPackage(accommodationPackage));
