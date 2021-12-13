@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -28,63 +28,68 @@
 package com.elephasvacation.tms.web.dal.custom.impl;
 
 import com.elephasvacation.tms.web.commonConstant.Number;
+import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class TourDetailDAOImpl implements TourDetailDAO {
+public class TourDetailDAOImpl
+        extends CrudDAOImpl<TourDetail, Integer>
+        implements TourDetailDAO {
 
-    private EntityManager entityManager;
+    //    private EntityManager entityManager;
+//
+//    @Override
+//    public void setEntityManager(EntityManager entityManager) {
+//        this.entityManager = entityManager;
+//    }
+//
+//    @Override
+//    public TourDetail save(TourDetail tourDetail) throws Exception {
+//        this.entityManager.persist(tourDetail);
+//        //  call the flush method on EntityManager manually, because we need to get the Generated ID
+//        this.entityManager.flush();
+////        return tourDetail.getId();
+//        return tourDetail;
+//    }
+//
+//    @Override
+//    public void update(TourDetail tourDetail) throws Exception {
+//        this.entityManager.merge(tourDetail);
+//    }
+//
+//    @Override
+//    public void delete(Integer key) throws Exception {
+//        this.entityManager.remove(this.entityManager.find(TourDetail.class, key));
+//    }
+//
+//    @Override
+//    public TourDetail get(Integer key) throws Exception {
+//        return this.entityManager.find(TourDetail.class, key);
+//    }
+//
+//    @Override
+//    public List<TourDetail> getAll() throws Exception {
+//        Query allTourDetailsQuery = this.entityManager.createQuery("SELECT t FROM TourDetail t");
+//        return (List<TourDetail>) allTourDetailsQuery.getResultList();
+//    }
 
     @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    @Override
-    public Integer save(TourDetail tourDetail) throws Exception {
-        this.entityManager.persist(tourDetail);
-        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-        this.entityManager.flush();
-        return tourDetail.getId();
-    }
-
-    @Override
-    public void update(TourDetail tourDetail) throws Exception {
-        this.entityManager.merge(tourDetail);
-    }
-
-    @Override
-    public void delete(Integer key) throws Exception {
-        this.entityManager.remove(this.entityManager.find(TourDetail.class, key));
-    }
-
-    @Override
-    public TourDetail get(Integer key) throws Exception {
-        return this.entityManager.find(TourDetail.class, key);
-    }
-
-    @Override
-    public List<TourDetail> getAll() throws Exception {
-        Query allTourDetailsQuery = this.entityManager.createQuery("SELECT t FROM TourDetail t");
-        return (List<TourDetail>) allTourDetailsQuery.getResultList();
-    }
-
-    @Override
-    public List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws Exception {
-        Query query = this.entityManager.createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1");
+    public List<TourDetail> getAllTourDetailsByCustomerID(int customerID) {
+        TypedQuery<TourDetail> query = this.getEntityManager().
+                createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1", TourDetail.class);
         query.setParameter(Number.ONE, customerID);
-        return (List<TourDetail>) query.getResultList();
+        return query.getResultList();
     }
 
     @Override
     public TourDetail getTourDetailByCustomerIDAndTourDetailID(int customerID,
-                                                               int tourDetailID) throws Exception {
-        Query query = this.entityManager
-                .createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1 AND t.id=?2");
+                                                               int tourDetailID) {
+        Query query = this.getEntityManager().
+                createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1 AND t.id=?2");
         query.setParameter(Number.ONE, customerID);
         query.setParameter(Number.TWO, tourDetailID);
         return (TourDetail) query.getSingleResult();

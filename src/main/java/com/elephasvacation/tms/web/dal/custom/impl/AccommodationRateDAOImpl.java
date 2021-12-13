@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -28,17 +28,19 @@
 package com.elephasvacation.tms.web.dal.custom.impl;
 
 import com.elephasvacation.tms.web.commonConstant.Number;
+import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAO;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
+import com.elephasvacation.tms.web.entity.AccommodationRateId;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.sql.SQLException;
 import java.util.List;
 
-public class AccommodationRateDAOImpl implements AccommodationRateDAO {
+public class AccommodationRateDAOImpl
+        extends CrudDAOImpl<AccommodationRate, AccommodationRateId>
+        implements AccommodationRateDAO {
 
-    private EntityManager entityManager;
+    /*private EntityManager entityManager;
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
@@ -48,12 +50,13 @@ public class AccommodationRateDAOImpl implements AccommodationRateDAO {
     // CrudDAO ===================================================================================
 
     @Override
-    public Integer save(AccommodationRate accommodationRate) throws Exception {
+    public AccommodationRate save(AccommodationRate accommodationRate) throws Exception {
         this.entityManager.persist(accommodationRate);
         //  call the flush method on EntityManager manually, because we need to get the Generated ID
         this.entityManager.flush();
         // TODO: Check the returning: getAccommodationPackageId
-        return accommodationRate.getId().getAccommodationPackageId();
+//        return accommodationRate.getId().getAccommodationPackageId();
+        return accommodationRate;
     }
 
     @Override
@@ -77,17 +80,16 @@ public class AccommodationRateDAOImpl implements AccommodationRateDAO {
                 this.entityManager.createQuery("SELECT ar FROM AccommodationRate ar", AccommodationRate.class);
 
         return selectAccommodationRateTypedQuery.getResultList();
-    }
+    }*/
 
     // AccommodationRateDAO ===================================================================================
 
     @Override
-    public List<AccommodationRate> getAllAccommodationRatesByAccommodationPackageID(Integer accommodationPackageID)
-            throws SQLException {
+    public List<AccommodationRate> getAllAccommodationRatesByAccommodationPackageID(Integer accommodationPackageID) {
 
         TypedQuery<AccommodationRate> selectAccommodationRateByAccommodationPackageTypedQuery =
-                this.entityManager
-                        .createQuery("SELECT ar FROM AccommodationRate ar WHERE ar.id.accommodationPackageId=?1",
+                this.getEntityManager().
+                        createQuery("SELECT ar FROM AccommodationRate ar WHERE ar.id.accommodationPackageId=?1",
                                 AccommodationRate.class);
 
         selectAccommodationRateByAccommodationPackageTypedQuery.setParameter(Number.ONE, accommodationPackageID);

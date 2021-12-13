@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -27,6 +27,7 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
 
@@ -34,7 +35,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class RoomCategoryDAOImpl implements RoomCategoryDAO {
+public class RoomCategoryDAOImpl
+        extends CrudDAOImpl<RoomCategory, Integer>
+        implements RoomCategoryDAO {
 
     private EntityManager entityManager;
 
@@ -44,11 +47,12 @@ public class RoomCategoryDAOImpl implements RoomCategoryDAO {
     }
 
     @Override
-    public Integer save(RoomCategory roomCategory) throws Exception {
+    public RoomCategory save(RoomCategory roomCategory) throws Exception {
         this.entityManager.persist(roomCategory);
         //  call the flush method on EntityManager manually, because we need to get the Generated ID
         this.entityManager.flush();
-        return roomCategory.getId();
+//        return roomCategory.getId();
+        return roomCategory;
     }
 
     @Override

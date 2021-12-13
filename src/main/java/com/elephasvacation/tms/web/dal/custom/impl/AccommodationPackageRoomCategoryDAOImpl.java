@@ -1,18 +1,43 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 Dhanusha Perera
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
 import com.elephasvacation.tms.web.commonConstant.Number;
+import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDAO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategoryId;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class AccommodationPackageRoomCategoryDAOImpl implements AccommodationPackageRoomCategoryDAO {
+public class AccommodationPackageRoomCategoryDAOImpl
+        extends CrudDAOImpl<AccommodationPackageRoomCategory, AccommodationPackageRoomCategoryId>
+        implements AccommodationPackageRoomCategoryDAO {
 
-    private EntityManager entityManager;
+    /*private EntityManager entityManager;
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
@@ -20,11 +45,12 @@ public class AccommodationPackageRoomCategoryDAOImpl implements AccommodationPac
     }
 
     @Override
-    public Integer save(AccommodationPackageRoomCategory pkgRoomCategory) throws Exception {
+    public AccommodationPackageRoomCategory save(AccommodationPackageRoomCategory pkgRoomCategory) throws Exception {
         this.entityManager.persist(pkgRoomCategory);
         //  call the flush method on EntityManager manually, because we need to get the Generated ID
         this.entityManager.flush();
-        return pkgRoomCategory.getIndexId(); // TODO: Check the return of the indexID
+//        return pkgRoomCategory.getIndexId(); // TODO: Check the return of the indexID
+        return pkgRoomCategory; // TODO: Check the return of the indexID
     }
 
     @Override
@@ -48,13 +74,14 @@ public class AccommodationPackageRoomCategoryDAOImpl implements AccommodationPac
                 .createQuery("SELECT pkgRc FROM AccommodationPackageRoomCategory pkgRc",
                         AccommodationPackageRoomCategory.class);
         return selectPkgRoomCategoryTypedQuery.getResultList();
-    }
+    }*/
 
     @Override
     public List<AccommodationPackageRoomCategory> getAllRoomCategoriesForAccommodationPackage(AccommodationPackage accommodationPackage) {
-        TypedQuery<AccommodationPackageRoomCategory> query = this.entityManager.createQuery("SELECT pkgRc " +
-                "FROM AccommodationPackageRoomCategory pkgRc " +
-                "WHERE pkgRc.id.accommodationPackageId=?1", AccommodationPackageRoomCategory.class);
+        TypedQuery<AccommodationPackageRoomCategory> query = this.getEntityManager().
+                createQuery("SELECT pkgRc " +
+                        "FROM AccommodationPackageRoomCategory pkgRc " +
+                        "WHERE pkgRc.id.accommodationPackageId=?1", AccommodationPackageRoomCategory.class);
         query.setParameter(Number.ONE, accommodationPackage.getId());
         return query.getResultList();
     }
