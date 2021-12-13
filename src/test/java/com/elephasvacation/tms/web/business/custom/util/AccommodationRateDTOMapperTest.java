@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -46,10 +46,10 @@ public class AccommodationRateDTOMapperTest {
         AccommodationRateDTO accommodationRateDTO =
                 this.mapper.getAccommodationRateDTO(accommodationRate);
 
-        assertEquals(new Integer("1"), accommodationRateDTO.getPkgRoomTypeId());
-        assertEquals(new Integer("1"), accommodationRateDTO.getPkgRoomCategoryId());
-        assertEquals(new Integer("1"), accommodationRateDTO.getPkgMealPlanId());
-        assertEquals(new Integer("1"), accommodationRateDTO.getAccommodationPackageId());
+        assertEquals(new Integer("1"), accommodationRateDTO.getAccommodationRateId().getPkgRoomTypeId());
+        assertEquals(new Integer("1"), accommodationRateDTO.getAccommodationRateId().getPkgRoomCategoryId());
+        assertEquals(new Integer("1"), accommodationRateDTO.getAccommodationRateId().getPkgMealPlanId());
+        assertEquals(new Integer("1"), accommodationRateDTO.getAccommodationRateId().getAccommodationPackageId());
         assertEquals(new BigDecimal("40"), accommodationRateDTO.getRate());
     }
 

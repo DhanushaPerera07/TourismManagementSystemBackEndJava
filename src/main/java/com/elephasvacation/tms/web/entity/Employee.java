@@ -15,29 +15,30 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package com.elephasvacation.tms.web.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "employee")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee implements SuperEntity {
+@Getter
+@Setter
+@ToString
+public class Employee implements SuperEntity<Serializable>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -63,7 +64,7 @@ public class Employee implements SuperEntity {
     private String email;
 
     @Column(name = "gender", length = 20)
-    private String gender;
+    private GenderTypes gender;
 
     @Column(name = "position", length = 45)
     private String position;
@@ -77,6 +78,7 @@ public class Employee implements SuperEntity {
     @Column(name = "updated")
     private LocalDateTime updated;
 
+    /* Constructor with ID attribute. */
     public Employee(Integer id,
                     String name,
                     String address,
@@ -84,7 +86,7 @@ public class Employee implements SuperEntity {
                     String nic,
                     String contact,
                     String email,
-                    String gender,
+                    GenderTypes gender,
                     String position,
                     String status) {
         this.id = id;
@@ -99,13 +101,14 @@ public class Employee implements SuperEntity {
         this.status = status;
     }
 
+    /* Constructor without ID attribute. */
     public Employee(String name,
                     String address,
                     LocalDate dateOfBirth,
                     String nic,
                     String contact,
                     String email,
-                    String gender,
+                    GenderTypes gender,
                     String position,
                     String status) {
         this.name = name;

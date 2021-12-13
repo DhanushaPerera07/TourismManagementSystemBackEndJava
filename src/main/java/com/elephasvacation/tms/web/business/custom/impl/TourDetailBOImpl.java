@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -41,7 +41,7 @@ import java.util.List;
 public class TourDetailBOImpl implements TourDetailBO {
 
     private final TourDetailDAO tourDetailDAO = DAOFactory.getInstance().getDAO(DAOTypes.TOUR_DETAIL);
-    TourDetailDTOMapper mapper = TourDetailDTOMapper.instance;
+    private final TourDetailDTOMapper mapper = TourDetailDTOMapper.instance;
     private EntityManager entityManager;
 
 
@@ -55,7 +55,7 @@ public class TourDetailBOImpl implements TourDetailBO {
 
     @Override
     public Integer createTourDetail(TourDetailDTO tourDetailDTO) throws Exception {
-        return this.tourDetailDAO.save(this.mapper.getTourDetail(tourDetailDTO));
+        return this.tourDetailDAO.save(this.mapper.getTourDetail(tourDetailDTO)).getId();
     }
 
     @Override

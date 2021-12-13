@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -35,10 +35,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccommodationRateDTO implements Serializable {
-    private Integer accommodationPackageId;
-    private Integer pkgMealPlanId;
-    private Integer pkgRoomCategoryId;
-    private Integer pkgRoomTypeId;
+    //    private Integer accommodationPackageId;
+//    private Integer pkgMealPlanId;
+//    private Integer pkgRoomCategoryId;
+//    private Integer pkgRoomTypeId;
+    private AccommodationRateDTOId accommodationRateId;
     private BigDecimal rate;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -48,10 +49,21 @@ public class AccommodationRateDTO implements Serializable {
                                 Integer pkgRoomCategoryId,
                                 Integer pkgRoomTypeId,
                                 BigDecimal rate) {
-        this.accommodationPackageId = accommodationPackageId;
-        this.pkgMealPlanId = pkgMealPlanId;
-        this.pkgRoomCategoryId = pkgRoomCategoryId;
-        this.pkgRoomTypeId = pkgRoomTypeId;
+//        this.accommodationPackageId = accommodationPackageId;
+//        this.pkgMealPlanId = pkgMealPlanId;
+//        this.pkgRoomCategoryId = pkgRoomCategoryId;
+//        this.pkgRoomTypeId = pkgRoomTypeId;
+        this.accommodationRateId = new AccommodationRateDTOId(accommodationPackageId,
+                pkgMealPlanId,
+                pkgRoomCategoryId,
+                pkgRoomTypeId);
         this.rate = rate;
     }
+
+    public AccommodationRateDTO(AccommodationRateDTOId accommodationRateDTOId,
+                                BigDecimal rate) {
+        this.accommodationRateId = accommodationRateDTOId;
+        this.rate = rate;
+    }
+
 }

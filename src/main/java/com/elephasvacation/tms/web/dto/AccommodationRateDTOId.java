@@ -21,27 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom;
+package com.elephasvacation.tms.web.dto;
 
-import com.elephasvacation.tms.web.business.SuperBO;
-import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
-import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.sql.SQLException;
-import java.util.List;
+import java.io.Serializable;
 
-public interface AccommodationRateBO extends SuperBO {
-
-    AccommodationRateDTOId createAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception;
-
-    void updateAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception;
-
-    void deleteAccommodationRate(AccommodationRateDTOId accommodationRateDTOId) throws Exception;
-
-    AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId) throws Exception;
-
-    List<AccommodationRateDTO> getAllAccommodationRates(Integer accommodationRateDTOID) throws Exception;
-
-    List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID)
-            throws SQLException;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccommodationRateDTOId implements Serializable {
+    private Integer accommodationPackageId;
+    private Integer pkgMealPlanId;
+    private Integer pkgRoomCategoryId;
+    private Integer pkgRoomTypeId;
 }

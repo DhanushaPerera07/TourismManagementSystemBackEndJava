@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -43,26 +43,28 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
 //            .getDAO(DAOTypes.ROOM_CATEGORY);
 //    RoomCategoryDTOMapper roomCategoryDTOMapper = RoomCategoryDTOMapper.instance;
 
+    private final AccommodationPackageRoomCategoryDAO packageRoomCategoryDAO = DAOFactory.getInstance()
+            .getDAO(DAOTypes.ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE);
     AccommodationPackageRoomCategoryDTOMapper mapper = AccommodationPackageRoomCategoryDTOMapper.instance;
     AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
-    private AccommodationPackageRoomCategoryDAO packageRoomCategoryDAO = DAOFactory.getInstance()
-            .getDAO(DAOTypes.ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE);
     private EntityManager entityManager;
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
+        /* Set Entity Manager to the DAL. */
 //        this.roomCategoryDAO.setEntityManager(this.entityManager);
         this.packageRoomCategoryDAO.setEntityManager(this.entityManager);
     }
 
     @Override
-    public Integer createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO)
+    public AccommodationPackageRoomCategoryDTO createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO)
             throws Exception {
-        AccommodationPackageRoomCategory packageRoomCategory = this.mapper
-                .getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
+        AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
+                getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
+        AccommodationPackageRoomCategory packageRC = this.packageRoomCategoryDAO.save(packageRoomCategory);
 
-        return this.packageRoomCategoryDAO.save(packageRoomCategory);
+        return this.mapper.getAccommodationPackageRoomCategoryDTO(packageRC);
     }
 
     @Override

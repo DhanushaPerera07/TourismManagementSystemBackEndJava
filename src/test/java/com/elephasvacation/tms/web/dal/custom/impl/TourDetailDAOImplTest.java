@@ -1,52 +1,122 @@
-package com.elephasvacation.tms.web.dal.custom.impl;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 Dhanusha Perera
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 /*
 @author : Dhanusha Perera
 @date : 04/07/2021
-*/public class TourDetailDAOImplTest {
+*/
+package com.elephasvacation.tms.web.dal.custom.impl;
 
-//    TourDetailDAOImpl tourDetailDAO = new TourDetailDAOImpl();
-//    Connection connection;
-//
-//    @Before
-//    public void setConnection() throws Exception {
-//        Class.forName("com.mysql.cj.jdbc.Driver");
-//        this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tms",
-//                "root", "root");
-//        this.connection.setAutoCommit(false);
-//        tourDetailDAO.setConnection(this.connection);
-//    }
-//
-//    @After
-//    public void closeConnection() throws SQLException {
-//        this.connection.rollback();
-//        this.connection.close();
-//    }
-//
-////    @Test
-////    public void save() {
-////
-////    }
-//
-//    @Test
-//    public void get() throws Exception {
-//        TourDetail tourDetail = new TourDetail();
-//        tourDetail.setId(3);
-//        tourDetail.setArrivalDate(Date.valueOf("2021-05-20"));
-//
-//        TourDetail tourDetailDB = this.tourDetailDAO.get(3);
-//        Assert.assertEquals(tourDetail.getId(), tourDetailDB.getId());
-//        Assert.assertEquals(tourDetail.getArrivalDate(), tourDetailDB.getArrivalDate());
-//
-//    }
+import com.elephasvacation.tms.web.dal.DAOFactory;
+import com.elephasvacation.tms.web.dal.DAOTypes;
+import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
+import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
+import com.elephasvacation.tms.web.entity.Customer;
+import com.elephasvacation.tms.web.entity.TourDetail;
+import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
+import com.elephasvacation.tms.web.util.HibernateUtil;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static org.junit.Assert.assertNotNull;
+
+public class TourDetailDAOImplTest {
+
+    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
+    private final TourDetailDAO tourDetailDAO = DAOFactory.getInstance().getDAO(DAOTypes.TOUR_DETAIL);
+    private EntityManagerFactory emf;
+    private EntityManager em;
+
+    @Before
+    public void setUp() {
+        try {
+            /* get EntityManagerFactory. */
+            this.emf = HibernateUtil.getEntityManagerFactory();
+            /* creates EntityManager. */
+            this.em = emf.createEntityManager();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @After
+    public void tearDown() {
+        /* close the EntityManagerFactory and EntityManager. */
+        if (em != null) {
+            em.close();
+            emf.close();
+        }
+    }
+
+    @Test
+    public void save() {
+        assertNotNull(this.customerDAO);
+        assertNotNull(this.tourDetailDAO);
+
+        try {
+
+            /* begins the transaction. */
+            this.em.getTransaction().begin();
+
+            /* set EntityManager. */
+            this.customerDAO.setEntityManager(this.em);
+            this.tourDetailDAO.setEntityManager(this.em);
+
+            Customer customer = this.customerDAO.get(1);
+
+            /* creates a new Employee Credential object. */
+            TourDetail tourDetail = new TourDetail(new BigDecimal("4"),
+                    4,
+                    2,
+                    3,
+                    LocalDateTime.of(2021, 12, 20, 0, 0),
+                    LocalDateTime.of(2021, 12, 24, 0, 0),
+                    TourDetailStatusTypes.POTENTIAL,
+                    new BigDecimal("200.00"),
+                    "None",
+                    new BigDecimal("0"),
+                    customer);
+
+            /* saving the Tour Detail. */
+            Integer generatedTourDetailId = this.tourDetailDAO.save(tourDetail).getId();
+
+            /* assert */
+            assertNotNull(generatedTourDetailId);
+
+            /* print the generated ID on the terminal. */
+            System.out.println("Generated Tour Detail ID: " + generatedTourDetailId);
+
+            /* committing the transaction. */
+            this.em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
