@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -39,9 +39,9 @@ import java.util.List;
 
 public class MealPlanBOImpl implements MealPlanBO {
 
-    private MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
+    private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
             .getDAO(DAOTypes.MEAL_PLAN);
-    private MealPlanDTOMapper mapper = MealPlanDTOMapper.instance;
+    private final MealPlanDTOMapper mapper = MealPlanDTOMapper.instance;
     private EntityManager entityManager;
 
     @Override
@@ -54,7 +54,7 @@ public class MealPlanBOImpl implements MealPlanBO {
 
     @Override
     public Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
-        return this.mealPlanDAO.save(this.mapper.getMealPlan(mealPlanDTO));
+        return this.mealPlanDAO.save(this.mapper.getMealPlan(mealPlanDTO)).getId();
     }
 
     @Override

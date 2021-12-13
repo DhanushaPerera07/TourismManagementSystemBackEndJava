@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -40,9 +40,9 @@ import java.util.List;
 
 public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
-    private AccommodationPackageDAO accommodationPackageDAO = DAOFactory.getInstance()
+    private final AccommodationPackageDAO accommodationPackageDAO = DAOFactory.getInstance()
             .getDAO(DAOTypes.ACCOMMODATION_PACKAGE);
-    private AccommodationPackageDTOMapper mapper = AccommodationPackageDTOMapper.instance;
+    private final AccommodationPackageDTOMapper mapper = AccommodationPackageDTOMapper.instance;
     private EntityManager entityManager;
 
     @Override
@@ -55,7 +55,7 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
     @Override
     public Integer createAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception {
-        return this.accommodationPackageDAO.save(this.mapper.getAccommodationPackage(accommodationPackageDTO));
+        return this.accommodationPackageDAO.save(this.mapper.getAccommodationPackage(accommodationPackageDTO)).getId();
     }
 
     @Override
