@@ -40,43 +40,6 @@ public class TourDetailDAOImpl
         extends CrudDAOImpl<TourDetail, Integer>
         implements TourDetailDAO {
 
-    //    private EntityManager entityManager;
-//
-//    @Override
-//    public void setEntityManager(EntityManager entityManager) {
-//        this.entityManager = entityManager;
-//    }
-//
-//    @Override
-//    public TourDetail save(TourDetail tourDetail) throws Exception {
-//        this.entityManager.persist(tourDetail);
-//        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-//        this.entityManager.flush();
-////        return tourDetail.getId();
-//        return tourDetail;
-//    }
-//
-//    @Override
-//    public void update(TourDetail tourDetail) throws Exception {
-//        this.entityManager.merge(tourDetail);
-//    }
-//
-//    @Override
-//    public void delete(Integer key) throws Exception {
-//        this.entityManager.remove(this.entityManager.find(TourDetail.class, key));
-//    }
-//
-//    @Override
-//    public TourDetail get(Integer key) throws Exception {
-//        return this.entityManager.find(TourDetail.class, key);
-//    }
-//
-//    @Override
-//    public List<TourDetail> getAll() throws Exception {
-//        Query allTourDetailsQuery = this.entityManager.createQuery("SELECT t FROM TourDetail t");
-//        return (List<TourDetail>) allTourDetailsQuery.getResultList();
-//    }
-
     @Override
     public List<TourDetail> getAllTourDetailsByCustomerID(int customerID) {
         TypedQuery<TourDetail> query = this.getEntityManager().

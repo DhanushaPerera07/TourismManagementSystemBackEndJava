@@ -31,49 +31,8 @@ import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.util.List;
-
 public class RoomCategoryDAOImpl
         extends CrudDAOImpl<RoomCategory, Integer>
         implements RoomCategoryDAO {
 
-    private EntityManager entityManager;
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    @Override
-    public RoomCategory save(RoomCategory roomCategory) throws Exception {
-        this.entityManager.persist(roomCategory);
-        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-        this.entityManager.flush();
-//        return roomCategory.getId();
-        return roomCategory;
-    }
-
-    @Override
-    public void update(RoomCategory roomCategory) throws Exception {
-        this.entityManager.merge(roomCategory);
-    }
-
-    @Override
-    public void delete(Integer key) throws Exception {
-        this.entityManager.remove(this.entityManager.find(RoomCategory.class, key));
-    }
-
-    @Override
-    public RoomCategory get(Integer key) throws Exception {
-        return this.entityManager.find(RoomCategory.class, key);
-    }
-
-    @Override
-    public List<RoomCategory> getAll() throws Exception {
-        TypedQuery<RoomCategory> selectRoomCategoryTypedQuery =
-                this.entityManager.createQuery("SELECT rc FROM RoomCategory rc", RoomCategory.class);
-        return selectRoomCategoryTypedQuery.getResultList();
-    }
 }

@@ -35,44 +35,4 @@ public class CustomerDAOImpl
         extends CrudDAOImpl<Customer, Integer>
         implements CustomerDAO {
 
-//    private EntityManager entityManager;
-//
-//    @Override
-//    public void setEntityManager(EntityManager entityManager) {
-//        this.entityManager = entityManager;
-//    }
-//
-//    /**
-//    * Persist the new customer record to the database.
-//    * @returns Integer: generated primary key of the customer. */
-//    @Override
-//    public Customer save(Customer customer) throws Exception {
-//        this.entityManager.persist(customer);
-//        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-//        this.entityManager.flush();
-////        return customer.getId();
-//        return customer;
-//    }
-//
-//    @Override
-//    public void update(Customer customer) throws Exception {
-//        this.entityManager.merge(customer);
-//    }
-//
-//    @Override
-//    public void delete(Integer key) throws Exception {
-//        this.entityManager.remove(this.entityManager.find(Customer.class, key));
-//    }
-//
-//    @Override
-//    public Customer get(Integer key) throws Exception {
-//        return this.entityManager.find(Customer.class, key);
-//    }
-//
-//    @Override
-//    public List<Customer> getAll() throws Exception {
-//        Query allCustomersQuery = this.entityManager.createQuery("SELECT c FROM customer c");
-//        return (List<Customer>) allCustomersQuery.getResultList();
-//    }
-
 }

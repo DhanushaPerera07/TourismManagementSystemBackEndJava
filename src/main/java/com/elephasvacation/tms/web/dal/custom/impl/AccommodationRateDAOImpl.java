@@ -40,48 +40,6 @@ public class AccommodationRateDAOImpl
         extends CrudDAOImpl<AccommodationRate, AccommodationRateId>
         implements AccommodationRateDAO {
 
-    /*private EntityManager entityManager;
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    // CrudDAO ===================================================================================
-
-    @Override
-    public AccommodationRate save(AccommodationRate accommodationRate) throws Exception {
-        this.entityManager.persist(accommodationRate);
-        //  call the flush method on EntityManager manually, because we need to get the Generated ID
-        this.entityManager.flush();
-        // TODO: Check the returning: getAccommodationPackageId
-//        return accommodationRate.getId().getAccommodationPackageId();
-        return accommodationRate;
-    }
-
-    @Override
-    public void update(AccommodationRate accommodationRate) throws Exception {
-        this.entityManager.merge(accommodationRate);
-    }
-
-    @Override
-    public void delete(Integer key) throws Exception {
-        this.entityManager.remove(this.entityManager.find(AccommodationRate.class, key));
-    }
-
-    @Override
-    public AccommodationRate get(Integer key) throws Exception {
-        return this.entityManager.find(AccommodationRate.class, key);
-    }
-
-    @Override
-    public List<AccommodationRate> getAll() throws Exception {
-        TypedQuery<AccommodationRate> selectAccommodationRateTypedQuery =
-                this.entityManager.createQuery("SELECT ar FROM AccommodationRate ar", AccommodationRate.class);
-
-        return selectAccommodationRateTypedQuery.getResultList();
-    }*/
-
     // AccommodationRateDAO ===================================================================================
 
     @Override
