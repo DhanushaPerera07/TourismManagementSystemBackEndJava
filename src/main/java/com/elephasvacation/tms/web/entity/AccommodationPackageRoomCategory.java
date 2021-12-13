@@ -21,24 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package com.elephasvacation.tms.web.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "accommodation_package_room_category", indexes = {
         @Index(name = "fk_accommodation_package_has_room_category_room_category1_idx", columnList = "room_category_id"),
         @Index(name = "fk_accommodation_package_has_room_category_accommodation_pa_idx", columnList = "accommodation_package_id")
 })
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccommodationPackageRoomCategory implements SuperEntity {
+@Getter
+@Setter
+@ToString
+public class AccommodationPackageRoomCategory implements SuperEntity<Serializable> {
     @EmbeddedId
     private AccommodationPackageRoomCategoryId id;
 

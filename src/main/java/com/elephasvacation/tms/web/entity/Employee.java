@@ -27,6 +27,7 @@ import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -37,7 +38,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class Employee implements SuperEntity {
+public class Employee implements SuperEntity<Serializable>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

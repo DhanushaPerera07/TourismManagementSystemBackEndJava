@@ -26,24 +26,24 @@ package com.elephasvacation.tms.web.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Table(name = "employee_credential", indexes = {
-        @Index(name = "email_UNIQUE", columnList = "email", unique = true)
-})
+@Table(name = "employee_credential")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Getter
 @Setter
 @ToString
-public class EmployeeCredential implements SuperEntity {
+public class EmployeeCredential implements SuperEntity<Serializable> {
     @Id
     @Column(name = "employee_id", nullable = false)
-    private Integer id;
+    @Getter(AccessLevel.PRIVATE)
+    private Integer employeeId; // Employee ID
 
-    @Column(name = "email", length = 200)
-    private String email;
+//    @Column(name = "email", length = 200)
+//    private String email;
 
     @Lob
     @Column(name = "password")
@@ -56,6 +56,12 @@ public class EmployeeCredential implements SuperEntity {
     private LocalDateTime updated;
 
     /* Constructor with ID attribute */
+    public EmployeeCredential(Integer employeeId, String password) {
+        this.employeeId = employeeId;
+        this.password = password;
+    }
+
+/*    *//* Constructor with ID attribute *//*
     public EmployeeCredential(Integer id,
                               String email,
                               String password) {
@@ -64,12 +70,12 @@ public class EmployeeCredential implements SuperEntity {
         this.password = password;
     }
 
-    /* Constructor without ID attribute */
+    *//* Constructor without ID attribute *//*
     public EmployeeCredential(String email,
                               String password) {
         this.email = email;
         this.password = password;
-    }
+    }*/
 
     @PrePersist
     public void creationTimeStamps() {
@@ -80,5 +86,10 @@ public class EmployeeCredential implements SuperEntity {
     @PreUpdate
     public void updateTimeStamps() {
         updated = LocalDateTime.now();
+    }
+
+    @Override
+    public Integer getId() {
+        return this.getEmployeeId();
     }
 }
