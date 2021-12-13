@@ -25,9 +25,10 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
+import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
-import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
+import com.elephasvacation.tms.web.entity.EmployeeCredential;
 import com.elephasvacation.tms.web.util.HibernateUtil;
 import org.junit.After;
 import org.junit.Before;
@@ -35,13 +36,14 @@ import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.time.LocalDate;
 
 import static org.junit.Assert.assertNotNull;
 
-public class EmployeeDAOImplTest {
+public class EmployeeCredentialDAOImplTest {
 
     private final EmployeeDAO employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
+    private final EmployeeCredentialDAO employeeCredentialDAO =
+            DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE_CREDENTIAL);
     private EntityManagerFactory emf;
     private EntityManager em;
 
@@ -75,33 +77,28 @@ public class EmployeeDAOImplTest {
 
             /* set EntityManager. */
             this.employeeDAO.setEntityManager(this.em);
+            this.employeeCredentialDAO.setEntityManager(this.em);
 
-            /* creates a new Employee object. */
-            Employee employee = new Employee("John Doe",
-                    "New York",
-                    LocalDate.of(1991, 1, 1),
-                    "112233445566",
-                    "03321234567",
-                    "john.test@gmail.com",
-                    GenderTypes.MALE,
-                    "Trainee",
-                    "Active");
+            Employee john = this.employeeDAO.get(new Integer("1"));
+
+            assertNotNull(john);
+
+            /* creates a new Employee Credential object. */
+            EmployeeCredential johnsCredential = new EmployeeCredential(john.getId(), "Test@123");
 
             /* saving the Employee. */
-            Integer generatedEmployeeId = this.employeeDAO.save(employee).getId();
+            Integer employeeCredentialId = this.employeeCredentialDAO.save(johnsCredential).getId();
 
             /* assert */
-            assertNotNull(generatedEmployeeId);
+            assertNotNull(employeeCredentialId);
 
             /* print the generated ID on the terminal. */
-            System.out.println("Generated Employee ID: " + generatedEmployeeId);
+            System.out.println("Generated Employee Credential ID: " + employeeCredentialId);
 
             /* committing the transaction. */
             this.em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 }
