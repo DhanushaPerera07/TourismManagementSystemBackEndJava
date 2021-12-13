@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -31,10 +31,10 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public class CrudDAOImpl<T extends SuperEntity, K extends Serializable> implements CrudDAO<T, K> {
+public class CrudDAOImpl<T extends SuperEntity<Serializable>, K extends Serializable> implements CrudDAO<T, K> {
 
+    private final Class<T> entityClass;
     private EntityManager entityManager;
-    private Class<T> entityClass;
 
     public CrudDAOImpl() {
         this.entityClass =
@@ -54,10 +54,11 @@ public class CrudDAOImpl<T extends SuperEntity, K extends Serializable> implemen
     }
 
     @Override
-    public Integer save(T entity) throws Exception {
+    public T save(T entity) throws Exception {
         this.entityManager.persist(entity);
         this.entityManager.flush();
-        return entity.getId(); // Let's return the generated ID here.
+//        return entity.getId(); // Let's return the generated ID here.
+        return entity; // Let's return the saved entity here.
     }
 
     @Override
