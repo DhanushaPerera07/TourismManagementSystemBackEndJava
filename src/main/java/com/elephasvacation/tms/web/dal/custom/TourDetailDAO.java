@@ -28,6 +28,7 @@
 package com.elephasvacation.tms.web.dal.custom;
 
 import com.elephasvacation.tms.web.dal.CrudDAO;
+import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 
 import java.util.List;
@@ -38,3 +39,4 @@ public interface TourDetailDAO extends CrudDAO<TourDetail, Integer> {
 
     List<TourDetail> getAllTourDetailsByCustomerID(int customerID) throws Exception;
 }
+

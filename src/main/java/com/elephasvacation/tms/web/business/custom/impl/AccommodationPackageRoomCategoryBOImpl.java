@@ -39,47 +39,72 @@ import java.util.List;
 
 public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPackageRoomCategoryBO {
 
-//    private RoomCategoryDAO roomCategoryDAO = DAOFactory.getInstance()
-//            .getDAO(DAOTypes.ROOM_CATEGORY);
-//    RoomCategoryDTOMapper roomCategoryDTOMapper = RoomCategoryDTOMapper.instance;
-
     private final AccommodationPackageRoomCategoryDAO packageRoomCategoryDAO = DAOFactory.getInstance()
             .getDAO(DAOTypes.ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE);
-    AccommodationPackageRoomCategoryDTOMapper mapper = AccommodationPackageRoomCategoryDTOMapper.instance;
-    AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
+    private final AccommodationPackageRoomCategoryDTOMapper mapper = AccommodationPackageRoomCategoryDTOMapper.instance;
+    private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
     private EntityManager entityManager;
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
+
         /* Set Entity Manager to the DAL. */
-//        this.roomCategoryDAO.setEntityManager(this.entityManager);
         this.packageRoomCategoryDAO.setEntityManager(this.entityManager);
     }
 
     @Override
-    public AccommodationPackageRoomCategoryDTO createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO)
-            throws Exception {
+    public AccommodationPackageRoomCategoryDTO
+    createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationPackageRoomCategoryDTO to entity. */
         AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
                 getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
+
+        /* save AccommodationPackageRoomCategory. */
         AccommodationPackageRoomCategory packageRC = this.packageRoomCategoryDAO.save(packageRoomCategory);
 
-        return this.mapper.getAccommodationPackageRoomCategoryDTO(packageRC);
+        /* convert entity to DTO. */
+        AccommodationPackageRoomCategoryDTO savedPackageRoomCategoryDTO = this.mapper.
+                getAccommodationPackageRoomCategoryDTO(packageRC);
+
+        this.entityManager.getTransaction().commit();
+        return savedPackageRoomCategoryDTO;
     }
 
     @Override
     public void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO)
             throws Exception {
-        AccommodationPackageRoomCategory packageRoomCategory =
-                this.mapper.getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationPackageRoomCategoryDTO to entity. */
+        AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
+                getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
+
+        /* delete the AccommodationPackageRoomCategory By ID. */
         this.packageRoomCategoryDAO.delete(packageRoomCategory.getId());
+
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public List<AccommodationPackageRoomCategoryDTO>
     getAllRoomCategoriesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationPackageDTO to entity. */
         AccommodationPackage accommodationPackage = this.packageDTOMapper.getAccommodationPackage(packageDTO);
-        return this.mapper.getAccommodationPackageRoomCategoryDTOList(
-                this.packageRoomCategoryDAO.getAllRoomCategoriesForAccommodationPackage(accommodationPackage));
+
+        /* get all room categories for an AccommodationPackage. */
+        List<AccommodationPackageRoomCategory> allRoomCategoriesForAccommodationPackage = this.packageRoomCategoryDAO.
+                getAllRoomCategoriesForAccommodationPackage(accommodationPackage);
+
+        /* convert allRoomCategoriesForAccommodationPackage to DTOList. */
+        List<AccommodationPackageRoomCategoryDTO> accommodationPackageRoomCategoryDTOList = this.mapper.
+                getAccommodationPackageRoomCategoryDTOList(allRoomCategoriesForAccommodationPackage);
+
+        this.entityManager.getTransaction().commit();
+        return accommodationPackageRoomCategoryDTOList;
     }
 }

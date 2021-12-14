@@ -33,6 +33,7 @@ import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
+import com.elephasvacation.tms.web.entity.MealPlan;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -54,26 +55,57 @@ public class MealPlanBOImpl implements MealPlanBO {
 
     @Override
     public Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
-        return this.mealPlanDAO.save(this.mapper.getMealPlan(mealPlanDTO)).getId();
+        this.entityManager.getTransaction().begin();
+
+        /* convert DTO to entity. */
+        MealPlan mealPlan = this.mapper.getMealPlan(mealPlanDTO);
+
+        /* save. */
+        Integer generatedMealPlanId = this.mealPlanDAO.save(mealPlan).getId();
+
+        this.entityManager.getTransaction().commit();
+        return generatedMealPlanId;
     }
 
     @Override
     public void updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
+        this.entityManager.getTransaction().begin();
         this.mealPlanDAO.update(this.mapper.getMealPlan(mealPlanDTO));
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteMealPlan(Integer mealPlanID) throws Exception {
+        this.entityManager.getTransaction().begin();
         this.mealPlanDAO.delete(mealPlanID);
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public MealPlanDTO getMealPlanByID(Integer mealPlanID) throws Exception {
-        return this.mapper.getMealPlanDTO(this.mealPlanDAO.get(mealPlanID));
+        this.entityManager.getTransaction().begin();
+
+        /* get meal plan by ID. */
+        MealPlan mealPlan = this.mealPlanDAO.get(mealPlanID);
+
+        /* convert entity to DTO. */
+        MealPlanDTO mealPlanDTO = this.mapper.getMealPlanDTO(mealPlan);
+
+        this.entityManager.getTransaction().commit();
+        return mealPlanDTO;
     }
 
     @Override
     public List<MealPlanDTO> getAllMealPlans() throws Exception {
-        return this.mapper.getMealPlanDTOList(this.mealPlanDAO.getAll());
+        this.entityManager.getTransaction().begin();
+
+        /* get all meal plans. */
+        List<MealPlan> mealPlanList = this.mealPlanDAO.getAll();
+
+        /* convert mealPlanList to DTOList. */
+        List<MealPlanDTO> mealPlanDTOList = this.mapper.getMealPlanDTOList(mealPlanList);
+
+        this.entityManager.getTransaction().commit();
+        return mealPlanDTOList;
     }
 }

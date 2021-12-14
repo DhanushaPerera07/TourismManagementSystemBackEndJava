@@ -53,26 +53,48 @@ public class CustomerBOImpl implements CustomerBO {
 
     @Override
     public Integer createCustomer(CustomerDTO customerDTO) throws Exception {
-        return this.customerDAO.save(mapper.getCustomer(customerDTO)).getId();
+        this.entityManager.getTransaction().begin();
+        /* save. */
+        Integer generatedCustomerId = this.customerDAO.save(mapper.getCustomer(customerDTO)).getId();
+        this.entityManager.getTransaction().commit();
+        return generatedCustomerId;
     }
 
     @Override
     public void updateCustomer(CustomerDTO customerDTO) throws Exception {
+        this.entityManager.getTransaction().begin();
+        /* update. */
         this.customerDAO.update(mapper.getCustomer(customerDTO));
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteCustomer(int customerID) throws Exception {
+        this.entityManager.getTransaction().begin();
+        /* delete. */
         this.customerDAO.delete(customerID);
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public CustomerDTO getCustomerByID(int customerID) throws Exception {
-        return mapper.getCustomerDTO(this.customerDAO.get(customerID));
+        this.entityManager.getTransaction().begin();
+
+        /* get customer by customer ID. */
+        CustomerDTO customerDTO = this.mapper.getCustomerDTO(this.customerDAO.get(customerID));
+
+        this.entityManager.getTransaction().commit();
+        return customerDTO;
     }
 
     @Override
     public List<CustomerDTO> getAllCustomers() throws Exception {
-        return mapper.getCustomerDTOs(this.customerDAO.getAll());
+        this.entityManager.getTransaction().begin();
+
+        /* get all customers. */
+        List<CustomerDTO> customerDTOList = this.mapper.getCustomerDTOs(this.customerDAO.getAll());
+        
+        this.entityManager.getTransaction().commit();
+        return customerDTOList;
     }
 }

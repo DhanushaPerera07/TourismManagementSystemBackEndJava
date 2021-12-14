@@ -7,6 +7,7 @@ import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
+import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
 
 import javax.persistence.EntityManager;
@@ -17,7 +18,7 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
 
     private final AccommodationRateDAO accommodationRateDAO = DAOFactory.getInstance().
             getDAO(DAOTypes.ACCOMMODATION_RATE);
-    AccommodationRateDTOMapper mapper = AccommodationRateDTOMapper.instance;
+    private final AccommodationRateDTOMapper mapper = AccommodationRateDTOMapper.instance;
     private EntityManager entityManager;
 
     @Override
@@ -30,42 +31,93 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
 
     @Override
     public AccommodationRateDTOId createAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationRateDTO to entity. */
+        AccommodationRate accommodationRate = this.mapper.getAccommodationRate(accommodationRateDTO);
+
+        /* save AccommodationRate and get the accommodationRateId. */
         AccommodationRateId accommodationRateId =
-                this.accommodationRateDAO.save(this.mapper.getAccommodationRate(accommodationRateDTO)).getId();
-        return this.mapper.getAccommodationRateDTOId(accommodationRateId);
+                this.accommodationRateDAO.save(accommodationRate).getId();
+
+        /* convert accommodationRateId to accommodationRateDTOId */
+        AccommodationRateDTOId accommodationRateDTOId = this.mapper.getAccommodationRateDTOId(accommodationRateId);
+
+        this.entityManager.getTransaction().commit();
+        return accommodationRateDTOId;
     }
 
     @Override
     public void updateAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception {
+        this.entityManager.getTransaction().begin();
+        /* update */
         this.accommodationRateDAO.update(this.mapper.getAccommodationRate(accommodationRateDTO));
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteAccommodationRate(AccommodationRateDTOId accommodationRateDTOId) throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* convert accommodationRateDTOId to entity. */
         AccommodationRateId accommodationRateId = this.mapper.getAccommodationRateId(accommodationRateDTOId);
+
+        /* delete AccommodationRate By ID. */
         this.accommodationRateDAO.delete(accommodationRateId);
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId)
             throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* convert accommodationRateDTOId to entity. */
         AccommodationRateId accommodationRateId = this.mapper.getAccommodationRateId(accommodationRateDTOId);
-        return this.mapper.getAccommodationRateDTO(this.accommodationRateDAO.get(accommodationRateId));
+
+        /* get AccommodationRate by ID. */
+        AccommodationRate accommodationRate = this.accommodationRateDAO.get(accommodationRateId);
+
+        /* convert AccommodationRate to AccommodationRateDTO. */
+        AccommodationRateDTO accommodationRateDTO = this.mapper.getAccommodationRateDTO(accommodationRate);
+        this.entityManager.getTransaction().commit();
+        return accommodationRateDTO;
     }
 
     @Override
-    public List<AccommodationRateDTO> getAllAccommodationRates(Integer accommodationRateDTOID) throws Exception {
-        return this.mapper.getAccommodationRateDTOList(this.accommodationRateDAO.getAll());
+    public List<AccommodationRateDTO> getAllAccommodationRates() throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* get all Accommodation Rates. */
+        List<AccommodationRate> allAccommodationRateList = this.accommodationRateDAO.getAll();
+
+        /* convert allAccommodationRateList to DTOList. */
+        List<AccommodationRateDTO> accommodationRateDTOList = this.mapper.
+                getAccommodationRateDTOList(allAccommodationRateList);
+
+        this.entityManager.getTransaction().commit();
+        return accommodationRateDTOList;
     }
 
     /**
-     * Get all the accommodation rates for t accommodation PACKAGE.
+     * Get all the accommodation rates for an accommodation PACKAGE.
+     *
+     * @return List<AccommodationRateDTO> All accommodation rates for a given Accommodation Package.
      */
     @Override
     public List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID)
             throws SQLException {
-        return this.mapper.
-                getAccommodationRateDTOList(this.accommodationRateDAO.
-                        getAllAccommodationRatesByAccommodationPackageID(accommodationPackageID));
+        this.entityManager.getTransaction().begin();
+
+        /* get all accommodation rates by Accommodation Package ID. */
+        List<AccommodationRate> allAccommodationRatesByAccommodationPackageID = this.accommodationRateDAO.
+                getAllAccommodationRatesByAccommodationPackageID(accommodationPackageID);
+
+        /* convert allAccommodationRatesByAccommodationPackageID to DTOList. */
+        List<AccommodationRateDTO> accommodationRateDTOList = this.mapper.
+                getAccommodationRateDTOList(allAccommodationRatesByAccommodationPackageID);
+
+        this.entityManager.getTransaction().commit();
+        return accommodationRateDTOList;
     }
 }

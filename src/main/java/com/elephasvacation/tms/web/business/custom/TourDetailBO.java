@@ -29,7 +29,6 @@ package com.elephasvacation.tms.web.business.custom;
 
 import com.elephasvacation.tms.web.business.SuperBO;
 import com.elephasvacation.tms.web.dto.TourDetailDTO;
-import com.elephasvacation.tms.web.entity.TourDetail;
 
 import java.util.List;
 
@@ -41,11 +40,11 @@ public interface TourDetailBO extends SuperBO {
 
     void deleteTourDetail(Integer tourDetailID) throws Exception;
 
-    TourDetail getTourDetailByID(Integer tourDetailID) throws Exception;
+    TourDetailDTO getTourDetailByID(Integer tourDetailID) throws Exception;
 
-    TourDetail getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception;
+    TourDetailDTO getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception;
 
-    List<TourDetail> getAllTourDetails() throws Exception;
+    List<TourDetailDTO> getAllTourDetails() throws Exception;
 
-    List<TourDetail> getAllTourDetailsByCustomerID(Integer customerID) throws Exception;
+    List<TourDetailDTO> getAllTourDetailsByCustomerID(Integer customerID) throws Exception;
 }

@@ -40,7 +40,7 @@ public interface AccommodationRateBO extends SuperBO {
 
     AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId) throws Exception;
 
-    List<AccommodationRateDTO> getAllAccommodationRates(Integer accommodationRateDTOID) throws Exception;
+    List<AccommodationRateDTO> getAllAccommodationRates() throws Exception;
 
     List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID)
             throws SQLException;

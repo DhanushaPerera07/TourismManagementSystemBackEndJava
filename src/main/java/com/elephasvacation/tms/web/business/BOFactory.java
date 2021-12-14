@@ -50,18 +50,24 @@ public class BOFactory {
                 return (T) new CustomerBOImpl();
             case TOUR_DETAIL:
                 return (T) new TourDetailBOImpl();
-            case ACCOMMODATION:
-                return (T) new AccommodationBOImpl();
-            case ACCOMMODATION_PACKAGE:
-                return (T) new AccommodationPackageBOImpl();
-            case ACCOMMODATION_RATE:
-                return (T) new AccommodationRateBOImpl();
             case ROOM_TYPE:
                 return (T) new RoomTypeBOImpl();
             case ROOM_CATEGORY:
                 return (T) new RoomCategoryBOImpl();
             case MEAL_PLAN:
                 return (T) new MealPlanBOImpl();
+            case ACCOMMODATION:
+                return (T) new AccommodationBOImpl();
+            case ACCOMMODATION_PACKAGE:
+                return (T) new AccommodationPackageBOImpl();
+            case ACCOMMODATION_RATE:
+                return (T) new AccommodationRateBOImpl();
+            case ACCOMMODATION_PACKAGE_MEAL_PLAN:
+                return (T) new AccommodationPackageMealPlanBOImpl();
+            case ACCOMMODATION_PACKAGE_ROOM_CATEGORY:
+                return (T) new AccommodationPackageRoomCategoryBOImpl();
+            case ACCOMMODATION_PACKAGE_ROOM_TYPE:
+                return (T) new AccommodationPackageRoomTypeBOImpl();
             default:
                 return null;
         }

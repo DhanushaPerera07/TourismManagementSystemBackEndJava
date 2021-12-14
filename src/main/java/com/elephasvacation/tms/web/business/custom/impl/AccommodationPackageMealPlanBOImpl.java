@@ -36,14 +36,14 @@ import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
+import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
+import com.elephasvacation.tms.web.entity.MealPlan;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageMealPlanBO {
 
-    //    private AccommodationPackageDAO accommodationPackageDAO = DAOFactory.getInstance()
-//            .getDAO(DAOTypes.ACCOMMODATION_PACKAGE);
     private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
 
     private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
@@ -61,7 +61,6 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         this.entityManager = entityManager;
 
         /* Set Entity Manager to the DAL. */
-//        this.accommodationPackageDAO.setEntityManager(this.entityManager);
         this.mealPlanDAO.setEntityManager(this.entityManager);
         this.accommodationPackageMealPlanDAO.setEntityManager(this.entityManager);
     }
@@ -69,44 +68,76 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
     @Override
     public AccommodationPackageMealPlanDTO
     addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) throws Exception {
-        AccommodationPackageMealPlan packageMealPlan = this.accommodationPackageMealPlanDAO
-                .save(this.mapper.getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO));
+        this.entityManager.getTransaction().begin();
 
-        return this.mapper.getAccommodationPackageMealPlanDTO(packageMealPlan);
-    }
+        /* convert DTO to AccommodationPackageMealPlan. */
+        AccommodationPackageMealPlan accommodationPackageMealPlan = this.mapper.
+                getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO);
 
-//    @Override
-//    public void updateMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO,
-//                               AccommodationPackageMealPlanDTO newAccommodationPackageMealPlanDTO) throws Exception {
-//        this.accommodationPackageMealPlanDAO.update(this.mapper
-//                .getAccommodationPackageMealPlan(newAccommodationPackageMealPlanDTO));
-//    }
+        /* add/save AccommodationPackageMealPlan. */
+        AccommodationPackageMealPlan addedPkgMealPlan = this.accommodationPackageMealPlanDAO
+                .save(accommodationPackageMealPlan);
 
-    @Override
-    public void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) throws Exception {
-        this.accommodationPackageMealPlanDAO
-                .delete(this.mapper.getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO).getId());
-    }
-
-    @Override
-    public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO) throws Exception {
-        AccommodationPackageMealPlan pkgMealPlan = this.mapper
-                .getAccommodationPackageMealPlan(pkgMealPlanDTO);
-        return this.mealPlanDTOMapper.getMealPlanDTO(this.mealPlanDAO.get(pkgMealPlan
-                .getId().getMealPlanId()));
+        /* convert entity to addedPkgMealPlanDTO. */
+        AccommodationPackageMealPlanDTO addedPkgMealPlanDTO = this.mapper.
+                getAccommodationPackageMealPlanDTO(addedPkgMealPlan);
+        this.entityManager.getTransaction().commit();
+        return addedPkgMealPlanDTO;
     }
 
     @Override
-    public List<AccommodationPackageMealPlanDTO> getAllMealPlansForAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) {
+    public void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO)
+            throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* convert DTO to entity, and get the AccommodationPackageMealPlanId. */
+        AccommodationPackageMealPlanId packageMealPlanId = this.mapper.
+                getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO).getId();
+
+        /* delete AccommodationPackageMealPlan By ID. */
+        this.accommodationPackageMealPlanDAO.delete(packageMealPlanId);
+
+        this.entityManager.getTransaction().commit();
+    }
+
+    @Override
+    public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO)
+            throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationPackageMealPlanDTO to entity. */
+        AccommodationPackageMealPlan pkgMealPlan = this.mapper.getAccommodationPackageMealPlan(pkgMealPlanDTO);
+
+        /* get MealPlan */
+        MealPlan mealPlan = this.mealPlanDAO.get(pkgMealPlan.getId().getMealPlanId());
+
+        /* convert mealPlan entity to DTO. */
+        MealPlanDTO mealPlanDTO = this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);
+
+        this.entityManager.getTransaction().commit();
+        return mealPlanDTO;
+    }
+
+    @Override
+    public List<AccommodationPackageMealPlanDTO>
+    getAllMealPlansForAccommodationPackage(AccommodationPackageDTO packageDTO) {
+        this.entityManager.getTransaction().begin();
+
         /* AccommodationPackageDTO --> AccommodationPackage conversion */
         AccommodationPackage accommodationPackage = this.packageDTOMapper
-                .getAccommodationPackage(accommodationPackageDTO);
+                .getAccommodationPackage(packageDTO);
 
         /* Find out all the all MealPlans For Accommodation Package */
         List<AccommodationPackageMealPlan> allMealPlansForAccommodationPackage =
                 this.accommodationPackageMealPlanDAO.getAllMealPlansForAccommodationPackage(accommodationPackage);
 
+        /* convert entityList to DTOList. */
+        List<AccommodationPackageMealPlanDTO> packageMealPlanDTOList = this.mapper.
+                getAccommodationPackageMealPlanDTOList(allMealPlansForAccommodationPackage);
+
+        this.entityManager.getTransaction().commit();
+
         /* return the List in DTO form. */
-        return this.mapper.getAccommodationPackageMealPlanDTOList(allMealPlansForAccommodationPackage);
+        return packageMealPlanDTOList;
     }
 }

@@ -41,8 +41,8 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
 
     private final AccommodationPackageRoomTypeDAO packageRoomTypeDAO = DAOFactory.getInstance().
             getDAO(DAOTypes.ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE);
-    AccommodationPackageRoomTypeDTOMapper mapper = AccommodationPackageRoomTypeDTOMapper.instance;
-    AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
+    private final AccommodationPackageRoomTypeDTOMapper mapper = AccommodationPackageRoomTypeDTOMapper.instance;
+    private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
     private EntityManager entityManager;
 
     @Override
@@ -57,25 +57,60 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
     public AccommodationPackageRoomTypeDTO
     createAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
             throws Exception {
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationPackageRoomTypeDTO to AccommodationPackageRoomType entity. */
         AccommodationPackageRoomType packageRoomType = this.mapper.
                 getAccommodationPackageRoomType(accommodationPackageRoomTypeDTO);
-        AccommodationPackageRoomType packageRT = this.packageRoomTypeDAO.save(packageRoomType);
-        return this.mapper.getAccommodationPackageRoomTypeDTO(packageRT);
+
+        /* save AccommodationPackageRoomType. */
+        AccommodationPackageRoomType savedPackageRT = this.packageRoomTypeDAO.save(packageRoomType);
+
+        /* convert AccommodationPackageRoomType entity to AccommodationPackageRoomTypeDTO. */
+        AccommodationPackageRoomTypeDTO savedPackageRoomTypeDTO = this.mapper.
+                getAccommodationPackageRoomTypeDTO(savedPackageRT);
+
+        this.entityManager.getTransaction().commit();
+        return savedPackageRoomTypeDTO;
     }
 
     @Override
     public void deleteAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
             throws Exception {
-        AccommodationPackageRoomType packageRoomType = this.mapper
-                .getAccommodationPackageRoomType(accommodationPackageRoomTypeDTO);
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationPackageRoomTypeDTO to entity. */
+        AccommodationPackageRoomType packageRoomType = this.mapper.
+                getAccommodationPackageRoomType(accommodationPackageRoomTypeDTO);
+
+        /* delete AccommodationPackageRoomType By ID. */
         this.packageRoomTypeDAO.delete(packageRoomType.getId());
+
+        this.entityManager.getTransaction().commit();
     }
 
+    /**
+     * Get all room types for an Accommodation Package.
+     *
+     * @return List<AccommodationPackageRoomTypeDTO> accommodationPackageRoomTypeDTOList
+     */
     @Override
     public List<AccommodationPackageRoomTypeDTO>
     getAllPackageRoomTypesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
+        this.entityManager.getTransaction().begin();
+
+        /* convert AccommodationPackageDTO to entity. */
         AccommodationPackage accommodationPackage = this.packageDTOMapper.getAccommodationPackage(packageDTO);
-        return this.mapper.getAccommodationPackageRoomTypeDTOList(
-                this.packageRoomTypeDAO.getAllPackageRoomTypesForAccommodationPackage(accommodationPackage));
+
+        /* get all room types for an accommodation package. */
+        List<AccommodationPackageRoomType> allPackageRoomTypesForAccommodationPackage = this.packageRoomTypeDAO.
+                getAllPackageRoomTypesForAccommodationPackage(accommodationPackage);
+
+        /* convert allPackageRoomTypesForAccommodationPackage to accommodationPackageRoomTypeDTOList. */
+        List<AccommodationPackageRoomTypeDTO> accommodationPackageRoomTypeDTOList = this.mapper.
+                getAccommodationPackageRoomTypeDTOList(allPackageRoomTypesForAccommodationPackage);
+
+        this.entityManager.getTransaction().commit();
+        return accommodationPackageRoomTypeDTOList;
     }
 }
