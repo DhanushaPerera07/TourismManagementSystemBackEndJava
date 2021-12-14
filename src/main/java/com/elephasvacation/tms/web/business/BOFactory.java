@@ -66,6 +66,8 @@ public class BOFactory {
                 return (T) new AccommodationPackageMealPlanBOImpl();
             case ACCOMMODATION_PACKAGE_ROOM_CATEGORY:
                 return (T) new AccommodationPackageRoomCategoryBOImpl();
+            case ACCOMMODATION_PACKAGE_ROOM_TYPE:
+                return (T) new AccommodationPackageRoomTypeBOImpl();
             default:
                 return null;
         }
