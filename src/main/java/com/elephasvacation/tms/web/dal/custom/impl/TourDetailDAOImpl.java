@@ -30,6 +30,7 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
+import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 
 import javax.persistence.Query;
@@ -50,7 +51,7 @@ public class TourDetailDAOImpl
 
     @Override
     public TourDetail getTourDetailByCustomerIDAndTourDetailID(int customerID,
-                                                               int tourDetailID) {
+                                                                  int tourDetailID) {
         Query query = this.getEntityManager().
                 createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1 AND t.id=?2");
         query.setParameter(Number.ONE, customerID);
