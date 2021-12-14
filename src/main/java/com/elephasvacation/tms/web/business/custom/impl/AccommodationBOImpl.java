@@ -33,6 +33,7 @@ import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
 import com.elephasvacation.tms.web.dto.AccommodationDTO;
+import com.elephasvacation.tms.web.entity.Accommodation;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -54,26 +55,41 @@ public class AccommodationBOImpl implements AccommodationBO {
 
     @Override
     public Integer createAccommodation(AccommodationDTO accommodationDTO) throws Exception {
-        return this.accommodationDAO.save(this.mapper.getAccommodation(accommodationDTO)).getId();
+        this.entityManager.getTransaction().begin();
+        Accommodation accommodation = this.accommodationDAO.save(this.mapper.getAccommodation(accommodationDTO));
+        this.entityManager.getTransaction().commit();
+        return accommodation.getId();
     }
 
     @Override
     public void updateAccommodation(AccommodationDTO accommodationDTO) throws Exception {
+        this.entityManager.getTransaction().begin();
         this.accommodationDAO.update(this.mapper.getAccommodation(accommodationDTO));
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteAccommodation(int accommodationID) throws Exception {
+        this.entityManager.getTransaction().begin();
         this.accommodationDAO.delete(accommodationID);
+        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public AccommodationDTO getAccommodationByID(int accommodationID) throws Exception {
-        return this.mapper.getAccommodationDTO(this.accommodationDAO.get(accommodationID));
+        this.entityManager.getTransaction().begin();
+        AccommodationDTO accommodationDTO = this.mapper.
+                getAccommodationDTO(this.accommodationDAO.get(accommodationID));
+        this.entityManager.getTransaction().commit();
+        return accommodationDTO;
     }
 
     @Override
     public List<AccommodationDTO> getAllAccommodations() throws Exception {
-        return this.mapper.getAccommodationDTOList(this.accommodationDAO.getAll());
+        this.entityManager.getTransaction().begin();
+        List<AccommodationDTO> accommodationDTOList = this.mapper.
+                getAccommodationDTOList(this.accommodationDAO.getAll());
+        this.entityManager.getTransaction().commit();
+        return accommodationDTOList;
     }
 }
