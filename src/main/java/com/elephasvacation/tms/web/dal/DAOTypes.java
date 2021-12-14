@@ -40,6 +40,7 @@ public enum DAOTypes {
     MEAL_PLAN,
     MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE, // AccommodationPackageMealPlanDAOImpl
     ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE, // AccommodationPackageRoomCategoryDAOImpl
-    ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE  // AccommodationPackageRoomTypeDAOImpl
+    ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE,  // AccommodationPackageRoomTypeDAOImpl
+    QUERY
 
 }
