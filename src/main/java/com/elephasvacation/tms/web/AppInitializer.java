@@ -23,12 +23,28 @@
  */
 package com.elephasvacation.tms.web;
 
+import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
 import com.elephasvacation.tms.web.config.AppConfig;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class AppInitializer {
-    public static void main(String[] args) {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AppInitializer.class);
+
+    /* buildApplicationContext() will be executed when loading AppInitializer
+     the in the MyContextListener.java */
+    private static AnnotationConfigApplicationContext ctx = buildApplicationContext();
+
+    private static AnnotationConfigApplicationContext buildApplicationContext() {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         ctx.register(AppConfig.class);
+        ctx.refresh();
+        logger.info(SuccessfulMessages.Spring.APP_INITIALIZER_EXECUTED_SUCCESSFULLY);
+        return ctx;
+    }
+
+    public static AnnotationConfigApplicationContext getContext() {
+        return ctx;
     }
 }
