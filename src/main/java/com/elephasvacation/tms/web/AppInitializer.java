@@ -23,8 +23,12 @@
  */
 package com.elephasvacation.tms.web;
 
+import com.elephasvacation.tms.web.config.AppConfig;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 public class AppInitializer {
     public static void main(String[] args) {
-        System.out.println("Hello Spring!");
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+        ctx.register(AppConfig.class);
     }
 }
