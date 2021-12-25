@@ -24,7 +24,11 @@
 package com.elephasvacation.tms.web.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
+@Import(value = {
+        DAOConfig.class
+})
 public class AppConfig {
 }
