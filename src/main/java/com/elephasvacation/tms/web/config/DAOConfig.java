@@ -23,8 +23,15 @@
  */
 package com.elephasvacation.tms.web.config;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ComponentScans(value = {
+        @ComponentScan(basePackages = {
+                "com.elephasvacation.tms.web.entity"
+        })
+})
 public class DAOConfig {
 }
