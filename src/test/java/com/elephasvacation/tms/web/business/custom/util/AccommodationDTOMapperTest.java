@@ -23,6 +23,7 @@
  */
 package com.elephasvacation.tms.web.business.custom.util;
 
+import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationDTOMapper;
 import com.elephasvacation.tms.web.dto.AccommodationDTO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import org.junit.Assert;

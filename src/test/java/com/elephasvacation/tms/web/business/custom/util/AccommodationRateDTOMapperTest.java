@@ -23,6 +23,7 @@
  */
 package com.elephasvacation.tms.web.business.custom.util;
 
+import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationRateDTOMapper;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
