@@ -23,6 +23,8 @@
  */
 package com.elephasvacation.tms.web.config;
 
+import com.elephasvacation.tms.web.dal.DAOFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +32,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScans(value = {
         @ComponentScan(basePackages = {
-                "com.elephasvacation.tms.web.entity"
+                "com.elephasvacation.tms.web.entity",
+                "com.elephasvacation.tms.web.dal.custom.impl"
         })
 })
 public class DAOConfig {
+
+    @Bean
+    public DAOFactory daoFactory() {
+        return DAOFactory.getInstance();
+    }
 }
