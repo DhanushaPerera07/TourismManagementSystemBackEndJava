@@ -29,7 +29,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import(value = {
         DAOConfig.class,
-        JPAConfig.class
+        JPAConfig.class,
+        BOConfig.class
 })
 public class AppConfig {
 }
