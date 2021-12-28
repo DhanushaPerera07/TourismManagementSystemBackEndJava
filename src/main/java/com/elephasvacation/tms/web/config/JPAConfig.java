@@ -21,26 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom.util;
+package com.elephasvacation.tms.web.config;
 
-import com.elephasvacation.tms.web.dto.MealPlanDTO;
-import com.elephasvacation.tms.web.entity.MealPlan;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 
-import java.util.List;
-
-@Mapper(componentModel = "spring")
-public interface MealPlanDTOMapper {
-
-    MealPlanDTOMapper instance = Mappers.getMapper(MealPlanDTOMapper.class);
-
-    MealPlan getMealPlan(MealPlanDTO mealPlanDTO);
-
-    MealPlanDTO getMealPlanDTO(MealPlan mealPlan);
-
-    List<MealPlan> getMealPlanList(List<MealPlanDTO> mealPlanDTOList);
-
-    List<MealPlanDTO> getMealPlanDTOList(List<MealPlan> mealPlanList);
-
+@Configuration
+@ImportResource("classpath:/JpaXmlConfig.xml")
+public class JPAConfig {
 }

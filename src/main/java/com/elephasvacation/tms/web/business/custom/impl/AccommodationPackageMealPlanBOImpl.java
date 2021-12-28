@@ -38,10 +38,12 @@ import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Component
 public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageMealPlanBO {
 
     private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;

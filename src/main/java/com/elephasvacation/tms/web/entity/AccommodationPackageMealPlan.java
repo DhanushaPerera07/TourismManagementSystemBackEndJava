@@ -24,6 +24,9 @@
 package com.elephasvacation.tms.web.entity;
 
 import lombok.*;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -39,6 +42,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
+@Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AccommodationPackageMealPlan implements SuperEntity<Serializable> {
     @EmbeddedId
     private AccommodationPackageMealPlanId id;

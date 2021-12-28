@@ -29,16 +29,19 @@ import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDA
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategoryId;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+@Component
 public class AccommodationPackageRoomCategoryDAOImpl
         extends CrudDAOImpl<AccommodationPackageRoomCategory, AccommodationPackageRoomCategoryId>
         implements AccommodationPackageRoomCategoryDAO {
 
     @Override
-    public List<AccommodationPackageRoomCategory> getAllRoomCategoriesForAccommodationPackage(AccommodationPackage accommodationPackage) {
+    public List<AccommodationPackageRoomCategory>
+    getAllRoomCategoriesForAccommodationPackage(AccommodationPackage accommodationPackage) {
         TypedQuery<AccommodationPackageRoomCategory> query = this.getEntityManager().
                 createQuery("SELECT pkgRc " +
                         "FROM AccommodationPackageRoomCategory pkgRc " +

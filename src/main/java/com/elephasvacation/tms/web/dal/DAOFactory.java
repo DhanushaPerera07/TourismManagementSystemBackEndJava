@@ -28,10 +28,50 @@
 package com.elephasvacation.tms.web.dal;
 
 import com.elephasvacation.tms.web.dal.custom.impl.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DAOFactory {
 
     private static DAOFactory daoFactory = null;
+
+    @Autowired
+    private CustomerDAOImpl customerDAOImpl;
+
+    @Autowired
+    private TourDetailDAOImpl tourDetailDAOImpl;
+
+    @Autowired
+    private AccommodationDAOImpl accommodationDAOImpl;
+
+    @Autowired
+    private AccommodationPackageDAOImpl accommodationPackageDAOImpl;
+
+    @Autowired
+    private AccommodationRateDAOImpl accommodationRateDAOImpl;
+
+    @Autowired
+    private EmployeeDAOImpl employeeDAOImpl;
+
+    @Autowired
+    private EmployeeCredentialDAOImpl employeeCredentialDAOImpl;
+
+    @Autowired
+    private RoomTypeDAOImpl roomTypeDAOImpl;
+
+    @Autowired
+    private RoomCategoryDAOImpl roomCategoryDAOImpl;
+
+    @Autowired
+    private MealPlanDAOImpl mealPlanDAOImpl;
+
+    @Autowired
+    private AccommodationPackageMealPlanDAOImpl accommodationPackageMealPlanDAOImpl;
+
+    @Autowired
+    private AccommodationPackageRoomCategoryDAOImpl accommodationPackageRoomCategoryDAOImpl;
+
+    @Autowired
+    private AccommodationPackageRoomTypeDAOImpl accommodationPackageRoomTypeDAOImpl;
 
     private DAOFactory() {
     }
@@ -43,31 +83,31 @@ public class DAOFactory {
     public <T extends SuperDAO> T getDAO(DAOTypes daoTypes) {
         switch (daoTypes) {
             case CUSTOMER:
-                return (T) new CustomerDAOImpl();
+                return (T) this.customerDAOImpl;
             case TOUR_DETAIL:
-                return (T) new TourDetailDAOImpl();
+                return (T) this.tourDetailDAOImpl;
             case ACCOMMODATION:
-                return (T) new AccommodationDAOImpl();
+                return (T) this.accommodationDAOImpl;
             case ACCOMMODATION_PACKAGE:
-                return (T) new AccommodationPackageDAOImpl();
+                return (T) this.accommodationPackageDAOImpl;
             case ACCOMMODATION_RATE:
-                return (T) new AccommodationRateDAOImpl();
+                return (T) this.accommodationRateDAOImpl;
             case EMPLOYEE:
-                return (T) new EmployeeDAOImpl();
+                return (T) this.employeeDAOImpl;
             case EMPLOYEE_CREDENTIAL:
-                return (T) new EmployeeCredentialDAOImpl();
+                return (T) this.employeeCredentialDAOImpl;
             case ROOM_TYPE:
-                return (T) new RoomTypeDAOImpl();
+                return (T) this.roomTypeDAOImpl;
             case ROOM_CATEGORY:
-                return (T) new RoomCategoryDAOImpl();
+                return (T) this.roomCategoryDAOImpl;
             case MEAL_PLAN:
-                return (T) new MealPlanDAOImpl();
+                return (T) this.mealPlanDAOImpl;
             case MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE:
-                return (T) new AccommodationPackageMealPlanDAOImpl();
+                return (T) this.accommodationPackageMealPlanDAOImpl;
             case ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE:
-                return (T) new AccommodationPackageRoomCategoryDAOImpl();
+                return (T) this.accommodationPackageRoomCategoryDAOImpl;
             case ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE:
-                return (T) new AccommodationPackageRoomTypeDAOImpl();
+                return (T) this.accommodationPackageRoomTypeDAOImpl;
             default:
                 return null;
         }

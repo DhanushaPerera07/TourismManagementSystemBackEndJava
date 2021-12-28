@@ -30,7 +30,9 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
 import com.elephasvacation.tms.web.entity.Accommodation;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AccommodationDAOImpl extends CrudDAOImpl<Accommodation, Integer> implements AccommodationDAO {
 
 }

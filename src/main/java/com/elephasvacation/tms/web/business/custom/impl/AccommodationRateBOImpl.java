@@ -9,11 +9,13 @@ import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.sql.SQLException;
 import java.util.List;
 
+@Component
 public class AccommodationRateBOImpl implements AccommodationRateBO {
 
     private final AccommodationRateDAO accommodationRateDAO = DAOFactory.getInstance().
