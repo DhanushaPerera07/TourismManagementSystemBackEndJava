@@ -41,6 +41,7 @@ public class AppInitializer {
         ctx.register(AppConfig.class);
         ctx.refresh();
         logger.info(SuccessfulMessages.Spring.APP_INITIALIZER_EXECUTED_SUCCESSFULLY);
+        logger.info("Do we have EntityManagerFactory: " + ctx.containsBean("entityManagerFactory"));
         return ctx;
     }
 
