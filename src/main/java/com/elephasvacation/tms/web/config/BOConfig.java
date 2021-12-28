@@ -25,9 +25,16 @@ package com.elephasvacation.tms.web.config;
 
 import com.elephasvacation.tms.web.business.BOFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ComponentScans(value = {
+        @ComponentScan(basePackages = {
+                "com.elephasvacation.tms.web.business.custom.impl"
+        })
+})
 public class BOConfig {
 
     @Bean
