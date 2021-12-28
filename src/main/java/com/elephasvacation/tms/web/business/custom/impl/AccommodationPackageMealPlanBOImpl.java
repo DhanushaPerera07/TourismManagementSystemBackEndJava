@@ -24,9 +24,9 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageMealPlanBO;
-import com.elephasvacation.tms.web.business.custom.util.AccommodationPackageDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.AccommodationPackageMealPlanDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.MealPlanDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageMealPlanDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
@@ -48,15 +48,19 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
 
     private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
 
-    private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
-            .getDAO(DAOTypes.MEAL_PLAN);
+    private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance().getDAO(DAOTypes.MEAL_PLAN);
     private final MealPlanDTOMapper mealPlanDTOMapper = MealPlanDTOMapper.instance;
 
-    private final AccommodationPackageMealPlanDAO accommodationPackageMealPlanDAO = DAOFactory.getInstance()
-            .getDAO(DAOTypes.MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE);
+    private final AccommodationPackageMealPlanDAO accommodationPackageMealPlanDAO = DAOFactory.getInstance().
+            getDAO(DAOTypes.MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE);
     private final AccommodationPackageMealPlanDTOMapper mapper = AccommodationPackageMealPlanDTOMapper.instance;
 
     private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {

@@ -28,7 +28,7 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.RoomCategoryBO;
-import com.elephasvacation.tms.web.business.custom.util.RoomCategoryDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.RoomCategoryDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
@@ -45,6 +45,11 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
     private final RoomCategoryDAO roomCategoryDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_CATEGORY);
     private final RoomCategoryDTOMapper mapper = RoomCategoryDTOMapper.instance;
     private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {

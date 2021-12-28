@@ -28,7 +28,7 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.TourDetailBO;
-import com.elephasvacation.tms.web.business.custom.util.TourDetailDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.TourDetailDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
@@ -46,6 +46,10 @@ public class TourDetailBOImpl implements TourDetailBO {
     private final TourDetailDTOMapper mapper = TourDetailDTOMapper.instance;
     private EntityManager entityManager;
 
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {

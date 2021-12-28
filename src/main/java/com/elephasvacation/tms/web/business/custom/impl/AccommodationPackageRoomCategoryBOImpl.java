@@ -24,8 +24,8 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomCategoryBO;
-import com.elephasvacation.tms.web.business.custom.util.AccommodationPackageDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.AccommodationPackageRoomCategoryDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomCategoryDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDAO;
@@ -41,11 +41,16 @@ import java.util.List;
 @Component
 public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPackageRoomCategoryBO {
 
-    private final AccommodationPackageRoomCategoryDAO packageRoomCategoryDAO = DAOFactory.getInstance()
-            .getDAO(DAOTypes.ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE);
+    private final AccommodationPackageRoomCategoryDAO packageRoomCategoryDAO = DAOFactory.getInstance().
+            getDAO(DAOTypes.ROOM_CATEGORY_FOR_ACCOMMODATION_PACKAGE);
     private final AccommodationPackageRoomCategoryDTOMapper mapper = AccommodationPackageRoomCategoryDTOMapper.instance;
     private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
     private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {

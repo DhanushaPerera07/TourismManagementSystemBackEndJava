@@ -28,7 +28,7 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeBO;
-import com.elephasvacation.tms.web.business.custom.util.EmployeeDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
@@ -46,6 +46,10 @@ public class EmployeeBOImpl implements EmployeeBO {
     private final EmployeeDTOMapper mapper = EmployeeDTOMapper.instance;
     private EntityManager entityManager;
 
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {

@@ -28,7 +28,7 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationBO;
-import com.elephasvacation.tms.web.business.custom.util.AccommodationDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
@@ -47,13 +47,17 @@ public class AccommodationBOImpl implements AccommodationBO {
     private EntityManager entityManager;
 
     @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
+
+    @Override
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
 
         /* Set Entity Manager to the DAL. */
         this.accommodationDAO.setEntityManager(this.entityManager);
     }
-
 
     @Override
     public Integer createAccommodation(AccommodationDTO accommodationDTO) throws Exception {

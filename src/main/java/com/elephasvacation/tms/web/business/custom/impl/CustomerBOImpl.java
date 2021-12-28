@@ -28,7 +28,7 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
-import com.elephasvacation.tms.web.business.custom.util.CustomerDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.CustomerDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
@@ -44,6 +44,11 @@ public class CustomerBOImpl implements CustomerBO {
     private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
     private final CustomerDTOMapper mapper = CustomerDTOMapper.instance;
     private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
@@ -95,7 +100,7 @@ public class CustomerBOImpl implements CustomerBO {
 
         /* get all customers. */
         List<CustomerDTO> customerDTOList = this.mapper.getCustomerDTOs(this.customerDAO.getAll());
-        
+
         this.entityManager.getTransaction().commit();
         return customerDTOList;
     }

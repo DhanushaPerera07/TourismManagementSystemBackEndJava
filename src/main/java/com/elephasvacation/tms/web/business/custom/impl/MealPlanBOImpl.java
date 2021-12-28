@@ -28,7 +28,7 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.MealPlanBO;
-import com.elephasvacation.tms.web.business.custom.util.MealPlanDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
@@ -46,6 +46,11 @@ public class MealPlanBOImpl implements MealPlanBO {
             .getDAO(DAOTypes.MEAL_PLAN);
     private final MealPlanDTOMapper mapper = MealPlanDTOMapper.instance;
     private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {

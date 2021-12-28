@@ -24,7 +24,7 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeCredentialBO;
-import com.elephasvacation.tms.web.business.custom.util.EmployeeCredentialDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeCredentialDTOMapper;
 import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
@@ -42,6 +42,11 @@ public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
             getDAO(DAOTypes.EMPLOYEE_CREDENTIAL);
     private final EmployeeCredentialDTOMapper mapper = EmployeeCredentialDTOMapper.instance;
     private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
