@@ -30,5 +30,7 @@ package com.elephasvacation.tms.web.business;
 import javax.persistence.EntityManager;
 
 public interface SuperBO {
+    EntityManager getEntityManager();
+
     void setEntityManager(EntityManager entityManager);
 }
