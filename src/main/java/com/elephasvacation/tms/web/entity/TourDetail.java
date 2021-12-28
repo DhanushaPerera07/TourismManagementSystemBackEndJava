@@ -25,6 +25,9 @@ package com.elephasvacation.tms.web.entity;
 
 import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
 import lombok.*;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,6 +43,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TourDetail implements SuperEntity<Serializable> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

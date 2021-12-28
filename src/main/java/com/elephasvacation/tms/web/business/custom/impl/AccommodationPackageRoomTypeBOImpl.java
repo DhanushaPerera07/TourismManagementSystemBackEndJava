@@ -33,10 +33,12 @@ import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Component
 public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageRoomTypeBO {
 
     private final AccommodationPackageRoomTypeDAO packageRoomTypeDAO = DAOFactory.getInstance().

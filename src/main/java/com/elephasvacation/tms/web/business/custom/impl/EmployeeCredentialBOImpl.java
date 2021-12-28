@@ -30,10 +30,12 @@ import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
 import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Component
 public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
 
     private final EmployeeCredentialDAO employeeCredentialDAO = DAOFactory.getInstance().

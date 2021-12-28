@@ -28,10 +28,50 @@
 package com.elephasvacation.tms.web.business;
 
 import com.elephasvacation.tms.web.business.custom.impl.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class BOFactory {
 
     private static BOFactory boFactory = null;
+
+    @Autowired
+    private EmployeeBOImpl employeeBOImpl;
+
+    @Autowired
+    private EmployeeCredentialBOImpl employeeCredentialBOImpl;
+
+    @Autowired
+    private CustomerBOImpl customerBOImpl;
+
+    @Autowired
+    private TourDetailBOImpl tourDetailBOImpl;
+
+    @Autowired
+    private RoomTypeBOImpl roomTypeBOImpl;
+
+    @Autowired
+    private RoomCategoryBOImpl roomCategoryBOImpl;
+
+    @Autowired
+    private MealPlanBOImpl mealPlanBOImpl;
+
+    @Autowired
+    private AccommodationBOImpl accommodationBOImpl;
+
+    @Autowired
+    private AccommodationPackageBOImpl accommodationPackageBOImpl;
+
+    @Autowired
+    private AccommodationRateBOImpl accommodationRateBOImpl;
+
+    @Autowired
+    private AccommodationPackageMealPlanBOImpl accommodationPackageMealPlanBOImpl;
+
+    @Autowired
+    private AccommodationPackageRoomCategoryBOImpl accommodationPackageRoomCategoryBOImpl;
+
+    @Autowired
+    private AccommodationPackageRoomTypeBOImpl accommodationPackageRoomTypeBOImpl;
 
     public BOFactory() {
     }
@@ -43,31 +83,31 @@ public class BOFactory {
     public <T extends SuperBO> T getBO(BOTypes boTypes) {
         switch (boTypes) {
             case EMPLOYEE:
-                return (T) new EmployeeBOImpl();
+                return (T) this.employeeBOImpl;
             case EMPLOYEE_CREDENTIAL:
-                return (T) new EmployeeCredentialBOImpl();
+                return (T) this.employeeCredentialBOImpl;
             case CUSTOMER:
-                return (T) new CustomerBOImpl();
+                return (T) this.customerBOImpl;
             case TOUR_DETAIL:
-                return (T) new TourDetailBOImpl();
+                return (T) this.tourDetailBOImpl;
             case ROOM_TYPE:
-                return (T) new RoomTypeBOImpl();
+                return (T) this.roomTypeBOImpl;
             case ROOM_CATEGORY:
-                return (T) new RoomCategoryBOImpl();
+                return (T) this.roomCategoryBOImpl;
             case MEAL_PLAN:
-                return (T) new MealPlanBOImpl();
+                return (T) this.mealPlanBOImpl;
             case ACCOMMODATION:
-                return (T) new AccommodationBOImpl();
+                return (T) this.accommodationBOImpl;
             case ACCOMMODATION_PACKAGE:
-                return (T) new AccommodationPackageBOImpl();
+                return (T) this.accommodationPackageBOImpl;
             case ACCOMMODATION_RATE:
-                return (T) new AccommodationRateBOImpl();
+                return (T) this.accommodationRateBOImpl;
             case ACCOMMODATION_PACKAGE_MEAL_PLAN:
-                return (T) new AccommodationPackageMealPlanBOImpl();
+                return (T) this.accommodationPackageMealPlanBOImpl;
             case ACCOMMODATION_PACKAGE_ROOM_CATEGORY:
-                return (T) new AccommodationPackageRoomCategoryBOImpl();
+                return (T) this.accommodationPackageRoomCategoryBOImpl;
             case ACCOMMODATION_PACKAGE_ROOM_TYPE:
-                return (T) new AccommodationPackageRoomTypeBOImpl();
+                return (T) this.accommodationPackageRoomTypeBOImpl;
             default:
                 return null;
         }

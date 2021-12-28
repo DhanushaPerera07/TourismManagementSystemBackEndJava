@@ -30,9 +30,9 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
+import org.springframework.stereotype.Component;
 
-public class RoomCategoryDAOImpl
-        extends CrudDAOImpl<RoomCategory, Integer>
-        implements RoomCategoryDAO {
+@Component
+public class RoomCategoryDAOImpl extends CrudDAOImpl<RoomCategory, Integer> implements RoomCategoryDAO {
 
 }

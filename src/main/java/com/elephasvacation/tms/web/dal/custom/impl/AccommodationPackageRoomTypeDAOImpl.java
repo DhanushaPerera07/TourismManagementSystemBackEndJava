@@ -29,16 +29,19 @@ import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomTypeDAO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomTypeId;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+@Component
 public class AccommodationPackageRoomTypeDAOImpl
         extends CrudDAOImpl<AccommodationPackageRoomType, AccommodationPackageRoomTypeId>
         implements AccommodationPackageRoomTypeDAO {
 
     @Override
-    public List<AccommodationPackageRoomType> getAllPackageRoomTypesForAccommodationPackage(AccommodationPackage accommodationPackage) {
+    public List<AccommodationPackageRoomType>
+    getAllPackageRoomTypesForAccommodationPackage(AccommodationPackage accommodationPackage) {
         TypedQuery<AccommodationPackageRoomType> query = this.getEntityManager().
                 createQuery("SELECT accRt " +
                                 "FROM AccommodationPackageRoomType accRt " +
