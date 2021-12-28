@@ -34,6 +34,9 @@ import org.springframework.context.annotation.Configuration;
         @ComponentScan(basePackages = {
                 "com.elephasvacation.tms.web.business.custom.impl",
                 "com.elephasvacation.tms.web.dto"
+        }),
+        @ComponentScan(basePackages = {
+                "com.elephasvacation.tms.web.business.custom.util.transaction"
         })
 })
 public class BOConfig {
