@@ -30,7 +30,6 @@ import com.elephasvacation.tms.web.AppInitializer;
 import com.elephasvacation.tms.web.commonConstant.FailedMessages;
 import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
 import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
-import com.elephasvacation.tms.web.util.HibernateUtil;
 import com.elephasvacation.tms.web.util.LogConfig;
 import org.slf4j.LoggerFactory;
 
@@ -48,10 +47,12 @@ public class MyContextListener implements ServletContextListener {
     public MyContextListener() {
     }
 
+    /**
+     * This method is called when the servlet context is initialized
+     * (when the Web application is deployed).
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        /* This method is called when the servlet context is initialized
-        (when the Web application is deployed). */
         LogConfig.initLogging();
 
         /* Initialize AppInitializer.java */
@@ -61,20 +62,22 @@ public class MyContextListener implements ServletContextListener {
             logger.error(FailedMessages.Spring.FAILED_LOADING_SPRING_CONTAINER, e);
         }
 
-        EntityManagerFactory entityManagerFactory = HibernateUtil.getEntityManagerFactory();
+        EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
         // let's set an attribute for EntityManagerFactory, and pass the EMF object.
         sce.getServletContext().setAttribute(HibernateConstant.ENTITY_MANAGER_FACTORY, entityManagerFactory);
         logger.info(SuccessfulMessages.ServletContext.CONTEXT_INITIALIZED_SUCCESSFULLY);
 
     }
 
+    /**
+     * This method is called when the servlet Context is undeploy or
+     * Application Server shuts down.
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        /* This method is called when the servlet Context is undeploy or
-        Application Server shuts down. */
-        EntityManagerFactory entityManagerFactory = (EntityManagerFactory) sce.getServletContext()
-                .getAttribute(HibernateConstant.ENTITY_MANAGER_FACTORY);
+        EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
 
+        /* close EntityManagerFactory. */
         if (entityManagerFactory != null) {
             entityManagerFactory.close();
         }
