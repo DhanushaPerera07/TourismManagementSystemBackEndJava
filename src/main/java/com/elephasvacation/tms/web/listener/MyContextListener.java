@@ -64,7 +64,7 @@ public class MyContextListener implements ServletContextListener {
 
         EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
         // let's set an attribute for EntityManagerFactory, and pass the EMF object.
-        sce.getServletContext().setAttribute(HibernateConstant.ENTITY_MANAGER_FACTORY, entityManagerFactory);
+        sce.getServletContext().setAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY, entityManagerFactory);
         logger.info(SuccessfulMessages.ServletContext.CONTEXT_INITIALIZED_SUCCESSFULLY);
 
     }
