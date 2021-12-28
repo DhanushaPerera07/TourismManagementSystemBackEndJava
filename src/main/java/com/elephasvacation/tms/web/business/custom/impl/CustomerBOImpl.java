@@ -33,10 +33,12 @@ import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Component
 public class CustomerBOImpl implements CustomerBO {
 
     private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);

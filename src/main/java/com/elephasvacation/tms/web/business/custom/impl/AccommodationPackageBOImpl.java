@@ -34,11 +34,13 @@ import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.sql.SQLException;
 import java.util.List;
 
+@Component
 public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
     private final AccommodationPackageDAO accommodationPackageDAO = DAOFactory.getInstance()

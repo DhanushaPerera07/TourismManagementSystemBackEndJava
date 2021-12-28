@@ -34,10 +34,12 @@ import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
 import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Component
 public class TourDetailBOImpl implements TourDetailBO {
 
     private final TourDetailDAO tourDetailDAO = DAOFactory.getInstance().getDAO(DAOTypes.TOUR_DETAIL);

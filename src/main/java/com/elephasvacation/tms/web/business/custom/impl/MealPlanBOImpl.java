@@ -34,10 +34,12 @@ import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Component
 public class MealPlanBOImpl implements MealPlanBO {
 
     private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
