@@ -47,6 +47,7 @@ public class AppInitializer {
         logger.info("Do we have EntityManagerFactory: " + ctx.containsBean("entityManagerFactory"));
         logger.info("Do we have daoFactory: " + ctx.containsBean("daoFactory"));
         logger.info("Do we have AccDAO: " + ctx.getBean(DAOFactory.class).getDAO(ACCOMMODATION));
+        logger.info("Do we have boFactory: " + ctx.containsBean("boFactory"));
         return ctx;
     }
 
