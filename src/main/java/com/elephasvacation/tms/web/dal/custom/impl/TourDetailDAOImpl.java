@@ -31,13 +31,13 @@ import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
 import com.elephasvacation.tms.web.entity.TourDetail;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Component
+@Repository
 public class TourDetailDAOImpl extends CrudDAOImpl<TourDetail, Integer> implements TourDetailDAO {
 
     @Override

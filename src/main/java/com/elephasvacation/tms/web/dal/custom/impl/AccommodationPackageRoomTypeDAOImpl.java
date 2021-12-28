@@ -29,12 +29,12 @@ import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomTypeDAO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomTypeId;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Component
+@Repository
 public class AccommodationPackageRoomTypeDAOImpl
         extends CrudDAOImpl<AccommodationPackageRoomType, AccommodationPackageRoomTypeId>
         implements AccommodationPackageRoomTypeDAO {

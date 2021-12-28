@@ -32,12 +32,12 @@ import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAO;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Component
+@Repository
 public class AccommodationRateDAOImpl
         extends CrudDAOImpl<AccommodationRate, AccommodationRateId>
         implements AccommodationRateDAO {
