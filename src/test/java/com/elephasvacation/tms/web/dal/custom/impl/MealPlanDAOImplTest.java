@@ -27,9 +27,6 @@ import com.elephasvacation.tms.web.dal.DAOFactory;
 import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.entity.MealPlan;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
@@ -44,24 +41,24 @@ public class MealPlanDAOImplTest {
 
     MealPlanDAO mealPlanDAO = DAOFactory.getInstance().getDAO(DAOTypes.MEAL_PLAN);
 
-    @Before
-    public void setEntityManager() {
-        try {
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void closeEntityManager() {
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+//    @Before
+//    public void setEntityManager() {
+//        try {
+//            this.emf = HibernateUtil.getEntityManagerFactory();
+//            this.em = emf.createEntityManager();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @After
+//    public void closeEntityManager() {
+//        if (em != null) {
+//            em.close();
+//            emf.close();
+//        }
+//    }
 
     @Test
     public void save() {

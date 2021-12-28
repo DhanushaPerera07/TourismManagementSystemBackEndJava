@@ -28,9 +28,6 @@ import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
@@ -45,27 +42,27 @@ public class EmployeeDAOImplTest {
     private EntityManagerFactory emf;
     private EntityManager em;
 
-    @Before
-    public void setUp() {
-        try {
-            /* get EntityManagerFactory. */
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            /* creates EntityManager. */
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void tearDown() {
-        /* close the EntityManagerFactory and EntityManager. */
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+//    @Before
+//    public void setUp() {
+//        try {
+//            /* get EntityManagerFactory. */
+//            this.emf = HibernateUtil.getEntityManagerFactory();
+//            /* creates EntityManager. */
+//            this.em = emf.createEntityManager();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @After
+//    public void tearDown() {
+//        /* close the EntityManagerFactory and EntityManager. */
+//        if (em != null) {
+//            em.close();
+//            emf.close();
+//        }
+//    }
 
     @Test
     public void save() {
