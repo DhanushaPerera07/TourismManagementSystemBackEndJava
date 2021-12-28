@@ -26,9 +26,10 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
+import org.springframework.stereotype.Component;
 
-public class EmployeeCredentialDAOImpl
-        extends CrudDAOImpl<EmployeeCredential, Integer>
+@Component
+public class EmployeeCredentialDAOImpl extends CrudDAOImpl<EmployeeCredential, Integer>
         implements EmployeeCredentialDAO {
 
 }

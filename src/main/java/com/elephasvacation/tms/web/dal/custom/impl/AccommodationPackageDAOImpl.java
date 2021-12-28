@@ -31,13 +31,14 @@ import com.elephasvacation.tms.web.commonConstant.Number;
 import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.Query;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AccommodationPackageDAOImpl
-        extends CrudDAOImpl<AccommodationPackage, Integer>
+@Component
+public class AccommodationPackageDAOImpl extends CrudDAOImpl<AccommodationPackage, Integer>
         implements AccommodationPackageDAO {
 
     // AccommodationPackageDAO ======================================================================================
