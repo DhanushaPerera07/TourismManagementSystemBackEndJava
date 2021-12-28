@@ -27,12 +27,11 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -41,8 +40,11 @@ import static org.junit.Assert.assertNotNull;
 
 public class CustomerDAOImplTest {
 
-    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
+    @Autowired
+    private CustomerDAO customerDAO;
+
     EntityManagerFactory emf = null;
+
     EntityManager em = null;
 
 //    @Before

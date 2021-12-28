@@ -27,8 +27,6 @@ import com.elephasvacation.tms.web.business.custom.AccommodationPackageMealPlanB
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageMealPlanDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
@@ -38,6 +36,7 @@ import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -46,14 +45,20 @@ import java.util.List;
 @Component
 public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageMealPlanBO {
 
-    private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
+    @Autowired
+    private AccommodationPackageDTOMapper packageDTOMapper;
 
-    private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance().getDAO(DAOTypes.MEAL_PLAN);
-    private final MealPlanDTOMapper mealPlanDTOMapper = MealPlanDTOMapper.instance;
+    @Autowired
+    private MealPlanDAO mealPlanDAO;
 
-    private final AccommodationPackageMealPlanDAO accommodationPackageMealPlanDAO = DAOFactory.getInstance().
-            getDAO(DAOTypes.MEAL_PLAN_FOR_ACCOMMODATION_PACKAGE);
-    private final AccommodationPackageMealPlanDTOMapper mapper = AccommodationPackageMealPlanDTOMapper.instance;
+    @Autowired
+    private MealPlanDTOMapper mealPlanDTOMapper;
+
+    @Autowired
+    private AccommodationPackageMealPlanDAO accommodationPackageMealPlanDAO;
+
+    @Autowired
+    private AccommodationPackageMealPlanDTOMapper mapper;
 
     private EntityManager entityManager;
 

@@ -29,11 +29,10 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -43,10 +42,16 @@ import java.util.List;
 @Component
 public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
-    private final AccommodationPackageDAO accommodationPackageDAO = DAOFactory.getInstance().
-            getDAO(DAOTypes.ACCOMMODATION_PACKAGE);
-    private final AccommodationPackageDTOMapper mapper = AccommodationPackageDTOMapper.instance;
+    @Autowired
+    private AccommodationPackageDAO accommodationPackageDAO;
+
+    @Autowired
+    private AccommodationPackageDTOMapper mapper;
+
     private EntityManager entityManager;
+
+    public AccommodationPackageBOImpl() {
+    }
 
     @Override
     public EntityManager getEntityManager() {

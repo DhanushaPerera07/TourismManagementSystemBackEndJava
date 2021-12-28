@@ -23,13 +23,12 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -38,10 +37,14 @@ import static org.junit.Assert.assertNotNull;
 
 public class EmployeeCredentialDAOImplTest {
 
-    private final EmployeeDAO employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
-    private final EmployeeCredentialDAO employeeCredentialDAO =
-            DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE_CREDENTIAL);
+    @Autowired
+    private EmployeeDAO employeeDAO;
+
+    @Autowired
+    private EmployeeCredentialDAO employeeCredentialDAO;
+
     private EntityManagerFactory emf;
+
     private EntityManager em;
 
 //    @Before

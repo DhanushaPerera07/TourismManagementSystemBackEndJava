@@ -29,11 +29,10 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
 import com.elephasvacation.tms.web.entity.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -42,8 +41,12 @@ import java.util.List;
 @Component
 public class EmployeeBOImpl implements EmployeeBO {
 
-    private final EmployeeDAO employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
-    private final EmployeeDTOMapper mapper = EmployeeDTOMapper.instance;
+    @Autowired
+    private EmployeeDAO employeeDAO;
+
+    @Autowired
+    private EmployeeDTOMapper mapper;
+
     private EntityManager entityManager;
 
     @Override

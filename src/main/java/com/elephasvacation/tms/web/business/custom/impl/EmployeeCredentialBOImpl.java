@@ -25,11 +25,10 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeCredentialBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeCredentialDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
 import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -38,9 +37,12 @@ import java.util.List;
 @Component
 public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
 
-    private final EmployeeCredentialDAO employeeCredentialDAO = DAOFactory.getInstance().
-            getDAO(DAOTypes.EMPLOYEE_CREDENTIAL);
-    private final EmployeeCredentialDTOMapper mapper = EmployeeCredentialDTOMapper.instance;
+    @Autowired
+    private EmployeeCredentialDAO employeeCredentialDAO;
+
+    @Autowired
+    private EmployeeCredentialDTOMapper mapper;
+
     private EntityManager entityManager;
 
     @Override

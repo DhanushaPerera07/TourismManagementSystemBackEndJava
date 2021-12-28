@@ -23,12 +23,11 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -38,8 +37,11 @@ import static org.junit.Assert.assertNotNull;
 
 public class EmployeeDAOImplTest {
 
-    private final EmployeeDAO employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
+    @Autowired
+    private EmployeeDAO employeeDAO;
+
     private EntityManagerFactory emf;
+
     private EntityManager em;
 
 //    @Before

@@ -29,11 +29,10 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.RoomTypeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.RoomTypeDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
 import com.elephasvacation.tms.web.dto.RoomTypeDTO;
 import com.elephasvacation.tms.web.entity.RoomType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -42,8 +41,12 @@ import java.util.List;
 @Component
 public class RoomTypeBOImpl implements RoomTypeBO {
 
-    private final RoomTypeDAO roomTypeDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_TYPE);
-    private final RoomTypeDTOMapper mapper = RoomTypeDTOMapper.instance;
+    @Autowired
+    private RoomTypeDAO roomTypeDAO;
+
+    @Autowired
+    private RoomTypeDTOMapper mapper;
+
     private EntityManager entityManager;
 
     @Override

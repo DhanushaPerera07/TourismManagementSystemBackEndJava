@@ -23,10 +23,9 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,9 +36,11 @@ import static org.junit.Assert.assertNotNull;
 public class AccommodationDAOImplTest {
 
     EntityManagerFactory emf = null;
+
     EntityManager em = null;
 
-    AccommodationDAOImpl accommodationDAO = DAOFactory.getInstance().getDAO(DAOTypes.ACCOMMODATION);
+    @Autowired
+    AccommodationDAOImpl accommodationDAO;
 
 //    @Before
 //    public void setEntityManager() {

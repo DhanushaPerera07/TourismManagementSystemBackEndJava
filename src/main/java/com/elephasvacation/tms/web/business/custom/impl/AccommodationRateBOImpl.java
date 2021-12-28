@@ -2,13 +2,12 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationRateBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationRateDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -18,9 +17,12 @@ import java.util.List;
 @Component
 public class AccommodationRateBOImpl implements AccommodationRateBO {
 
-    private final AccommodationRateDAO accommodationRateDAO = DAOFactory.getInstance().
-            getDAO(DAOTypes.ACCOMMODATION_RATE);
-    private final AccommodationRateDTOMapper mapper = AccommodationRateDTOMapper.instance;
+    @Autowired
+    private AccommodationRateDAO accommodationRateDAO;
+
+    @Autowired
+    private AccommodationRateDTOMapper mapper;
+
     private EntityManager entityManager;
 
     @Override

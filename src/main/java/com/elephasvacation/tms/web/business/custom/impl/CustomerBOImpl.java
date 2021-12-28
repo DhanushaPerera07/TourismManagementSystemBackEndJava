@@ -29,10 +29,9 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.CustomerDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -41,8 +40,12 @@ import java.util.List;
 @Component
 public class CustomerBOImpl implements CustomerBO {
 
-    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
-    private final CustomerDTOMapper mapper = CustomerDTOMapper.instance;
+    @Autowired
+    private CustomerDAO customerDAO;
+
+    @Autowired
+    private CustomerDTOMapper mapper;
+
     private EntityManager entityManager;
 
     @Override

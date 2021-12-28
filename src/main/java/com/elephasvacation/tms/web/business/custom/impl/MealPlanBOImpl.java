@@ -29,11 +29,10 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.MealPlanBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -42,9 +41,12 @@ import java.util.List;
 @Component
 public class MealPlanBOImpl implements MealPlanBO {
 
-    private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
-            .getDAO(DAOTypes.MEAL_PLAN);
-    private final MealPlanDTOMapper mapper = MealPlanDTOMapper.instance;
+    @Autowired
+    private MealPlanDAO mealPlanDAO;
+
+    @Autowired
+    private MealPlanDTOMapper mapper;
+
     private EntityManager entityManager;
 
     @Override

@@ -27,11 +27,10 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -40,10 +39,12 @@ import static org.junit.Assert.*;
 
 public class RoomCategoryDAOImplTest {
 
-    EntityManagerFactory emf = null;
-    EntityManager em = null;
+    @Autowired
+    RoomCategoryDAO roomCategoryDAO;
 
-    RoomCategoryDAO roomCategoryDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_CATEGORY);
+    EntityManagerFactory emf = null;
+
+    EntityManager em = null;
 
 //    @Before
 //    public void setEntityManager() {

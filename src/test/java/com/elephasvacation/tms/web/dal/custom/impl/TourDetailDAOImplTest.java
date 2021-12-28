@@ -27,14 +27,13 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.TourDetail;
 import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -45,9 +44,14 @@ import static org.junit.Assert.assertNotNull;
 
 public class TourDetailDAOImplTest {
 
-    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
-    private final TourDetailDAO tourDetailDAO = DAOFactory.getInstance().getDAO(DAOTypes.TOUR_DETAIL);
+    @Autowired
+    private CustomerDAO customerDAO;
+
+    @Autowired
+    private TourDetailDAO tourDetailDAO;
+
     private EntityManagerFactory emf;
+
     private EntityManager em;
 
 //    @Before

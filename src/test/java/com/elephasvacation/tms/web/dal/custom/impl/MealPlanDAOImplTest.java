@@ -23,11 +23,10 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.entity.MealPlan;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -39,7 +38,8 @@ public class MealPlanDAOImplTest {
     EntityManagerFactory emf = null;
     EntityManager em = null;
 
-    MealPlanDAO mealPlanDAO = DAOFactory.getInstance().getDAO(DAOTypes.MEAL_PLAN);
+    @Autowired
+    MealPlanDAO mealPlanDAO;
 
 //    @Before
 //    public void setEntityManager() {

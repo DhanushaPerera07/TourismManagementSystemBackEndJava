@@ -26,13 +26,12 @@ package com.elephasvacation.tms.web.business.custom.impl;
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomTypeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomTypeDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomTypeDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -41,10 +40,15 @@ import java.util.List;
 @Component
 public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageRoomTypeBO {
 
-    private final AccommodationPackageRoomTypeDAO packageRoomTypeDAO = DAOFactory.getInstance().
-            getDAO(DAOTypes.ROOM_TYPE_FOR_ACCOMMODATION_PACKAGE);
-    private final AccommodationPackageRoomTypeDTOMapper mapper = AccommodationPackageRoomTypeDTOMapper.instance;
-    private final AccommodationPackageDTOMapper packageDTOMapper = AccommodationPackageDTOMapper.instance;
+    @Autowired
+    private AccommodationPackageRoomTypeDAO packageRoomTypeDAO;
+
+    @Autowired
+    private AccommodationPackageRoomTypeDTOMapper mapper;
+
+    @Autowired
+    private AccommodationPackageDTOMapper packageDTOMapper;
+
     private EntityManager entityManager;
 
     @Override
