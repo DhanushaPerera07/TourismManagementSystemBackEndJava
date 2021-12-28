@@ -82,6 +82,8 @@ public class MyContextListener implements ServletContextListener {
             entityManagerFactory.close();
         }
 
+        AppInitializer.getContext().close();
+
     }
 
 
