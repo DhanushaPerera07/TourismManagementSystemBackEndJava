@@ -23,6 +23,8 @@
  *
  * @author : Dhanusha Perera
  * @date : 03/07/2021
+ * @author : Dhanusha Perera
+ * @date : 03/07/2021
  */
 /**
  * @author : Dhanusha Perera
@@ -30,8 +32,14 @@
  */
 package com.elephasvacation.tms.web.dto;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 
+@Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ErrorDTO implements Serializable {
 
     private int status;
