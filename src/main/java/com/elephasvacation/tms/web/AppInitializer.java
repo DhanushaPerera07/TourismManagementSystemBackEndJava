@@ -25,8 +25,11 @@ package com.elephasvacation.tms.web;
 
 import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
 import com.elephasvacation.tms.web.config.AppConfig;
+import com.elephasvacation.tms.web.dal.DAOFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import static com.elephasvacation.tms.web.dal.DAOTypes.ACCOMMODATION;
 
 public class AppInitializer {
 
@@ -42,6 +45,8 @@ public class AppInitializer {
         ctx.refresh();
         logger.info(SuccessfulMessages.Spring.APP_INITIALIZER_EXECUTED_SUCCESSFULLY);
         logger.info("Do we have EntityManagerFactory: " + ctx.containsBean("entityManagerFactory"));
+        logger.info("Do we have daoFactory: " + ctx.containsBean("daoFactory"));
+        logger.info("Do we have AccDAO: " + ctx.getBean(DAOFactory.class).getDAO(ACCOMMODATION));
         return ctx;
     }
 
