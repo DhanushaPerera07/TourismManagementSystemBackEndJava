@@ -34,7 +34,6 @@ import org.springframework.context.annotation.Configuration;
                 "com.elephasvacation.tms.web.dto"
         }),
         @ComponentScan(basePackages = {
-                "com.elephasvacation.tms.web.business.custom.util.transaction",
                 "com.elephasvacation.tms.web.business.custom.util.mapper"
         })
 })
