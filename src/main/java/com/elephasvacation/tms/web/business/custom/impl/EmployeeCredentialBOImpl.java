@@ -25,6 +25,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeCredentialBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeCredentialDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
 import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
@@ -58,9 +59,9 @@ public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
         this.employeeCredentialDAO.setEntityManager(this.entityManager);
     }
 
+    @TMSTransaction
     @Override
     public Integer createEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert employeeCredentialDTO to entity. */
         EmployeeCredential employeeCredential = this.mapper.getEmployeeCredential(employeeCredentialDTO);
@@ -68,31 +69,29 @@ public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
         /* save. */
         Integer generatedEmployeeCredentialID = this.employeeCredentialDAO.save(employeeCredential).getId();
 
-        this.entityManager.getTransaction().commit();
         return generatedEmployeeCredentialID;
     }
 
+    @TMSTransaction
     @Override
     public void updateEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
+
         /* convert DTO to entity. */
         EmployeeCredential employeeCredential = this.mapper.getEmployeeCredential(employeeCredentialDTO);
 
         /* update. */
         this.employeeCredentialDAO.update(employeeCredential);
-        this.entityManager.getTransaction().commit();
     }
 
+    @TMSTransaction
     @Override
     public void deleteEmployeeCredential(Integer employeeCredentialID) throws Exception {
-        this.entityManager.getTransaction().begin();
         this.employeeCredentialDAO.delete(employeeCredentialID);
-        this.entityManager.getTransaction().commit();
     }
 
+    @TMSTransaction
     @Override
     public EmployeeCredentialDTO getEmployeeCredentialByID(Integer employeeCredentialID) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get EmployeeCredential By ID.  */
         EmployeeCredential employeeCredential = this.employeeCredentialDAO.get(employeeCredentialID);
@@ -100,13 +99,12 @@ public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
         /* convert entity to DTO. */
         EmployeeCredentialDTO employeeCredentialDTO = this.mapper.getEmployeeCredentialDTO(employeeCredential);
 
-        this.entityManager.getTransaction().commit();
         return employeeCredentialDTO;
     }
 
+    @TMSTransaction
     @Override
     public List<EmployeeCredentialDTO> getAllEmployeeCredentials(Integer employeeCredentialID) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get all employee credentials. */
         List<EmployeeCredential> employeeCredentialList = this.employeeCredentialDAO.getAll();
@@ -115,7 +113,6 @@ public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
         List<EmployeeCredentialDTO> employeeCredentialDTOList = this.mapper.
                 getEmployeeCredentialDTOList(employeeCredentialList);
 
-        this.entityManager.getTransaction().commit();
         return employeeCredentialDTOList;
     }
 }

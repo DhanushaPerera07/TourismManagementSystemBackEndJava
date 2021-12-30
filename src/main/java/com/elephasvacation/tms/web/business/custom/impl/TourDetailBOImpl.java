@@ -29,6 +29,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.TourDetailBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.TourDetailDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
 import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
@@ -62,9 +63,9 @@ public class TourDetailBOImpl implements TourDetailBO {
         this.tourDetailDAO.setEntityManager(this.entityManager);
     }
 
+    @TMSTransaction
     @Override
     public Integer createTourDetail(TourDetailDTO tourDetailDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert DTO to entity. */
         TourDetail tourDetail = this.mapper.getTourDetail(tourDetailDTO);
@@ -72,24 +73,21 @@ public class TourDetailBOImpl implements TourDetailBO {
         /* save. */
         Integer generatedID = this.tourDetailDAO.save(tourDetail).getId();
 
-        this.entityManager.getTransaction().commit();
         return generatedID;
     }
 
+    @TMSTransaction
     @Override
     public void updateTourDetail(TourDetailDTO tourDetailDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* update. */
         this.tourDetailDAO.update(this.mapper.getTourDetail(tourDetailDTO));
-        this.entityManager.getTransaction().commit();
     }
 
+    @TMSTransaction
     @Override
     public void deleteTourDetail(Integer tourDetailID) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* delete. */
         this.tourDetailDAO.delete(tourDetailID);
-        this.entityManager.getTransaction().commit();
     }
 
     /**
@@ -97,16 +95,15 @@ public class TourDetailBOImpl implements TourDetailBO {
      *
      * @return TourDetailDTO tour detail.
      */
+    @TMSTransaction
     @Override
     public TourDetailDTO getTourDetailByID(Integer tourDetailID) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get tour detail by tourDetailID. */
         TourDetail tourDetail = this.tourDetailDAO.get(tourDetailID);
 
         /* convert entity to DTO. */
         TourDetailDTO tourDetailDTO = this.mapper.getTourDetailDTO(tourDetail);
-        this.entityManager.getTransaction().commit();
         return tourDetailDTO;
     }
 
@@ -115,9 +112,9 @@ public class TourDetailBOImpl implements TourDetailBO {
      *
      * @return TourDetailDTO tour detail.
      */
+    @TMSTransaction
     @Override
     public TourDetailDTO getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get tour detail by customerID &  tourDetailID. */
         TourDetail tourDetail = this.tourDetailDAO.
@@ -126,7 +123,6 @@ public class TourDetailBOImpl implements TourDetailBO {
         /* convert tourDetail to DTO. */
         TourDetailDTO tourDetailDTO = this.mapper.getTourDetailDTO(tourDetail);
 
-        this.entityManager.getTransaction().commit();
         return tourDetailDTO;
     }
 
@@ -136,8 +132,8 @@ public class TourDetailBOImpl implements TourDetailBO {
      * @return List<TourDetailDTO> all tour details.
      */
     @Override
+    @TMSTransaction
     public List<TourDetailDTO> getAllTourDetails() throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get all Tour Details. */
         List<TourDetail> tourDetailList = this.tourDetailDAO.getAll();
@@ -145,7 +141,6 @@ public class TourDetailBOImpl implements TourDetailBO {
         /* convert tourDetailList to DTOList. */
         List<TourDetailDTO> tourDetailDTOList = this.mapper.getTourDetailDTOList(tourDetailList);
 
-        this.entityManager.getTransaction().commit();
         return tourDetailDTOList;
     }
 
@@ -155,14 +150,13 @@ public class TourDetailBOImpl implements TourDetailBO {
      * @return List<TourDetailDTO> all tour details for a customer.
      */
     @Override
+    @TMSTransaction
     public List<TourDetailDTO> getAllTourDetailsByCustomerID(Integer customerID) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* get all tour details by customerID. */
         List<TourDetail> tourDetailList = this.tourDetailDAO.getAllTourDetailsByCustomerID(customerID);
 
         /* convert tourDetailList to DTOList. */
         List<TourDetailDTO> tourDetailDTOList = this.mapper.getTourDetailDTOList(tourDetailList);
-        this.entityManager.getTransaction().commit();
         return tourDetailDTOList;
     }
 }

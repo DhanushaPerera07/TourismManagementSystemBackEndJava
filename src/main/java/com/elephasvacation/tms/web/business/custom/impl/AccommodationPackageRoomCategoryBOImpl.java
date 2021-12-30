@@ -26,6 +26,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomCategoryBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomCategoryDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomCategoryDTO;
@@ -65,9 +66,9 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
     }
 
     @Override
+    @TMSTransaction
     public AccommodationPackageRoomCategoryDTO
     createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert AccommodationPackageRoomCategoryDTO to entity. */
         AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
@@ -80,14 +81,13 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
         AccommodationPackageRoomCategoryDTO savedPackageRoomCategoryDTO = this.mapper.
                 getAccommodationPackageRoomCategoryDTO(packageRC);
 
-        this.entityManager.getTransaction().commit();
         return savedPackageRoomCategoryDTO;
     }
 
     @Override
+    @TMSTransaction
     public void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO)
             throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert AccommodationPackageRoomCategoryDTO to entity. */
         AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
@@ -95,14 +95,12 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
 
         /* delete the AccommodationPackageRoomCategory By ID. */
         this.packageRoomCategoryDAO.delete(packageRoomCategory.getId());
-
-        this.entityManager.getTransaction().commit();
     }
 
     @Override
+    @TMSTransaction
     public List<AccommodationPackageRoomCategoryDTO>
     getAllRoomCategoriesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
-        this.entityManager.getTransaction().begin();
 
         /* convert AccommodationPackageDTO to entity. */
         AccommodationPackage accommodationPackage = this.packageDTOMapper.getAccommodationPackage(packageDTO);
@@ -115,7 +113,6 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
         List<AccommodationPackageRoomCategoryDTO> accommodationPackageRoomCategoryDTOList = this.mapper.
                 getAccommodationPackageRoomCategoryDTOList(allRoomCategoriesForAccommodationPackage);
 
-        this.entityManager.getTransaction().commit();
         return accommodationPackageRoomCategoryDTOList;
     }
 }

@@ -27,6 +27,7 @@ import com.elephasvacation.tms.web.business.custom.AccommodationPackageMealPlanB
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageMealPlanDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
@@ -77,9 +78,9 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
     }
 
     @Override
+    @TMSTransaction
     public AccommodationPackageMealPlanDTO
     addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert DTO to AccommodationPackageMealPlan. */
         AccommodationPackageMealPlan accommodationPackageMealPlan = this.mapper.
@@ -92,14 +93,14 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         /* convert entity to addedPkgMealPlanDTO. */
         AccommodationPackageMealPlanDTO addedPkgMealPlanDTO = this.mapper.
                 getAccommodationPackageMealPlanDTO(addedPkgMealPlan);
-        this.entityManager.getTransaction().commit();
+
         return addedPkgMealPlanDTO;
     }
 
     @Override
+    @TMSTransaction
     public void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO)
             throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert DTO to entity, and get the AccommodationPackageMealPlanId. */
         AccommodationPackageMealPlanId packageMealPlanId = this.mapper.
@@ -108,13 +109,12 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         /* delete AccommodationPackageMealPlan By ID. */
         this.accommodationPackageMealPlanDAO.delete(packageMealPlanId);
 
-        this.entityManager.getTransaction().commit();
     }
 
     @Override
+    @TMSTransaction
     public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO)
             throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert AccommodationPackageMealPlanDTO to entity. */
         AccommodationPackageMealPlan pkgMealPlan = this.mapper.getAccommodationPackageMealPlan(pkgMealPlanDTO);
@@ -125,14 +125,13 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         /* convert mealPlan entity to DTO. */
         MealPlanDTO mealPlanDTO = this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);
 
-        this.entityManager.getTransaction().commit();
         return mealPlanDTO;
     }
 
     @Override
+    @TMSTransaction
     public List<AccommodationPackageMealPlanDTO>
     getAllMealPlansForAccommodationPackage(AccommodationPackageDTO packageDTO) {
-        this.entityManager.getTransaction().begin();
 
         /* AccommodationPackageDTO --> AccommodationPackage conversion */
         AccommodationPackage accommodationPackage = this.packageDTOMapper
@@ -145,8 +144,6 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         /* convert entityList to DTOList. */
         List<AccommodationPackageMealPlanDTO> packageMealPlanDTOList = this.mapper.
                 getAccommodationPackageMealPlanDTOList(allMealPlansForAccommodationPackage);
-
-        this.entityManager.getTransaction().commit();
 
         /* return the List in DTO form. */
         return packageMealPlanDTOList;

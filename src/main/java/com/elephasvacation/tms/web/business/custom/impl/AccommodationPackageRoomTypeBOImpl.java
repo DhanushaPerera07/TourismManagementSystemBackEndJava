@@ -26,6 +26,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomTypeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomTypeDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomTypeDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
@@ -65,10 +66,10 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
     }
 
     @Override
+    @TMSTransaction
     public AccommodationPackageRoomTypeDTO
     createAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
             throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert AccommodationPackageRoomTypeDTO to AccommodationPackageRoomType entity. */
         AccommodationPackageRoomType packageRoomType = this.mapper.
@@ -81,14 +82,13 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
         AccommodationPackageRoomTypeDTO savedPackageRoomTypeDTO = this.mapper.
                 getAccommodationPackageRoomTypeDTO(savedPackageRT);
 
-        this.entityManager.getTransaction().commit();
         return savedPackageRoomTypeDTO;
     }
 
     @Override
+    @TMSTransaction
     public void deleteAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
             throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert AccommodationPackageRoomTypeDTO to entity. */
         AccommodationPackageRoomType packageRoomType = this.mapper.
@@ -96,8 +96,6 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
 
         /* delete AccommodationPackageRoomType By ID. */
         this.packageRoomTypeDAO.delete(packageRoomType.getId());
-
-        this.entityManager.getTransaction().commit();
     }
 
     /**
@@ -106,9 +104,9 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
      * @return List<AccommodationPackageRoomTypeDTO> accommodationPackageRoomTypeDTOList
      */
     @Override
+    @TMSTransaction
     public List<AccommodationPackageRoomTypeDTO>
     getAllPackageRoomTypesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
-        this.entityManager.getTransaction().begin();
 
         /* convert AccommodationPackageDTO to entity. */
         AccommodationPackage accommodationPackage = this.packageDTOMapper.getAccommodationPackage(packageDTO);
@@ -121,7 +119,6 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
         List<AccommodationPackageRoomTypeDTO> accommodationPackageRoomTypeDTOList = this.mapper.
                 getAccommodationPackageRoomTypeDTOList(allPackageRoomTypesForAccommodationPackage);
 
-        this.entityManager.getTransaction().commit();
         return accommodationPackageRoomTypeDTOList;
     }
 }
