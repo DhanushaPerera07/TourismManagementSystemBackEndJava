@@ -53,8 +53,6 @@ public class MyContextListener implements ServletContextListener {
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        LogConfig.initLogging();
-
         /* Initialize AppInitializer.java */
         try {
             Class.forName(AppInitializer.class.getName());
@@ -62,7 +60,12 @@ public class MyContextListener implements ServletContextListener {
             logger.error(FailedMessages.Spring.FAILED_LOADING_SPRING_CONTAINER, e);
         }
 
+        /* Initialize Logging. */
+        LogConfig.initLogging();
+
+        /* get EntityManagerFactory instance from the Spring context. */
         EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
+
         // let's set an attribute for EntityManagerFactory, and pass the EMF object.
         sce.getServletContext().setAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY, entityManagerFactory);
         logger.info(SuccessfulMessages.ServletContext.CONTEXT_INITIALIZED_SUCCESSFULLY);
@@ -75,7 +78,10 @@ public class MyContextListener implements ServletContextListener {
      */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
+//        EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
+
+        EntityManagerFactory entityManagerFactory = (EntityManagerFactory) sce.getServletContext().
+                getAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY);
 
         /* close EntityManagerFactory. */
         if (entityManagerFactory != null) {
