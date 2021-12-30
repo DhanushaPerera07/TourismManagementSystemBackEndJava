@@ -26,7 +26,6 @@ package com.elephasvacation.tms.web.dal;
 import com.elephasvacation.tms.web.entity.SuperEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -78,8 +77,7 @@ public class CrudDAOImpl<T extends SuperEntity<Serializable>, K extends Serializ
 
     @Override
     public List<T> getAll() throws Exception {
-        TypedQuery<T> query =
-                this.entityManager.createQuery("SELECT " + (this.entityClass.getName()), this.entityClass);
-        return query.getResultList();
+        List<T> resultList = (List<T>) this.entityManager.createQuery("SELECT e FROM " + this.entityClass.getName() + " e").getResultList();
+        return resultList;
     }
 }
