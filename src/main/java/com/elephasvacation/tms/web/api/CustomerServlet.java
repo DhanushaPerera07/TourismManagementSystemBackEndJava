@@ -6,6 +6,7 @@ package com.elephasvacation.tms.web.api;
 
 import com.elephasvacation.tms.web.AppInitializer;
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
+import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
 import com.elephasvacation.tms.web.exception.HttpResponseException;
 import com.elephasvacation.tms.web.exception.ResponseExceptionUtil;
@@ -42,16 +43,39 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        /* Get the EntityManagerFactory instance from the servlet context. */
 
-        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
+        String stringId = null;
+        Integer id = null;
+
+        if (request.getPathInfo() != null)
+            stringId = request.getPathInfo().replace("/", "");
+
+        if (stringId != null && stringId.length() > 0) {
+            try {
+                id = new Integer(stringId);
+            } catch (NumberFormatException numberFormatException) {
+                throw new HttpResponseException(400, "ID is not valid.", numberFormatException);
+            }
+
+            if (id <= 0) {
+                throw new HttpResponseException(400, "ID is not valid.", null);
+            }
+        }
+
+        /* Get the EntityManagerFactory instance from the servlet context. */
+        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext()
+                .getAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY);
         EntityManager em = emf.createEntityManager();
 
         try {
             response.setContentType("application/json");
             CustomerBO customerBO = AppInitializer.getContext().getBean(CustomerBO.class);
             customerBO.setEntityManager(em);
-            response.getWriter().println(jsonb.toJson(customerBO.getAllCustomers()));
+
+            if (id == null)
+                response.getWriter().println(jsonb.toJson(customerBO.getAllCustomers()));
+            else
+                response.getWriter().println(jsonb.toJson(customerBO.getCustomerByID(id)));
 
         } catch (Throwable t) {
             ResponseExceptionUtil.handle(t, response);
@@ -63,7 +87,8 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         Jsonb jsonb = JsonbBuilder.create();
-        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
+        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext()
+                .getAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY);
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -93,7 +118,8 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
-        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
+        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext()
+                .getAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY);
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -137,7 +163,8 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
-        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
+        final EntityManagerFactory emf = (EntityManagerFactory) getServletContext()
+                .getAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY);
         EntityManager em = emf.createEntityManager();
 
         try {
