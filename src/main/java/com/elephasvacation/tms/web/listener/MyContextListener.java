@@ -30,7 +30,7 @@ import com.elephasvacation.tms.web.AppInitializer;
 import com.elephasvacation.tms.web.commonConstant.FailedMessages;
 import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
 import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
-import com.elephasvacation.tms.web.util.LogConfig;
+import com.elephasvacation.tms.web.util.LogUtil;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManagerFactory;
@@ -61,7 +61,7 @@ public class MyContextListener implements ServletContextListener {
         }
 
         /* Initialize Logging. */
-        LogConfig.initLogging();
+        LogUtil.initLogging();
 
         /* get EntityManagerFactory instance from the Spring context. */
         EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);

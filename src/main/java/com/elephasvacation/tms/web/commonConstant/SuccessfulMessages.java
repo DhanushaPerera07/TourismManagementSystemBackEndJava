@@ -31,6 +31,10 @@ public final class SuccessfulMessages {
     public static final String CREATED_RECORD_SUCCESSFUL = "Created {0} record, generated ID: {1}";
     public static final String SEND_LIST_SUCCESSFULLY = "Send {0} record(s) successfully. No of records: {1}";
 
+    public static final class LogUtil {
+        public static final String LOGGER_FILE_FOLDER_CREATED_SUCCESSFULLY = "Logger directory created successfully.";
+    }
+
     public static final class ServletContext {
         public static final String CONTEXT_INITIALIZED_SUCCESSFULLY = "Context initialized successfully...!";
         public static final String LOGGER_INITIALIZED_SUCCESSFULLY = "Logger initialized successfully...!";
