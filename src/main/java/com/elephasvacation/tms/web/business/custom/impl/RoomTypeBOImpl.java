@@ -29,17 +29,19 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.RoomTypeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.RoomTypeDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
 import com.elephasvacation.tms.web.dto.RoomTypeDTO;
 import com.elephasvacation.tms.web.entity.RoomType;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class RoomTypeBOImpl implements RoomTypeBO {
 
     @Autowired
@@ -48,22 +50,7 @@ public class RoomTypeBOImpl implements RoomTypeBO {
     @Autowired
     private RoomTypeDTOMapper mapper;
 
-    private EntityManager entityManager;
 
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.roomTypeDAO.setEntityManager(this.entityManager);
-    }
-
-    @TMSTransaction
     @Override
     public Integer createRoomTypeDTO(RoomTypeDTO roomTypeDTO) throws Exception {
 
@@ -71,45 +58,37 @@ public class RoomTypeBOImpl implements RoomTypeBO {
         RoomType roomType = this.mapper.getRoomType(roomTypeDTO);
 
         /* save. */
-        Integer generatedID = this.roomTypeDAO.save(roomType).getId();
-
-        return generatedID;
+        return this.roomTypeDAO.save(roomType).getId();
     }
 
-    @TMSTransaction
     @Override
     public void updateRoomTypeDTO(RoomTypeDTO roomTypeDTO) throws Exception {
         /* update. */
         this.roomTypeDAO.update(this.mapper.getRoomType(roomTypeDTO));
     }
 
-    @TMSTransaction
     @Override
     public void deleteRoomTypeDTO(Integer roomTypeID) throws Exception {
         this.roomTypeDAO.delete(roomTypeID);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public RoomTypeDTO getRoomTypeByID(Integer roomTypeID) throws Exception {
         /* get room type by ID. */
         RoomType roomType = this.roomTypeDAO.get(roomTypeID);
 
         /* convert entity to DTO. */
-        RoomTypeDTO roomTypeDTO = this.mapper.getRoomTypeDTO(roomType);
-
-        return roomTypeDTO;
+        return this.mapper.getRoomTypeDTO(roomType);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public List<RoomTypeDTO> getAllRoomTypes() throws Exception {
         /* get all room types. */
         List<RoomType> roomTypeList = this.roomTypeDAO.getAll();
 
         /* convert roomTypeList to DTOList. */
-        List<RoomTypeDTO> roomTypeDTOList = this.mapper.getRoomTypeDTOs(roomTypeList);
-
-        return roomTypeDTOList;
+        return this.mapper.getRoomTypeDTOs(roomTypeList);
     }
 }

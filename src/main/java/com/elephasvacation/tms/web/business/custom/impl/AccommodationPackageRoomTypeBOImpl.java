@@ -26,19 +26,21 @@ package com.elephasvacation.tms.web.business.custom.impl;
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomTypeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomTypeDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomTypeDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageRoomTypeBO {
 
     @Autowired
@@ -50,23 +52,8 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
     @Autowired
     private AccommodationPackageDTOMapper packageDTOMapper;
 
-    private EntityManager entityManager;
 
     @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.packageRoomTypeDAO.setEntityManager(this.entityManager);
-    }
-
-    @Override
-    @TMSTransaction
     public AccommodationPackageRoomTypeDTO
     createAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
             throws Exception {
@@ -79,14 +66,11 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
         AccommodationPackageRoomType savedPackageRT = this.packageRoomTypeDAO.save(packageRoomType);
 
         /* convert AccommodationPackageRoomType entity to AccommodationPackageRoomTypeDTO. */
-        AccommodationPackageRoomTypeDTO savedPackageRoomTypeDTO = this.mapper.
+        return this.mapper.
                 getAccommodationPackageRoomTypeDTO(savedPackageRT);
-
-        return savedPackageRoomTypeDTO;
     }
 
     @Override
-    @TMSTransaction
     public void deleteAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO)
             throws Exception {
 
@@ -103,8 +87,8 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
      *
      * @return List<AccommodationPackageRoomTypeDTO> accommodationPackageRoomTypeDTOList
      */
+    @Transactional(readOnly = true)
     @Override
-    @TMSTransaction
     public List<AccommodationPackageRoomTypeDTO>
     getAllPackageRoomTypesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
 
@@ -116,9 +100,7 @@ public class AccommodationPackageRoomTypeBOImpl implements AccommodationPackageR
                 getAllPackageRoomTypesForAccommodationPackage(accommodationPackage);
 
         /* convert allPackageRoomTypesForAccommodationPackage to accommodationPackageRoomTypeDTOList. */
-        List<AccommodationPackageRoomTypeDTO> accommodationPackageRoomTypeDTOList = this.mapper.
+        return this.mapper.
                 getAccommodationPackageRoomTypeDTOList(allPackageRoomTypesForAccommodationPackage);
-
-        return accommodationPackageRoomTypeDTOList;
     }
 }

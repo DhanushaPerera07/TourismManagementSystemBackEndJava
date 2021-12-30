@@ -27,7 +27,6 @@ import com.elephasvacation.tms.web.business.custom.AccommodationPackageMealPlanB
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageMealPlanDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
@@ -37,48 +36,35 @@ import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageMealPlanBO {
-
-    @Autowired
-    private AccommodationPackageDTOMapper packageDTOMapper;
 
     @Autowired
     private MealPlanDAO mealPlanDAO;
 
     @Autowired
-    private MealPlanDTOMapper mealPlanDTOMapper;
+    private AccommodationPackageMealPlanDAO accommodationPackageMealPlanDAO;
 
     @Autowired
-    private AccommodationPackageMealPlanDAO accommodationPackageMealPlanDAO;
+    private AccommodationPackageDTOMapper packageDTOMapper;
+
+    @Autowired
+    private MealPlanDTOMapper mealPlanDTOMapper;
+
 
     @Autowired
     private AccommodationPackageMealPlanDTOMapper mapper;
 
-    private EntityManager entityManager;
-
     @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.mealPlanDAO.setEntityManager(this.entityManager);
-        this.accommodationPackageMealPlanDAO.setEntityManager(this.entityManager);
-    }
-
-    @Override
-    @TMSTransaction
     public AccommodationPackageMealPlanDTO
     addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) throws Exception {
 
@@ -91,14 +77,11 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
                 .save(accommodationPackageMealPlan);
 
         /* convert entity to addedPkgMealPlanDTO. */
-        AccommodationPackageMealPlanDTO addedPkgMealPlanDTO = this.mapper.
+        return this.mapper.
                 getAccommodationPackageMealPlanDTO(addedPkgMealPlan);
-
-        return addedPkgMealPlanDTO;
     }
 
     @Override
-    @TMSTransaction
     public void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO)
             throws Exception {
 
@@ -111,8 +94,8 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
 
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @TMSTransaction
     public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO)
             throws Exception {
 
@@ -123,13 +106,11 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         MealPlan mealPlan = this.mealPlanDAO.get(pkgMealPlan.getId().getMealPlanId());
 
         /* convert mealPlan entity to DTO. */
-        MealPlanDTO mealPlanDTO = this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);
-
-        return mealPlanDTO;
+        return this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @TMSTransaction
     public List<AccommodationPackageMealPlanDTO>
     getAllMealPlansForAccommodationPackage(AccommodationPackageDTO packageDTO) {
 
@@ -142,10 +123,8 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
                 this.accommodationPackageMealPlanDAO.getAllMealPlansForAccommodationPackage(accommodationPackage);
 
         /* convert entityList to DTOList. */
-        List<AccommodationPackageMealPlanDTO> packageMealPlanDTOList = this.mapper.
-                getAccommodationPackageMealPlanDTOList(allMealPlansForAccommodationPackage);
-
         /* return the List in DTO form. */
-        return packageMealPlanDTOList;
+        return this.mapper.
+                getAccommodationPackageMealPlanDTOList(allMealPlansForAccommodationPackage);
     }
 }

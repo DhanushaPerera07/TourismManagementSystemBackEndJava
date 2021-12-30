@@ -29,17 +29,19 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.MealPlanBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class MealPlanBOImpl implements MealPlanBO {
 
     @Autowired
@@ -48,22 +50,6 @@ public class MealPlanBOImpl implements MealPlanBO {
     @Autowired
     private MealPlanDTOMapper mapper;
 
-    private EntityManager entityManager;
-
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.mealPlanDAO.setEntityManager(this.entityManager);
-    }
-
-    @TMSTransaction
     @Override
     public Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
 
@@ -71,24 +57,20 @@ public class MealPlanBOImpl implements MealPlanBO {
         MealPlan mealPlan = this.mapper.getMealPlan(mealPlanDTO);
 
         /* save. */
-        Integer generatedMealPlanId = this.mealPlanDAO.save(mealPlan).getId();
-
-        return generatedMealPlanId;
+        return this.mealPlanDAO.save(mealPlan).getId();
     }
 
-    @TMSTransaction
     @Override
     public void updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
         this.mealPlanDAO.update(this.mapper.getMealPlan(mealPlanDTO));
     }
 
-    @TMSTransaction
     @Override
     public void deleteMealPlan(Integer mealPlanID) throws Exception {
         this.mealPlanDAO.delete(mealPlanID);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public MealPlanDTO getMealPlanByID(Integer mealPlanID) throws Exception {
 
@@ -96,12 +78,10 @@ public class MealPlanBOImpl implements MealPlanBO {
         MealPlan mealPlan = this.mealPlanDAO.get(mealPlanID);
 
         /* convert entity to DTO. */
-        MealPlanDTO mealPlanDTO = this.mapper.getMealPlanDTO(mealPlan);
-
-        return mealPlanDTO;
+        return this.mapper.getMealPlanDTO(mealPlan);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public List<MealPlanDTO> getAllMealPlans() throws Exception {
 
@@ -109,8 +89,6 @@ public class MealPlanBOImpl implements MealPlanBO {
         List<MealPlan> mealPlanList = this.mealPlanDAO.getAll();
 
         /* convert mealPlanList to DTOList. */
-        List<MealPlanDTO> mealPlanDTOList = this.mapper.getMealPlanDTOList(mealPlanList);
-
-        return mealPlanDTOList;
+        return this.mapper.getMealPlanDTOList(mealPlanList);
     }
 }

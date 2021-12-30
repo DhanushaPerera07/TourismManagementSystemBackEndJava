@@ -29,17 +29,19 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
 import com.elephasvacation.tms.web.entity.Employee;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class EmployeeBOImpl implements EmployeeBO {
 
     @Autowired
@@ -48,22 +50,6 @@ public class EmployeeBOImpl implements EmployeeBO {
     @Autowired
     private EmployeeDTOMapper mapper;
 
-    private EntityManager entityManager;
-
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.employeeDAO.setEntityManager(this.entityManager);
-    }
-
-    @TMSTransaction
     @Override
     public Integer createEmployee(EmployeeDTO employeeDTO) throws Exception {
         /* save. */
@@ -71,41 +57,35 @@ public class EmployeeBOImpl implements EmployeeBO {
         return generatedEmployeeId;
     }
 
-    @TMSTransaction
     @Override
     public void updateEmployee(EmployeeDTO employeeDTO) throws Exception {
         /* update. */
         this.employeeDAO.update(mapper.getEmployee(employeeDTO));
     }
 
-    @TMSTransaction
     @Override
     public void deleteEmployee(int employeeID) throws Exception {
         /* delete. */
         this.employeeDAO.delete(employeeID);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public EmployeeDTO getEmployeeByID(int employeeID) throws Exception {
         /* get employee by ID. */
         Employee employee = this.employeeDAO.get(employeeID);
 
         /* convert employee to DTO. */
-        EmployeeDTO employeeDTO = this.mapper.getEmployeeDTO(employee);
-
-        return employeeDTO;
+        return this.mapper.getEmployeeDTO(employee);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public List<EmployeeDTO> getAllEmployees() throws Exception {
         /* get all employees. */
         List<Employee> employeeList = this.employeeDAO.getAll();
 
         /* convert employeeList to DTOList. */
-        List<EmployeeDTO> employeeDTOList = this.mapper.getEmployeeDTOs(employeeList);
-
-        return employeeDTOList;
+        return this.mapper.getEmployeeDTOs(employeeList);
     }
 }

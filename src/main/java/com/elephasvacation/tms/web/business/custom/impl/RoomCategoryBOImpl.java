@@ -29,17 +29,19 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.RoomCategoryBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.RoomCategoryDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class RoomCategoryBOImpl implements RoomCategoryBO {
 
     @Autowired
@@ -48,22 +50,6 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
     @Autowired
     private RoomCategoryDTOMapper mapper;
 
-    private EntityManager entityManager;
-
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.roomCategoryDAO.setEntityManager(this.entityManager);
-    }
-
-    @TMSTransaction
     @Override
     public Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception {
 
@@ -71,25 +57,21 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
         RoomCategory roomCategory = this.mapper.getRoomCategory(roomCategoryDTO);
 
         /* save. */
-        Integer generatedRoomCategoryID = this.roomCategoryDAO.save(roomCategory).getId();
-
-        return generatedRoomCategoryID;
+        return this.roomCategoryDAO.save(roomCategory).getId();
     }
 
-    @TMSTransaction
     @Override
     public void updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception {
         /* update. */
         this.roomCategoryDAO.update(this.mapper.getRoomCategory(roomCategoryDTO));
     }
 
-    @TMSTransaction
     @Override
     public void deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception {
         this.roomCategoryDAO.delete(roomCategoryID);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public RoomCategoryDTO getRoomCategoryByID(Integer roomCategoryID) throws Exception {
 
@@ -97,12 +79,10 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
         RoomCategory roomCategory = this.roomCategoryDAO.get(roomCategoryID);
 
         /* convert entity to DTO. */
-        RoomCategoryDTO roomCategoryDTO = this.mapper.getRoomCategoryDTO(roomCategory);
-
-        return roomCategoryDTO;
+        return this.mapper.getRoomCategoryDTO(roomCategory);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public List<RoomCategoryDTO> getAllRoomCategories() throws Exception {
 
@@ -110,7 +90,6 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
         List<RoomCategory> roomCategoryList = this.roomCategoryDAO.getAll();
 
         /* convert roomCategoryList to DTOList. */
-        List<RoomCategoryDTO> roomCategoryDTOList = this.mapper.getRoomCategoryDTOs(roomCategoryList);
-        return roomCategoryDTOList;
+        return this.mapper.getRoomCategoryDTOs(roomCategoryList);
     }
 }

@@ -29,17 +29,19 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
 import com.elephasvacation.tms.web.dto.AccommodationDTO;
 import com.elephasvacation.tms.web.entity.Accommodation;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class AccommodationBOImpl implements AccommodationBO {
 
     @Autowired
@@ -48,53 +50,33 @@ public class AccommodationBOImpl implements AccommodationBO {
     @Autowired
     AccommodationDTOMapper mapper;
 
-    private EntityManager entityManager;
-
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.accommodationDAO.setEntityManager(this.entityManager);
-    }
-
-    @TMSTransaction
     @Override
     public Integer createAccommodation(AccommodationDTO accommodationDTO) throws Exception {
         Accommodation accommodation = this.accommodationDAO.save(this.mapper.getAccommodation(accommodationDTO));
         return accommodation.getId();
     }
 
-    @TMSTransaction
     @Override
     public void updateAccommodation(AccommodationDTO accommodationDTO) throws Exception {
         this.accommodationDAO.update(this.mapper.getAccommodation(accommodationDTO));
     }
 
-    @TMSTransaction
     @Override
     public void deleteAccommodation(int accommodationID) throws Exception {
         this.accommodationDAO.delete(accommodationID);
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public AccommodationDTO getAccommodationByID(int accommodationID) throws Exception {
-        AccommodationDTO accommodationDTO = this.mapper.
+        return this.mapper.
                 getAccommodationDTO(this.accommodationDAO.get(accommodationID));
-        return accommodationDTO;
     }
 
-    @TMSTransaction
+    @Transactional(readOnly = true)
     @Override
     public List<AccommodationDTO> getAllAccommodations() throws Exception {
-        List<AccommodationDTO> accommodationDTOList = this.mapper.
+        return this.mapper.
                 getAccommodationDTOList(this.accommodationDAO.getAll());
-        return accommodationDTOList;
     }
 }

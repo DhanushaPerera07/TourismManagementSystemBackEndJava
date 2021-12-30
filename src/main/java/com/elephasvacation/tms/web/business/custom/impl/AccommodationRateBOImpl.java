@@ -2,20 +2,22 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationRateBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationRateDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.sql.SQLException;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class AccommodationRateBOImpl implements AccommodationRateBO {
 
     @Autowired
@@ -24,23 +26,8 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
     @Autowired
     private AccommodationRateDTOMapper mapper;
 
-    private EntityManager entityManager;
 
     @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.accommodationRateDAO.setEntityManager(this.entityManager);
-    }
-
-    @Override
-    @TMSTransaction
     public AccommodationRateDTOId createAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception {
 
         /* convert AccommodationRateDTO to entity. */
@@ -51,20 +38,16 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
                 this.accommodationRateDAO.save(accommodationRate).getId();
 
         /* convert accommodationRateId to accommodationRateDTOId */
-        AccommodationRateDTOId accommodationRateDTOId = this.mapper.getAccommodationRateDTOId(accommodationRateId);
-
-        return accommodationRateDTOId;
+        return this.mapper.getAccommodationRateDTOId(accommodationRateId);
     }
 
     @Override
-    @TMSTransaction
     public void updateAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception {
         /* update */
         this.accommodationRateDAO.update(this.mapper.getAccommodationRate(accommodationRateDTO));
     }
 
     @Override
-    @TMSTransaction
     public void deleteAccommodationRate(AccommodationRateDTOId accommodationRateDTOId) throws Exception {
 
         /* convert accommodationRateDTOId to entity. */
@@ -75,7 +58,7 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
     }
 
     @Override
-    @TMSTransaction
+    @Transactional(readOnly = true)
     public AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId)
             throws Exception {
 
@@ -86,22 +69,19 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
         AccommodationRate accommodationRate = this.accommodationRateDAO.get(accommodationRateId);
 
         /* convert AccommodationRate to AccommodationRateDTO. */
-        AccommodationRateDTO accommodationRateDTO = this.mapper.getAccommodationRateDTO(accommodationRate);
-        return accommodationRateDTO;
+        return this.mapper.getAccommodationRateDTO(accommodationRate);
     }
 
     @Override
-    @TMSTransaction
+    @Transactional(readOnly = true)
     public List<AccommodationRateDTO> getAllAccommodationRates() throws Exception {
 
         /* get all Accommodation Rates. */
         List<AccommodationRate> allAccommodationRateList = this.accommodationRateDAO.getAll();
 
         /* convert allAccommodationRateList to DTOList. */
-        List<AccommodationRateDTO> accommodationRateDTOList = this.mapper.
+        return this.mapper.
                 getAccommodationRateDTOList(allAccommodationRateList);
-
-        return accommodationRateDTOList;
     }
 
     /**
@@ -110,7 +90,7 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
      * @return List<AccommodationRateDTO> All accommodation rates for a given Accommodation Package.
      */
     @Override
-    @TMSTransaction
+    @Transactional(readOnly = true)
     public List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID)
             throws SQLException {
 
@@ -119,9 +99,7 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
                 getAllAccommodationRatesByAccommodationPackageID(accommodationPackageID);
 
         /* convert allAccommodationRatesByAccommodationPackageID to DTOList. */
-        List<AccommodationRateDTO> accommodationRateDTOList = this.mapper.
+        return this.mapper.
                 getAccommodationRateDTOList(allAccommodationRatesByAccommodationPackageID);
-
-        return accommodationRateDTOList;
     }
 }

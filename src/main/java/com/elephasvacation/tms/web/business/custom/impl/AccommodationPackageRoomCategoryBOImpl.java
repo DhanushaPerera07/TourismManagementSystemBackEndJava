@@ -26,19 +26,21 @@ package com.elephasvacation.tms.web.business.custom.impl;
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomCategoryBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomCategoryDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomCategoryDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPackageRoomCategoryBO {
 
     @Autowired
@@ -50,23 +52,8 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
     @Autowired
     private AccommodationPackageDTOMapper packageDTOMapper;
 
-    private EntityManager entityManager;
 
     @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.packageRoomCategoryDAO.setEntityManager(this.entityManager);
-    }
-
-    @Override
-    @TMSTransaction
     public AccommodationPackageRoomCategoryDTO
     createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) throws Exception {
 
@@ -85,7 +72,6 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
     }
 
     @Override
-    @TMSTransaction
     public void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO)
             throws Exception {
 
@@ -98,7 +84,7 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
     }
 
     @Override
-    @TMSTransaction
+    @Transactional(readOnly = true)
     public List<AccommodationPackageRoomCategoryDTO>
     getAllRoomCategoriesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
 

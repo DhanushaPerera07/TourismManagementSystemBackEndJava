@@ -29,18 +29,20 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
-import com.elephasvacation.tms.web.business.custom.util.transaction.TMSTransaction;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.sql.SQLException;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
     @Autowired
@@ -49,26 +51,8 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
     @Autowired
     private AccommodationPackageDTOMapper mapper;
 
-    private EntityManager entityManager;
-
-    public AccommodationPackageBOImpl() {
-    }
 
     @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.accommodationPackageDAO.setEntityManager(this.entityManager);
-    }
-
-    @Override
-    @TMSTransaction
     public Integer createAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception {
         AccommodationPackage accommodationPackage = this.accommodationPackageDAO.
                 save(this.mapper.getAccommodationPackage(accommodationPackageDTO));
@@ -76,23 +60,20 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
     }
 
     @Override
-    @TMSTransaction
     public void updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception {
         this.accommodationPackageDAO.update(this.mapper.getAccommodationPackage(accommodationPackageDTO));
     }
 
     @Override
-    @TMSTransaction
     public void deleteAccommodationPackage(Integer accommodationPackageID) throws Exception {
         this.accommodationPackageDAO.delete(accommodationPackageID);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @TMSTransaction
     public AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID) throws Exception {
-        AccommodationPackageDTO accommodationPackageDTO = this.mapper.
+        return this.mapper.
                 getAccommodationPackageDTO(this.accommodationPackageDAO.get(accommodationPackageID));
-        return accommodationPackageDTO;
     }
 
     /**
@@ -100,8 +81,8 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
      *
      * @return List<AccommodationPackageDTO> all the accommodation packages for a given accommodation ID.
      */
+    @Transactional(readOnly = true)
     @Override
-    @TMSTransaction
     public List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
             throws SQLException {
         /* Get all accommodation packages by accommodation ID. */
@@ -109,17 +90,14 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
                 getAllAccommodationPackagesByAccommodationID(accommodationID);
 
         /* convert to DTO. */
-        List<AccommodationPackageDTO> accommodationPackageDTOList = this.mapper.
+        return this.mapper.
                 getAccommodationPackageDTOList(allAccommodationPackagesByAccommodationID);
-        return accommodationPackageDTOList;
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @TMSTransaction
     public List<AccommodationPackageDTO> getAllAccommodationPackages() throws Exception {
-        List<AccommodationPackageDTO> accommodationPackageDTOList = this.mapper.
+        return this.mapper.
                 getAccommodationPackageDTOList(this.accommodationPackageDAO.getAll());
-
-        return accommodationPackageDTOList;
     }
 }
