@@ -37,9 +37,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class LogConfig {
+public class LogUtil {
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(LogConfig.class);
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(LogUtil.class);
 
     public static void initLogging() {
         createLoggingPath();
@@ -62,7 +62,9 @@ public class LogConfig {
         if (!file.exists()) {
             File fileLogFileDir = new File(System.getProperty(Commons.USER_DIR) + File.separator +
                     Commons.LOGGER_FILE_DIRECTORY);
-            fileLogFileDir.mkdir();
+            if (fileLogFileDir.mkdir()) {
+                logger.info(SuccessfulMessages.LogUtil.LOGGER_FILE_FOLDER_CREATED_SUCCESSFULLY);
+            }
             try {
                 createAFile(file);
             } catch (IOException e) {
