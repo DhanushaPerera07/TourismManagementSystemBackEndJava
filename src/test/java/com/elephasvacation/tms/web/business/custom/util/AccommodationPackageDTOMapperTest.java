@@ -27,13 +27,13 @@ import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPack
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class AccommodationPackageDTOMapperTest {
-    AccommodationPackageDTOMapper mapper = AccommodationPackageDTOMapper.instance;
-
-
+    @Autowired
+    AccommodationPackageDTOMapper mapper;
 
     @Test
     public void getAccommodationPackage() {
