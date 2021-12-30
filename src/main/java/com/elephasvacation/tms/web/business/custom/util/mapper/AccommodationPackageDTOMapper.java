@@ -36,7 +36,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AccommodationPackageDTOMapper {
-    AccommodationPackageDTOMapper instance = Mappers.getMapper(AccommodationPackageDTOMapper.class);
 
     /*  -------------------- Accommodation Package  -------------------- */
     @Mapping(source = ".", target = "accommodation", qualifiedByName = "toAccommodationQBN")
