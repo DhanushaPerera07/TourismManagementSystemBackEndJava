@@ -32,43 +32,15 @@ import com.elephasvacation.tms.web.entity.RoomType;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import static org.junit.Assert.*;
 
 public class RoomTypeDAOImplTest {
 
-    EntityManagerFactory emf = null;
-
-    EntityManager em = null;
-
     @Autowired
     RoomTypeDAO roomTypeDAO;
 
-//    @Before
-//    public void setEntityManager() {
-//        try {
-//            this.emf = HibernateUtil.getEntityManagerFactory();
-//            this.em = emf.createEntityManager();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @After
-//    public void closeEntityManager() {
-//        if (em != null) {
-//            em.close();
-//            emf.close();
-//        }
-//    }
-
     @Test
     public void save() {
-        this.em.getTransaction().begin();
-        this.roomTypeDAO.setEntityManager(this.em);
 
         RoomType standardRoomType = new RoomType("Standard");
         try {
@@ -76,15 +48,11 @@ public class RoomTypeDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 
     @Test
     public void update() {
         String std = "STD";
-        this.em.getTransaction().begin();
-        this.roomTypeDAO.setEntityManager(this.em);
 
         try {
             RoomType roomType = this.roomTypeDAO.get(1);
@@ -97,14 +65,10 @@ public class RoomTypeDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 
     @Test
     public void delete() {
-        this.em.getTransaction().begin();
-        this.roomTypeDAO.setEntityManager(this.em);
 
         try {
             RoomType roomType = this.roomTypeDAO.get(1);
@@ -116,7 +80,5 @@ public class RoomTypeDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 }

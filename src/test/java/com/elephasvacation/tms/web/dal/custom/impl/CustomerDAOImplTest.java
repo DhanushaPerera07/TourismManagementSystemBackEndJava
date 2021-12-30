@@ -33,9 +33,6 @@ import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import static org.junit.Assert.assertNotNull;
 
 public class CustomerDAOImplTest {
@@ -43,34 +40,9 @@ public class CustomerDAOImplTest {
     @Autowired
     private CustomerDAO customerDAO;
 
-    EntityManagerFactory emf = null;
-
-    EntityManager em = null;
-
-//    @Before
-//    public void setEntityManager() {
-//        try {
-//            this.emf = HibernateUtil.getEntityManagerFactory();
-//            this.em = emf.createEntityManager();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @After
-//    public void closeEntityManager() {
-//        if (em != null) {
-//            em.close();
-//            emf.close();
-//        }
-//    }
-
     @Test
     public void save() {
         assertNotNull(this.customerDAO);
-        this.em.getTransaction().begin();
-        this.customerDAO.setEntityManager(this.em);
 
         Customer customer = new Customer(
                 "John Doe",
@@ -88,7 +60,5 @@ public class CustomerDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 }

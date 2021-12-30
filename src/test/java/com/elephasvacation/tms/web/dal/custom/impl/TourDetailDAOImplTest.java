@@ -35,8 +35,6 @@ import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -50,46 +48,12 @@ public class TourDetailDAOImplTest {
     @Autowired
     private TourDetailDAO tourDetailDAO;
 
-    private EntityManagerFactory emf;
-
-    private EntityManager em;
-
-//    @Before
-//    public void setUp() {
-//        try {
-//            /* get EntityManagerFactory. */
-//            this.emf = HibernateUtil.getEntityManagerFactory();
-//            /* creates EntityManager. */
-//            this.em = emf.createEntityManager();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @After
-//    public void tearDown() {
-//        /* close the EntityManagerFactory and EntityManager. */
-//        if (em != null) {
-//            em.close();
-//            emf.close();
-//        }
-//    }
-
     @Test
     public void save() {
         assertNotNull(this.customerDAO);
         assertNotNull(this.tourDetailDAO);
 
         try {
-
-            /* begins the transaction. */
-            this.em.getTransaction().begin();
-
-            /* set EntityManager. */
-            this.customerDAO.setEntityManager(this.em);
-            this.tourDetailDAO.setEntityManager(this.em);
-
             Customer customer = this.customerDAO.get(1);
 
             /* creates a new Employee Credential object. */
@@ -114,8 +78,6 @@ public class TourDetailDAOImplTest {
             /* print the generated ID on the terminal. */
             System.out.println("Generated Tour Detail ID: " + generatedTourDetailId);
 
-            /* committing the transaction. */
-            this.em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }

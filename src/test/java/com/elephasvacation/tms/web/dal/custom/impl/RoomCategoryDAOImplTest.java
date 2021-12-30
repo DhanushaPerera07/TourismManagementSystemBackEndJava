@@ -32,9 +32,6 @@ import com.elephasvacation.tms.web.entity.RoomCategory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import static org.junit.Assert.*;
 
 public class RoomCategoryDAOImplTest {
@@ -42,33 +39,8 @@ public class RoomCategoryDAOImplTest {
     @Autowired
     RoomCategoryDAO roomCategoryDAO;
 
-    EntityManagerFactory emf = null;
-
-    EntityManager em = null;
-
-//    @Before
-//    public void setEntityManager() {
-//        try {
-//            this.emf = HibernateUtil.getEntityManagerFactory();
-//            this.em = emf.createEntityManager();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @After
-//    public void closeEntityManager() {
-//        if (em != null) {
-//            em.close();
-//            emf.close();
-//        }
-//    }
-
     @Test
     public void save() {
-        this.em.getTransaction().begin();
-        this.roomCategoryDAO.setEntityManager(this.em);
 
         RoomCategory singleRoomCategory = new RoomCategory("Single");
         try {
@@ -76,15 +48,11 @@ public class RoomCategoryDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 
     @Test
     public void update() {
         String single = "SGL";
-        this.em.getTransaction().begin();
-        this.roomCategoryDAO.setEntityManager(this.em);
 
         try {
             RoomCategory roomCategory = this.roomCategoryDAO.get(1);
@@ -97,14 +65,10 @@ public class RoomCategoryDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 
     @Test
     public void delete() {
-        this.em.getTransaction().begin();
-        this.roomCategoryDAO.setEntityManager(this.em);
 
         try {
             RoomCategory roomCategory = this.roomCategoryDAO.get(1);
@@ -117,6 +81,5 @@ public class RoomCategoryDAOImplTest {
             e.printStackTrace();
         }
 
-        this.em.getTransaction().commit();
     }
 }

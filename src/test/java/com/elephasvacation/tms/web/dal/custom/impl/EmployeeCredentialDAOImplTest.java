@@ -30,9 +30,6 @@ import com.elephasvacation.tms.web.entity.EmployeeCredential;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import static org.junit.Assert.assertNotNull;
 
 public class EmployeeCredentialDAOImplTest {
@@ -43,42 +40,9 @@ public class EmployeeCredentialDAOImplTest {
     @Autowired
     private EmployeeCredentialDAO employeeCredentialDAO;
 
-    private EntityManagerFactory emf;
-
-    private EntityManager em;
-
-//    @Before
-//    public void setUp() {
-//        try {
-//            /* get EntityManagerFactory. */
-//            this.emf = HibernateUtil.getEntityManagerFactory();
-//            /* creates EntityManager. */
-//            this.em = emf.createEntityManager();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @After
-//    public void tearDown() {
-//        /* close the EntityManagerFactory and EntityManager. */
-//        if (em != null) {
-//            em.close();
-//            emf.close();
-//        }
-//    }
-
     @Test
     public void save() {
         try {
-            /* begins the transaction. */
-            this.em.getTransaction().begin();
-
-            /* set EntityManager. */
-            this.employeeDAO.setEntityManager(this.em);
-            this.employeeCredentialDAO.setEntityManager(this.em);
-
             Employee john = this.employeeDAO.get(new Integer("1"));
 
             assertNotNull(john);
@@ -95,8 +59,6 @@ public class EmployeeCredentialDAOImplTest {
             /* print the generated ID on the terminal. */
             System.out.println("Generated Employee Credential ID: " + employeeCredentialId);
 
-            /* committing the transaction. */
-            this.em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
