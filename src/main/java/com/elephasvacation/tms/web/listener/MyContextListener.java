@@ -31,12 +31,15 @@ import com.elephasvacation.tms.web.commonConstant.FailedMessages;
 import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
 import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
 import com.elephasvacation.tms.web.util.LogUtil;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManagerFactory;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+//import javax.servlet.ServletContextEvent;
+//import javax.servlet.ServletContextListener;
+//import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class MyContextListener implements ServletContextListener {
