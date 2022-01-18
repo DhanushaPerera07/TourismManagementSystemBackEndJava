@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom.util;
+package com.elephasvacation.tms.web.business.custom.util.mapper;
 
-import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
-import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
+import com.elephasvacation.tms.web.dto.AccommodationPackageRoomCategoryDTO;
+import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -33,23 +33,24 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationPackageRoomTypeDTOMapper {
-    AccommodationPackageRoomTypeDTOMapper instance = Mappers.getMapper(AccommodationPackageRoomTypeDTOMapper.class);
+public interface AccommodationPackageRoomCategoryDTOMapper {
+    AccommodationPackageRoomCategoryDTOMapper instance =
+            Mappers.getMapper(AccommodationPackageRoomCategoryDTOMapper.class);
 
     @Mappings(value = {
-            @Mapping( source = "id.accommodationPackageId", target = "accommodationPackageId"),
-            @Mapping( source = "id.roomTypeId", target = "roomTypeId")
+            @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId"),
+            @Mapping(source = "id.roomCategoryId", target = "roomCategoryId")
     })
-    AccommodationPackageRoomTypeDTO
-    getAccommodationPackageRoomTypeDTO(AccommodationPackageRoomType accommodationPackageRoomType);
+    AccommodationPackageRoomCategoryDTO
+    getAccommodationPackageRoomCategoryDTO(AccommodationPackageRoomCategory packageRoomCategory);
 
-    @Mappings( value = {
-            @Mapping( source = "accommodationPackageId", target = "id.accommodationPackageId"),
-            @Mapping( source = "roomTypeId", target = "id.roomTypeId")
+    @Mappings(value = {
+            @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId"),
+            @Mapping(source = "roomCategoryId", target = "id.roomCategoryId")
     })
-    AccommodationPackageRoomType
-    getAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO);
+    AccommodationPackageRoomCategory
+    getAccommodationPackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
 
-    List<AccommodationPackageRoomTypeDTO>
-    getAccommodationPackageRoomTypeDTOList(List<AccommodationPackageRoomType> accommodationPackageRoomTypeList);
+    List<AccommodationPackageRoomCategoryDTO>
+    getAccommodationPackageRoomCategoryDTOList(List<AccommodationPackageRoomCategory> packageRoomCategoryList);
 }

@@ -29,12 +29,12 @@ import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Component
+@Repository
 public class AccommodationPackageMealPlanDAOImpl
         extends CrudDAOImpl<AccommodationPackageMealPlan, AccommodationPackageMealPlanId>
         implements AccommodationPackageMealPlanDAO {

@@ -30,9 +30,9 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 import com.elephasvacation.tms.web.dal.CrudDAOImpl;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.entity.MealPlan;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class MealPlanDAOImpl extends CrudDAOImpl<MealPlan, Integer> implements MealPlanDAO {
 
 }

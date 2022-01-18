@@ -33,10 +33,11 @@ package com.elephasvacation.tms.web.exception;
 import com.elephasvacation.tms.web.dto.ErrorDTO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ResponseExceptionUtil {

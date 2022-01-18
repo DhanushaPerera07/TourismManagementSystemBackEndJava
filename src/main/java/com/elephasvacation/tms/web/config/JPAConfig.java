@@ -23,10 +23,73 @@
  */
 package com.elephasvacation.tms.web.config;
 
+import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+
+@EnableTransactionManagement
 @Configuration
-@ImportResource("classpath:/JpaXmlConfig.xml")
+@PropertySource("classpath:/application.properties")
 public class JPAConfig {
+
+    @Autowired
+    private Environment env;
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
+                                                                       JpaVendorAdapter jpaVendorAdapter) {
+        LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
+        lcemfb.setPersistenceUnitName(HibernateConstant.JPA.PERSISTENCE_UNIT_NAME);
+        lcemfb.setDataSource(dataSource);
+        lcemfb.setJpaVendorAdapter(jpaVendorAdapter);
+        lcemfb.setPackagesToScan("com.elephasvacation.tms.web.entity");
+        return lcemfb;
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+
+        /* Set dbcp related configurations. */
+        dataSource.setDriverClassName(env.getRequiredProperty("dbcp.jdbc.driver"));
+        dataSource.setUrl(env.getRequiredProperty("dbcp.jdbc.url"));
+        dataSource.setUsername(env.getRequiredProperty("dbcp.jdbc.user"));
+        dataSource.setPassword(env.getRequiredProperty("dbcp.jdbc.password"));
+        dataSource.setInitialSize(env.getRequiredProperty("dbcp.initial_size", Integer.class));
+        dataSource.setMaxTotal(env.getRequiredProperty("dbcp.max_total", Integer.class));
+        return dataSource;
+    }
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+        /* Show sql */
+        adapter.setShowSql(env.getRequiredProperty("jpa.show_sql", Boolean.class));
+        /* Set whether to generate DDL after the EntityManagerFactory has been initialized,
+        creating/updating all relevant tables. */
+        adapter.setGenerateDdl(env.getRequiredProperty("jpa.generated_ddl", Boolean.class));
+        /* Set dialect */
+        adapter.setDatabasePlatform(env.getRequiredProperty("jpa.dialect"));
+        return adapter;
+    }
+
+    /* transactionManager */
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
+
 }

@@ -23,56 +23,25 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.entity.MealPlan;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.*;
 
 public class MealPlanDAOImplTest {
 
-    EntityManagerFactory emf = null;
-    EntityManager em = null;
-
-    MealPlanDAO mealPlanDAO = DAOFactory.getInstance().getDAO(DAOTypes.MEAL_PLAN);
-
-    @Before
-    public void setEntityManager() {
-        try {
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void closeEntityManager() {
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+    @Autowired
+    MealPlanDAO mealPlanDAO;
 
     @Test
     public void save() {
         MealPlan roomOnlyMealPlan = new MealPlan("Room Only");
 
         try {
-            this.em.getTransaction().begin();
-            this.mealPlanDAO.setEntityManager(this.em);
             Integer roomOnlyMealPlanId = mealPlanDAO.save(roomOnlyMealPlan).getId();
             assertNotNull(roomOnlyMealPlanId);
-            this.em.getTransaction().commit();
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -83,9 +52,6 @@ public class MealPlanDAOImplTest {
     @Test
     public void update() {
         try {
-            this.em.getTransaction().begin();
-            this.mealPlanDAO.setEntityManager(this.em);
-
             // get the database record.
             MealPlan roomOnlyMealPlan = mealPlanDAO.get(1);
             assertNotNull(roomOnlyMealPlan);
@@ -93,7 +59,6 @@ public class MealPlanDAOImplTest {
             this.mealPlanDAO.update(roomOnlyMealPlan);
 
             MealPlan roomOnlyMealPlanAfter = mealPlanDAO.get(1);
-            this.em.getTransaction().commit();
             assertEquals("RO", roomOnlyMealPlanAfter.getMealPlan());
 
         } catch (Exception exception) {
@@ -104,14 +69,11 @@ public class MealPlanDAOImplTest {
     @Test
     public void delete() {
         try {
-            this.em.getTransaction().begin();
-            this.mealPlanDAO.setEntityManager(this.em);
             MealPlan mealPlan = this.mealPlanDAO.get(1);
             assertNotNull(mealPlan);
             this.mealPlanDAO.delete(1);
             MealPlan mealPlanAfter = this.mealPlanDAO.get(1);
             assertNull(mealPlanAfter);
-            this.em.getTransaction().commit();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,12 +83,9 @@ public class MealPlanDAOImplTest {
     @Test
     public void get() {
         try {
-            this.em.getTransaction().begin();
-            this.mealPlanDAO.setEntityManager(this.em);
             MealPlan mealPlan = this.mealPlanDAO.get(1);
             /*if there is a record in the database, assertion will be passed. */
             assertNotNull(mealPlan);
-            this.em.getTransaction().commit();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -21,23 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom.util;
+package com.elephasvacation.tms.web.business.custom.util.mapper;
 
-import com.elephasvacation.tms.web.dto.CustomerDTO;
-import com.elephasvacation.tms.web.entity.Customer;
+import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
+import com.elephasvacation.tms.web.entity.EmployeeCredential;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface CustomerDTOMapper {
-    CustomerDTOMapper instance = Mappers.getMapper(CustomerDTOMapper.class);
+public interface EmployeeCredentialDTOMapper {
+    EmployeeCredentialDTOMapper instance = Mappers.getMapper(EmployeeCredentialDTOMapper.class);
 
-    /*  -------------------- Customer  -------------------- */
-    Customer getCustomer(CustomerDTO customerDTO);
+    EmployeeCredential getEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO);
 
-    CustomerDTO getCustomerDTO(Customer customer);
+    EmployeeCredentialDTO getEmployeeCredentialDTO(EmployeeCredential employeeCredential);
 
-    List<CustomerDTO> getCustomerDTOs(List<Customer> customerList);
+    List<EmployeeCredentialDTO> getEmployeeCredentialDTOList(List<EmployeeCredential> employeeCredential);
 }

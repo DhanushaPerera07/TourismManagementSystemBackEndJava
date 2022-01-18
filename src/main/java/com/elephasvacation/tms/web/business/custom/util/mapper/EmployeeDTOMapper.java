@@ -21,24 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom.util;
+package com.elephasvacation.tms.web.business.custom.util.mapper;
 
-import com.elephasvacation.tms.web.dto.RoomTypeDTO;
-import com.elephasvacation.tms.web.entity.RoomType;
+import com.elephasvacation.tms.web.dto.EmployeeDTO;
+import com.elephasvacation.tms.web.entity.Employee;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface RoomTypeDTOMapper {
+public interface EmployeeDTOMapper {
+    EmployeeDTOMapper instance = Mappers.getMapper(EmployeeDTOMapper.class);
 
-    RoomTypeDTOMapper instance = Mappers.getMapper(RoomTypeDTOMapper.class);
+    /* -------------------- Employee. -------------------- */
+    Employee getEmployee(EmployeeDTO employeeDTO);
 
-    /*  -------------------- Room Type  -------------------- */
-    RoomType getRoomType(RoomTypeDTO roomTypeDTO);
+    EmployeeDTO getEmployeeDTO(Employee employee);
 
-    RoomTypeDTO getRoomTypeDTO(RoomType roomType);
-
-    List<RoomTypeDTO> getRoomTypeDTOs(List<RoomType> roomTypeList);
+    List<EmployeeDTO> getEmployeeDTOs(List<Employee> employeeList);
 }

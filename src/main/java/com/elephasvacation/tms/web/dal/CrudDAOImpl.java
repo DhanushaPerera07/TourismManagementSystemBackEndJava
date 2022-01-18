@@ -26,7 +26,7 @@ package com.elephasvacation.tms.web.dal;
 import com.elephasvacation.tms.web.entity.SuperEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -34,6 +34,7 @@ import java.util.List;
 public class CrudDAOImpl<T extends SuperEntity<Serializable>, K extends Serializable> implements CrudDAO<T, K> {
 
     private final Class<T> entityClass;
+    @PersistenceContext
     private EntityManager entityManager;
 
     public CrudDAOImpl() {
@@ -44,13 +45,8 @@ public class CrudDAOImpl<T extends SuperEntity<Serializable>, K extends Serializ
     /**
      * This method is used to pass the EntityManager to the lower level classes that extend the CrudDAOImpl class.
      */
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return this.entityManager;
-    }
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 
     @Override
@@ -78,8 +74,8 @@ public class CrudDAOImpl<T extends SuperEntity<Serializable>, K extends Serializ
 
     @Override
     public List<T> getAll() throws Exception {
-        TypedQuery<T> query =
-                this.entityManager.createQuery("SELECT " + (this.entityClass.getName()), this.entityClass);
-        return query.getResultList();
+        List<T> resultList = (List<T>) this.entityManager.
+                createQuery("SELECT e FROM " + this.entityClass.getName() + " e").getResultList();
+        return resultList;
     }
 }

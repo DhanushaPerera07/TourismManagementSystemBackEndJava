@@ -21,22 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom.util;
+package com.elephasvacation.tms.web.business.custom.util.mapper;
 
-import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
-import com.elephasvacation.tms.web.entity.EmployeeCredential;
+import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
+import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface EmployeeCredentialDTOMapper {
-    EmployeeCredentialDTOMapper instance = Mappers.getMapper(EmployeeCredentialDTOMapper.class);
+public interface AccommodationPackageMealPlanDTOMapper {
+    AccommodationPackageMealPlanDTOMapper instance = Mappers.getMapper(AccommodationPackageMealPlanDTOMapper.class);
 
-    EmployeeCredential getEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO);
+    @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId")
+    @Mapping(source = "id.mealPlanId", target = "mealPlanId")
+    AccommodationPackageMealPlanDTO
+    getAccommodationPackageMealPlanDTO(AccommodationPackageMealPlan accommodationPackageMealPlan);
 
-    EmployeeCredentialDTO getEmployeeCredentialDTO(EmployeeCredential employeeCredential);
 
-    List<EmployeeCredentialDTO> getEmployeeCredentialDTOList(List<EmployeeCredential> employeeCredential);
+    @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId")
+    @Mapping(source = "mealPlanId", target = "id.mealPlanId")
+    AccommodationPackageMealPlan
+    getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
+
+    List<AccommodationPackageMealPlanDTO>
+    getAccommodationPackageMealPlanDTOList(List<AccommodationPackageMealPlan> accommodationPackageMealPlanList);
+
 }

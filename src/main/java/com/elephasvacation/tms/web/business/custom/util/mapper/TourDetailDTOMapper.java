@@ -21,32 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom.util;
+package com.elephasvacation.tms.web.business.custom.util.mapper;
 
-import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
-import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
+import com.elephasvacation.tms.web.dto.TourDetailDTO;
+import com.elephasvacation.tms.web.entity.TourDetail;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationPackageMealPlanDTOMapper {
-    AccommodationPackageMealPlanDTOMapper instance = Mappers.getMapper(AccommodationPackageMealPlanDTOMapper.class);
+public interface TourDetailDTOMapper {
+    TourDetailDTOMapper instance = Mappers.getMapper(TourDetailDTOMapper.class);
 
-    @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId")
-    @Mapping(source = "id.mealPlanId", target = "mealPlanId")
-    AccommodationPackageMealPlanDTO
-    getAccommodationPackageMealPlanDTO(AccommodationPackageMealPlan accommodationPackageMealPlan);
+    /*  -------------------- Tour-Details.  -------------------- */
+    TourDetail getTourDetail(TourDetailDTO tourDetailsDTO);
 
+    TourDetailDTO getTourDetailDTO(TourDetail tourDetails);
 
-    @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId")
-    @Mapping(source = "mealPlanId", target = "id.mealPlanId")
-    AccommodationPackageMealPlan
-    getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
-
-    List<AccommodationPackageMealPlanDTO>
-    getAccommodationPackageMealPlanDTOList(List<AccommodationPackageMealPlan> accommodationPackageMealPlanList);
-
+    List<TourDetailDTO> getTourDetailDTOList(List<TourDetail> tourDetailList);
 }

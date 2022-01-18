@@ -28,75 +28,56 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
-import com.elephasvacation.tms.web.business.custom.util.CustomerDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
+import com.elephasvacation.tms.web.business.custom.util.mapper.CustomerDTOMapper;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
-import org.springframework.stereotype.Component;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class CustomerBOImpl implements CustomerBO {
 
-    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
-    private final CustomerDTOMapper mapper = CustomerDTOMapper.instance;
-    private EntityManager entityManager;
+    @Autowired
+    private CustomerDAO customerDAO;
 
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.customerDAO.setEntityManager(this.entityManager);
-    }
+    @Autowired
+    private CustomerDTOMapper mapper;
 
     @Override
     public Integer createCustomer(CustomerDTO customerDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* save. */
-        Integer generatedCustomerId = this.customerDAO.save(mapper.getCustomer(customerDTO)).getId();
-        this.entityManager.getTransaction().commit();
-        return generatedCustomerId;
+        return this.customerDAO.save(mapper.getCustomer(customerDTO)).getId();
     }
 
     @Override
     public void updateCustomer(CustomerDTO customerDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* update. */
         this.customerDAO.update(mapper.getCustomer(customerDTO));
-        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteCustomer(int customerID) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* delete. */
         this.customerDAO.delete(customerID);
-        this.entityManager.getTransaction().commit();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CustomerDTO getCustomerByID(int customerID) throws Exception {
-        this.entityManager.getTransaction().begin();
-
         /* get customer by customer ID. */
-        CustomerDTO customerDTO = this.mapper.getCustomerDTO(this.customerDAO.get(customerID));
-
-        this.entityManager.getTransaction().commit();
-        return customerDTO;
+        return this.mapper.getCustomerDTO(this.customerDAO.get(customerID));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CustomerDTO> getAllCustomers() throws Exception {
-        this.entityManager.getTransaction().begin();
-
         /* get all customers. */
-        List<CustomerDTO> customerDTOList = this.mapper.getCustomerDTOs(this.customerDAO.getAll());
-        
-        this.entityManager.getTransaction().commit();
-        return customerDTOList;
+        return this.mapper.getCustomerDTOs(this.customerDAO.getAll());
     }
 }
