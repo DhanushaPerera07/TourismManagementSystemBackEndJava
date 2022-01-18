@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom.util;
+package com.elephasvacation.tms.web.business.custom.util.mapper;
 
+import com.elephasvacation.tms.web.AppInitializer;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
@@ -35,7 +36,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AccommodationPackageDTOMapper {
-    AccommodationPackageDTOMapper instance = Mappers.getMapper(AccommodationPackageDTOMapper.class);
 
     /*  -------------------- Accommodation Package  -------------------- */
     @Mapping(source = ".", target = "accommodation", qualifiedByName = "toAccommodationQBN")
@@ -43,7 +43,7 @@ public interface AccommodationPackageDTOMapper {
 
     @Named(value = "toAccommodationQBN")
     default Accommodation toAccommodation(AccommodationPackageDTO accommodationPackageDTO) {
-        Accommodation accommodation = new Accommodation();
+        Accommodation accommodation = AppInitializer.getContext().getBean(Accommodation.class);
         accommodation.setId(accommodationPackageDTO.getAccommodationId());
         return accommodation;
     }

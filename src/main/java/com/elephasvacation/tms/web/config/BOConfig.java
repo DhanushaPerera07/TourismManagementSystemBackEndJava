@@ -23,8 +23,6 @@
  */
 package com.elephasvacation.tms.web.config;
 
-import com.elephasvacation.tms.web.business.BOFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
@@ -34,12 +32,10 @@ import org.springframework.context.annotation.Configuration;
         @ComponentScan(basePackages = {
                 "com.elephasvacation.tms.web.business.custom.impl",
                 "com.elephasvacation.tms.web.dto"
+        }),
+        @ComponentScan(basePackages = {
+                "com.elephasvacation.tms.web.business.custom.util.mapper"
         })
 })
 public class BOConfig {
-
-    @Bean
-    public BOFactory boFactory() {
-        return BOFactory.getInstance();
-    }
 }

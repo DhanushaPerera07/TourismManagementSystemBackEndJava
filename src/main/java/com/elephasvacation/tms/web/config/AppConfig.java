@@ -24,6 +24,7 @@
 package com.elephasvacation.tms.web.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
 @Configuration
@@ -32,5 +33,6 @@ import org.springframework.context.annotation.Import;
         JPAConfig.class,
         BOConfig.class
 })
+@EnableAspectJAutoProxy
 public class AppConfig {
 }

@@ -23,45 +23,17 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.entity.Accommodation;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class AccommodationDAOImplTest {
 
-    EntityManagerFactory emf = null;
-    EntityManager em = null;
-
-    AccommodationDAOImpl accommodationDAO = DAOFactory.getInstance().getDAO(DAOTypes.ACCOMMODATION);
-
-    @Before
-    public void setEntityManager() {
-        try {
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void closeEntityManager() {
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+    @Autowired
+    AccommodationDAOImpl accommodationDAO;
 
     @Test
     public void save() {
@@ -78,11 +50,8 @@ public class AccommodationDAOImplTest {
                 "None");
 
         try {
-            em.getTransaction().begin();
-            accommodationDAO.setEntityManager(em);
             Accommodation newAccommodation = accommodationDAO.save(accommodation);
             assertNotNull(newAccommodation.getId());
-            em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,10 +75,7 @@ public class AccommodationDAOImplTest {
                 "None");
 
         try {
-            em.getTransaction().begin();
-            accommodationDAO.setEntityManager(em);
             accommodationDAO.update(accommodation);
-            em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,11 +91,7 @@ public class AccommodationDAOImplTest {
         assertNotNull(accommodationDAO);
 
         try {
-            em.getTransaction().begin();
-            accommodationDAO.setEntityManager(em);
             Accommodation accommodation = accommodationDAO.get(new Integer("4"));
-
-            em.getTransaction().commit();
 
             assertEquals(new Integer("4"), accommodation.getId());
             assertEquals("ABC hotel", accommodation.getName());

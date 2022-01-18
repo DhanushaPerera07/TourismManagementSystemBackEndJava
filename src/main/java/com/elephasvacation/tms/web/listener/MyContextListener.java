@@ -30,13 +30,16 @@ import com.elephasvacation.tms.web.AppInitializer;
 import com.elephasvacation.tms.web.commonConstant.FailedMessages;
 import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
 import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
-import com.elephasvacation.tms.web.util.LogConfig;
+import com.elephasvacation.tms.web.util.LogUtil;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManagerFactory;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+//import javax.servlet.ServletContextEvent;
+//import javax.servlet.ServletContextListener;
+//import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class MyContextListener implements ServletContextListener {
@@ -53,8 +56,6 @@ public class MyContextListener implements ServletContextListener {
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        LogConfig.initLogging();
-
         /* Initialize AppInitializer.java */
         try {
             Class.forName(AppInitializer.class.getName());
@@ -62,9 +63,14 @@ public class MyContextListener implements ServletContextListener {
             logger.error(FailedMessages.Spring.FAILED_LOADING_SPRING_CONTAINER, e);
         }
 
+        /* Initialize Logging. */
+        LogUtil.initLogging();
+
+        /* get EntityManagerFactory instance from the Spring context. */
         EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
+
         // let's set an attribute for EntityManagerFactory, and pass the EMF object.
-        sce.getServletContext().setAttribute(HibernateConstant.ENTITY_MANAGER_FACTORY, entityManagerFactory);
+        sce.getServletContext().setAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY, entityManagerFactory);
         logger.info(SuccessfulMessages.ServletContext.CONTEXT_INITIALIZED_SUCCESSFULLY);
 
     }
@@ -75,7 +81,10 @@ public class MyContextListener implements ServletContextListener {
      */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
+//        EntityManagerFactory entityManagerFactory = AppInitializer.getContext().getBean(EntityManagerFactory.class);
+
+        EntityManagerFactory entityManagerFactory = (EntityManagerFactory) sce.getServletContext().
+                getAttribute(HibernateConstant.JPA.ENTITY_MANAGER_FACTORY);
 
         /* close EntityManagerFactory. */
         if (entityManagerFactory != null) {

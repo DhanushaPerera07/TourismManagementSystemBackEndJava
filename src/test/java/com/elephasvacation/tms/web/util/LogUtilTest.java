@@ -7,15 +7,15 @@ package com.elephasvacation.tms.web.util;
 
 import org.junit.Test;
 
-public class LogConfigTest {
+public class LogUtilTest {
 
     @Test
     public void initLogging() {
-        LogConfig.initLogging();
+        LogUtil.initLogging();
     }
 
     @Test
     public void createLoggingPath() {
-        LogConfig.createLoggingPath();
+        LogUtil.createLoggingPath();
     }
 }

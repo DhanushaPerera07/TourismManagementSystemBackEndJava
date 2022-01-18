@@ -27,20 +27,14 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.TourDetail;
 import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -48,32 +42,11 @@ import static org.junit.Assert.assertNotNull;
 
 public class TourDetailDAOImplTest {
 
-    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
-    private final TourDetailDAO tourDetailDAO = DAOFactory.getInstance().getDAO(DAOTypes.TOUR_DETAIL);
-    private EntityManagerFactory emf;
-    private EntityManager em;
+    @Autowired
+    private CustomerDAO customerDAO;
 
-    @Before
-    public void setUp() {
-        try {
-            /* get EntityManagerFactory. */
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            /* creates EntityManager. */
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void tearDown() {
-        /* close the EntityManagerFactory and EntityManager. */
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+    @Autowired
+    private TourDetailDAO tourDetailDAO;
 
     @Test
     public void save() {
@@ -81,14 +54,6 @@ public class TourDetailDAOImplTest {
         assertNotNull(this.tourDetailDAO);
 
         try {
-
-            /* begins the transaction. */
-            this.em.getTransaction().begin();
-
-            /* set EntityManager. */
-            this.customerDAO.setEntityManager(this.em);
-            this.tourDetailDAO.setEntityManager(this.em);
-
             Customer customer = this.customerDAO.get(1);
 
             /* creates a new Employee Credential object. */
@@ -113,8 +78,6 @@ public class TourDetailDAOImplTest {
             /* print the generated ID on the terminal. */
             System.out.println("Generated Tour Detail ID: " + generatedTourDetailId);
 
-            /* committing the transaction. */
-            this.em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }

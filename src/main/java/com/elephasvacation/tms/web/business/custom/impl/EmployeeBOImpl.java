@@ -28,81 +28,64 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeBO;
-import com.elephasvacation.tms.web.business.custom.util.EmployeeDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
+import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeDTOMapper;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
 import com.elephasvacation.tms.web.entity.Employee;
-import org.springframework.stereotype.Component;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class EmployeeBOImpl implements EmployeeBO {
 
-    private final EmployeeDAO employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
-    private final EmployeeDTOMapper mapper = EmployeeDTOMapper.instance;
-    private EntityManager entityManager;
+    @Autowired
+    private EmployeeDAO employeeDAO;
 
-
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.employeeDAO.setEntityManager(this.entityManager);
-    }
+    @Autowired
+    private EmployeeDTOMapper mapper;
 
     @Override
     public Integer createEmployee(EmployeeDTO employeeDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* save. */
         Integer generatedEmployeeId = this.employeeDAO.save(mapper.getEmployee(employeeDTO)).getId();
-        this.entityManager.getTransaction().commit();
         return generatedEmployeeId;
     }
 
     @Override
     public void updateEmployee(EmployeeDTO employeeDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* update. */
         this.employeeDAO.update(mapper.getEmployee(employeeDTO));
-        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteEmployee(int employeeID) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* delete. */
         this.employeeDAO.delete(employeeID);
-        this.entityManager.getTransaction().commit();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public EmployeeDTO getEmployeeByID(int employeeID) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* get employee by ID. */
         Employee employee = this.employeeDAO.get(employeeID);
 
         /* convert employee to DTO. */
-        EmployeeDTO employeeDTO = this.mapper.getEmployeeDTO(employee);
-
-        this.entityManager.getTransaction().commit();
-        return employeeDTO;
+        return this.mapper.getEmployeeDTO(employee);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<EmployeeDTO> getAllEmployees() throws Exception {
-        this.entityManager.getTransaction().begin();
         /* get all employees. */
         List<Employee> employeeList = this.employeeDAO.getAll();
 
         /* convert employeeList to DTOList. */
-        List<EmployeeDTO> employeeDTOList = this.mapper.getEmployeeDTOs(employeeList);
-
-        this.entityManager.getTransaction().commit();
-        return employeeDTOList;
+        return this.mapper.getEmployeeDTOs(employeeList);
     }
 }

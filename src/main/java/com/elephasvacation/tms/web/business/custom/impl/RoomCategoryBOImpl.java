@@ -28,85 +28,68 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.RoomCategoryBO;
-import com.elephasvacation.tms.web.business.custom.util.RoomCategoryDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
+import com.elephasvacation.tms.web.business.custom.util.mapper.RoomCategoryDTOMapper;
 import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
 import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
-import org.springframework.stereotype.Component;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class RoomCategoryBOImpl implements RoomCategoryBO {
 
-    private final RoomCategoryDAO roomCategoryDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_CATEGORY);
-    private final RoomCategoryDTOMapper mapper = RoomCategoryDTOMapper.instance;
-    private EntityManager entityManager;
+    @Autowired
+    private RoomCategoryDAO roomCategoryDAO;
 
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.roomCategoryDAO.setEntityManager(this.entityManager);
-    }
+    @Autowired
+    private RoomCategoryDTOMapper mapper;
 
     @Override
     public Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert DTO to entity. */
         RoomCategory roomCategory = this.mapper.getRoomCategory(roomCategoryDTO);
 
         /* save. */
-        Integer generatedRoomCategoryID = this.roomCategoryDAO.save(roomCategory).getId();
-
-        this.entityManager.getTransaction().commit();
-        return generatedRoomCategoryID;
+        return this.roomCategoryDAO.save(roomCategory).getId();
     }
 
     @Override
     public void updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
         /* update. */
         this.roomCategoryDAO.update(this.mapper.getRoomCategory(roomCategoryDTO));
-        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception {
-        this.entityManager.getTransaction().begin();
         this.roomCategoryDAO.delete(roomCategoryID);
-        this.entityManager.getTransaction().commit();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public RoomCategoryDTO getRoomCategoryByID(Integer roomCategoryID) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get room category by ID. */
         RoomCategory roomCategory = this.roomCategoryDAO.get(roomCategoryID);
 
         /* convert entity to DTO. */
-        RoomCategoryDTO roomCategoryDTO = this.mapper.getRoomCategoryDTO(roomCategory);
-
-        this.entityManager.getTransaction().commit();
-        return roomCategoryDTO;
+        return this.mapper.getRoomCategoryDTO(roomCategory);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<RoomCategoryDTO> getAllRoomCategories() throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get all Room Categories. */
         List<RoomCategory> roomCategoryList = this.roomCategoryDAO.getAll();
 
         /* convert roomCategoryList to DTOList. */
-        List<RoomCategoryDTO> roomCategoryDTOList = this.mapper.getRoomCategoryDTOs(roomCategoryList);
-        this.entityManager.getTransaction().commit();
-        return roomCategoryDTOList;
+        return this.mapper.getRoomCategoryDTOs(roomCategoryList);
     }
 }

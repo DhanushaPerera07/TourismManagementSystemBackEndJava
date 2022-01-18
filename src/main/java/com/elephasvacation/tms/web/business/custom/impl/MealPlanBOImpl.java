@@ -28,86 +28,67 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.MealPlanBO;
-import com.elephasvacation.tms.web.business.custom.util.MealPlanDTOMapper;
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
+import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
 import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.MealPlan;
-import org.springframework.stereotype.Component;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Component
+@NoArgsConstructor
+@Transactional
+@Service
 public class MealPlanBOImpl implements MealPlanBO {
 
-    private final MealPlanDAO mealPlanDAO = DAOFactory.getInstance()
-            .getDAO(DAOTypes.MEAL_PLAN);
-    private final MealPlanDTOMapper mapper = MealPlanDTOMapper.instance;
-    private EntityManager entityManager;
+    @Autowired
+    private MealPlanDAO mealPlanDAO;
 
-    @Override
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-
-        /* Set Entity Manager to the DAL. */
-        this.mealPlanDAO.setEntityManager(this.entityManager);
-    }
+    @Autowired
+    private MealPlanDTOMapper mapper;
 
     @Override
     public Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* convert DTO to entity. */
         MealPlan mealPlan = this.mapper.getMealPlan(mealPlanDTO);
 
         /* save. */
-        Integer generatedMealPlanId = this.mealPlanDAO.save(mealPlan).getId();
-
-        this.entityManager.getTransaction().commit();
-        return generatedMealPlanId;
+        return this.mealPlanDAO.save(mealPlan).getId();
     }
 
     @Override
     public void updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
-        this.entityManager.getTransaction().begin();
         this.mealPlanDAO.update(this.mapper.getMealPlan(mealPlanDTO));
-        this.entityManager.getTransaction().commit();
     }
 
     @Override
     public void deleteMealPlan(Integer mealPlanID) throws Exception {
-        this.entityManager.getTransaction().begin();
         this.mealPlanDAO.delete(mealPlanID);
-        this.entityManager.getTransaction().commit();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public MealPlanDTO getMealPlanByID(Integer mealPlanID) throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get meal plan by ID. */
         MealPlan mealPlan = this.mealPlanDAO.get(mealPlanID);
 
         /* convert entity to DTO. */
-        MealPlanDTO mealPlanDTO = this.mapper.getMealPlanDTO(mealPlan);
-
-        this.entityManager.getTransaction().commit();
-        return mealPlanDTO;
+        return this.mapper.getMealPlanDTO(mealPlan);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<MealPlanDTO> getAllMealPlans() throws Exception {
-        this.entityManager.getTransaction().begin();
 
         /* get all meal plans. */
         List<MealPlan> mealPlanList = this.mealPlanDAO.getAll();
 
         /* convert mealPlanList to DTOList. */
-        List<MealPlanDTO> mealPlanDTOList = this.mapper.getMealPlanDTOList(mealPlanList);
-
-        this.entityManager.getTransaction().commit();
-        return mealPlanDTOList;
+        return this.mapper.getMealPlanDTOList(mealPlanList);
     }
 }

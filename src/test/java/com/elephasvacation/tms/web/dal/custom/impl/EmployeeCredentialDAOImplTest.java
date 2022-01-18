@@ -23,62 +23,26 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
 import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertNotNull;
 
 public class EmployeeCredentialDAOImplTest {
 
-    private final EmployeeDAO employeeDAO = DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE);
-    private final EmployeeCredentialDAO employeeCredentialDAO =
-            DAOFactory.getInstance().getDAO(DAOTypes.EMPLOYEE_CREDENTIAL);
-    private EntityManagerFactory emf;
-    private EntityManager em;
+    @Autowired
+    private EmployeeDAO employeeDAO;
 
-    @Before
-    public void setUp() {
-        try {
-            /* get EntityManagerFactory. */
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            /* creates EntityManager. */
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void tearDown() {
-        /* close the EntityManagerFactory and EntityManager. */
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+    @Autowired
+    private EmployeeCredentialDAO employeeCredentialDAO;
 
     @Test
     public void save() {
         try {
-            /* begins the transaction. */
-            this.em.getTransaction().begin();
-
-            /* set EntityManager. */
-            this.employeeDAO.setEntityManager(this.em);
-            this.employeeCredentialDAO.setEntityManager(this.em);
-
             Employee john = this.employeeDAO.get(new Integer("1"));
 
             assertNotNull(john);
@@ -95,8 +59,6 @@ public class EmployeeCredentialDAOImplTest {
             /* print the generated ID on the terminal. */
             System.out.println("Generated Employee Credential ID: " + employeeCredentialId);
 
-            /* committing the transaction. */
-            this.em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }

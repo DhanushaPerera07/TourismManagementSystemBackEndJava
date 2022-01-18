@@ -27,50 +27,20 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
 import com.elephasvacation.tms.web.entity.RoomType;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.*;
 
 public class RoomTypeDAOImplTest {
 
-    EntityManagerFactory emf = null;
-    EntityManager em = null;
-
-    RoomTypeDAO roomTypeDAO = DAOFactory.getInstance().getDAO(DAOTypes.ROOM_TYPE);
-
-    @Before
-    public void setEntityManager() {
-        try {
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void closeEntityManager() {
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+    @Autowired
+    RoomTypeDAO roomTypeDAO;
 
     @Test
     public void save() {
-        this.em.getTransaction().begin();
-        this.roomTypeDAO.setEntityManager(this.em);
 
         RoomType standardRoomType = new RoomType("Standard");
         try {
@@ -78,15 +48,11 @@ public class RoomTypeDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 
     @Test
     public void update() {
         String std = "STD";
-        this.em.getTransaction().begin();
-        this.roomTypeDAO.setEntityManager(this.em);
 
         try {
             RoomType roomType = this.roomTypeDAO.get(1);
@@ -99,14 +65,10 @@ public class RoomTypeDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 
     @Test
     public void delete() {
-        this.em.getTransaction().begin();
-        this.roomTypeDAO.setEntityManager(this.em);
 
         try {
             RoomType roomType = this.roomTypeDAO.get(1);
@@ -118,7 +80,5 @@ public class RoomTypeDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 }

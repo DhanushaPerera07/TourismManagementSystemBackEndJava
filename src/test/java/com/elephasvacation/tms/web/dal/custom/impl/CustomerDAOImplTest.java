@@ -27,51 +27,22 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.DAOFactory;
-import com.elephasvacation.tms.web.dal.DAOTypes;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
-import com.elephasvacation.tms.web.util.HibernateUtil;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertNotNull;
 
 public class CustomerDAOImplTest {
 
-    private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOTypes.CUSTOMER);
-    EntityManagerFactory emf = null;
-    EntityManager em = null;
-
-    @Before
-    public void setEntityManager() {
-        try {
-            this.emf = HibernateUtil.getEntityManagerFactory();
-            this.em = emf.createEntityManager();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @After
-    public void closeEntityManager() {
-        if (em != null) {
-            em.close();
-            emf.close();
-        }
-    }
+    @Autowired
+    private CustomerDAO customerDAO;
 
     @Test
     public void save() {
         assertNotNull(this.customerDAO);
-        this.em.getTransaction().begin();
-        this.customerDAO.setEntityManager(this.em);
 
         Customer customer = new Customer(
                 "John Doe",
@@ -89,7 +60,5 @@ public class CustomerDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.em.getTransaction().commit();
     }
 }
