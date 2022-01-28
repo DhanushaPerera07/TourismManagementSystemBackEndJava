@@ -28,12 +28,15 @@ import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
 
 public class AccommodationPackageMealPlanDTOMapperTest {
 
-    AccommodationPackageMealPlanDTOMapper mapper = AccommodationPackageMealPlanDTOMapper.instance;
+//    AccommodationPackageMealPlanDTOMapper mapper = AccommodationPackageMealPlanDTOMapper.instance;
+    @Autowired
+    AccommodationPackageMealPlanDTOMapper mapper;
 
     @Test
     public void getAccommodationPackageMealPlanDTO() {

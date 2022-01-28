@@ -28,6 +28,7 @@ import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
@@ -35,7 +36,9 @@ import static org.junit.Assert.assertEquals;
 
 public class AccommodationRateDTOMapperTest {
 
-    AccommodationRateDTOMapper mapper = AccommodationRateDTOMapper.instance;
+    @Autowired
+    AccommodationRateDTOMapper mapper;
+//    AccommodationRateDTOMapper mapper = AccommodationRateDTOMapper.instance;
 
     @Test
     public void getAccommodationRateDTO() {

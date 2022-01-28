@@ -28,11 +28,14 @@ import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomTypeId;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
 
 public class AccommodationPackageRoomTypeDTOMapperTest {
-    AccommodationPackageRoomTypeDTOMapper mapper = AccommodationPackageRoomTypeDTOMapper.instance;
+    @Autowired
+    AccommodationPackageRoomTypeDTOMapper mapper;
+//    AccommodationPackageRoomTypeDTOMapper mapper = AccommodationPackageRoomTypeDTOMapper.instance;
 
     @Test
     public void getAccommodationPackageRoomTypeDTO() {
