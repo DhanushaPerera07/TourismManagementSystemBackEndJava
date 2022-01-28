@@ -26,18 +26,16 @@ package com.elephasvacation.tms.web.business.custom.util.mapper;
 import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface TourDetailDTOMapper {
-    TourDetailDTOMapper instance = Mappers.getMapper(TourDetailDTOMapper.class);
+public abstract class TourDetailDTOMapper {
 
     /*  -------------------- Tour-Details.  -------------------- */
-    TourDetail getTourDetail(TourDetailDTO tourDetailsDTO);
+    public abstract TourDetail getTourDetail(TourDetailDTO tourDetailsDTO);
 
-    TourDetailDTO getTourDetailDTO(TourDetail tourDetails);
+    public abstract TourDetailDTO getTourDetailDTO(TourDetail tourDetails);
 
-    List<TourDetailDTO> getTourDetailDTOList(List<TourDetail> tourDetailList);
+    public abstract List<TourDetailDTO> getTourDetailDTOList(List<TourDetail> tourDetailList);
 }

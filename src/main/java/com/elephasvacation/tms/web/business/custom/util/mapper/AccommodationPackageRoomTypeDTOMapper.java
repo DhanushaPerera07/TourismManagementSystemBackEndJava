@@ -28,28 +28,26 @@ import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationPackageRoomTypeDTOMapper {
-    AccommodationPackageRoomTypeDTOMapper instance = Mappers.getMapper(AccommodationPackageRoomTypeDTOMapper.class);
+public abstract class AccommodationPackageRoomTypeDTOMapper {
 
     @Mappings(value = {
-            @Mapping( source = "id.accommodationPackageId", target = "accommodationPackageId"),
-            @Mapping( source = "id.roomTypeId", target = "roomTypeId")
+            @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId"),
+            @Mapping(source = "id.roomTypeId", target = "roomTypeId")
     })
-    AccommodationPackageRoomTypeDTO
+    public abstract AccommodationPackageRoomTypeDTO
     getAccommodationPackageRoomTypeDTO(AccommodationPackageRoomType accommodationPackageRoomType);
 
-    @Mappings( value = {
-            @Mapping( source = "accommodationPackageId", target = "id.accommodationPackageId"),
-            @Mapping( source = "roomTypeId", target = "id.roomTypeId")
+    @Mappings(value = {
+            @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId"),
+            @Mapping(source = "roomTypeId", target = "id.roomTypeId")
     })
-    AccommodationPackageRoomType
+    public abstract AccommodationPackageRoomType
     getAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO);
 
-    List<AccommodationPackageRoomTypeDTO>
+    public abstract List<AccommodationPackageRoomTypeDTO>
     getAccommodationPackageRoomTypeDTOList(List<AccommodationPackageRoomType> accommodationPackageRoomTypeList);
 }

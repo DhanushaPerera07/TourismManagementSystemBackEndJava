@@ -33,24 +33,22 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationPackageRoomCategoryDTOMapper {
-    AccommodationPackageRoomCategoryDTOMapper instance =
-            Mappers.getMapper(AccommodationPackageRoomCategoryDTOMapper.class);
+public abstract class AccommodationPackageRoomCategoryDTOMapper {
 
     @Mappings(value = {
             @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId"),
             @Mapping(source = "id.roomCategoryId", target = "roomCategoryId")
     })
-    AccommodationPackageRoomCategoryDTO
+    public abstract AccommodationPackageRoomCategoryDTO
     getAccommodationPackageRoomCategoryDTO(AccommodationPackageRoomCategory packageRoomCategory);
 
     @Mappings(value = {
             @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId"),
             @Mapping(source = "roomCategoryId", target = "id.roomCategoryId")
     })
-    AccommodationPackageRoomCategory
+    public abstract AccommodationPackageRoomCategory
     getAccommodationPackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
 
-    List<AccommodationPackageRoomCategoryDTO>
+    public abstract List<AccommodationPackageRoomCategoryDTO>
     getAccommodationPackageRoomCategoryDTOList(List<AccommodationPackageRoomCategory> packageRoomCategoryList);
 }

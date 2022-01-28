@@ -32,21 +32,20 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationPackageMealPlanDTOMapper {
-    AccommodationPackageMealPlanDTOMapper instance = Mappers.getMapper(AccommodationPackageMealPlanDTOMapper.class);
+public abstract class AccommodationPackageMealPlanDTOMapper {
 
     @Mapping(source = "id.accommodationPackageId", target = "accommodationPackageId")
     @Mapping(source = "id.mealPlanId", target = "mealPlanId")
-    AccommodationPackageMealPlanDTO
+    public abstract AccommodationPackageMealPlanDTO
     getAccommodationPackageMealPlanDTO(AccommodationPackageMealPlan accommodationPackageMealPlan);
 
 
     @Mapping(source = "accommodationPackageId", target = "id.accommodationPackageId")
     @Mapping(source = "mealPlanId", target = "id.mealPlanId")
-    AccommodationPackageMealPlan
+    public abstract AccommodationPackageMealPlan
     getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
-    List<AccommodationPackageMealPlanDTO>
+    public abstract List<AccommodationPackageMealPlanDTO>
     getAccommodationPackageMealPlanDTOList(List<AccommodationPackageMealPlan> accommodationPackageMealPlanList);
 
 }

@@ -26,18 +26,16 @@ package com.elephasvacation.tms.web.business.custom.util.mapper;
 import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface RoomCategoryDTOMapper {
-    RoomCategoryDTOMapper instance = Mappers.getMapper(RoomCategoryDTOMapper.class);
+public abstract class RoomCategoryDTOMapper {
 
     /*  -------------------- Room Category  -------------------- */
-    RoomCategory getRoomCategory(RoomCategoryDTO roomCategoryDTO);
+    public abstract RoomCategory getRoomCategory(RoomCategoryDTO roomCategoryDTO);
 
-    RoomCategoryDTO getRoomCategoryDTO(RoomCategory roomCategory);
+    public abstract RoomCategoryDTO getRoomCategoryDTO(RoomCategory roomCategory);
 
-    List<RoomCategoryDTO> getRoomCategoryDTOs(List<RoomCategory> roomCategoryList);
+    public abstract List<RoomCategoryDTO> getRoomCategoryDTOs(List<RoomCategory> roomCategoryList);
 }

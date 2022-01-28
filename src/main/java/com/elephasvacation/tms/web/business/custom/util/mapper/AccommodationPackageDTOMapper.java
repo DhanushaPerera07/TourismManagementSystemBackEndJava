@@ -23,38 +23,40 @@
  */
 package com.elephasvacation.tms.web.business.custom.util.mapper;
 
-import com.elephasvacation.tms.web.AppInitializer;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationPackageDTOMapper {
+public abstract class AccommodationPackageDTOMapper {
+
+    @Autowired
+    Accommodation accommodation;
 
     /*  -------------------- Accommodation Package  -------------------- */
     @Mapping(source = ".", target = "accommodation", qualifiedByName = "toAccommodationQBN")
-    AccommodationPackage getAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
+    public abstract AccommodationPackage getAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
 
     @Named(value = "toAccommodationQBN")
-    default Accommodation toAccommodation(AccommodationPackageDTO accommodationPackageDTO) {
-        Accommodation accommodation = AppInitializer.getContext().getBean(Accommodation.class);
+    public Accommodation toAccommodation(AccommodationPackageDTO accommodationPackageDTO) {
+//        Accommodation accommodation = AppInitializer.getContext().getBean(Accommodation.class);
         accommodation.setId(accommodationPackageDTO.getAccommodationId());
         return accommodation;
     }
 
     @Mapping(target = "accommodationId", source = ".", qualifiedByName = "toAccommodationPackageId")
-    AccommodationPackageDTO getAccommodationPackageDTO(AccommodationPackage accommodationPackage);
+    public abstract AccommodationPackageDTO getAccommodationPackageDTO(AccommodationPackage accommodationPackage);
 
     @Named(value = "toAccommodationPackageId")
-    default Integer toAccommodationId(AccommodationPackage accommodationPackage) {
+    public Integer toAccommodationId(AccommodationPackage accommodationPackage) {
         return accommodationPackage.getAccommodation().getId();
     }
 
-    List<AccommodationPackageDTO> getAccommodationPackageDTOList(List<AccommodationPackage> accommodationPackageList);
+    public abstract List<AccommodationPackageDTO> getAccommodationPackageDTOList(List<AccommodationPackage> accommodationPackageList);
 }

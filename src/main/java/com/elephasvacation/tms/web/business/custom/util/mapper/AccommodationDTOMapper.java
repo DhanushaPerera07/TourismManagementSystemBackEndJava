@@ -26,18 +26,17 @@ package com.elephasvacation.tms.web.business.custom.util.mapper;
 import com.elephasvacation.tms.web.dto.AccommodationDTO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationDTOMapper {
+public abstract class AccommodationDTOMapper {
 
     /*  -------------------- Accommodation  -------------------- */
-    Accommodation getAccommodation(AccommodationDTO accommodationDTO);
+    public abstract Accommodation getAccommodation(AccommodationDTO accommodationDTO);
 
-    AccommodationDTO getAccommodationDTO(Accommodation accommodation);
+    public abstract AccommodationDTO getAccommodationDTO(Accommodation accommodation);
 
-    List<AccommodationDTO> getAccommodationDTOList(List<Accommodation> accommodationList);
+    public abstract List<AccommodationDTO> getAccommodationDTOList(List<Accommodation> accommodationList);
 
 }

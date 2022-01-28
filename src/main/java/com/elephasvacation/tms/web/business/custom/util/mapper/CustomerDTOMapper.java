@@ -26,18 +26,16 @@ package com.elephasvacation.tms.web.business.custom.util.mapper;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
 import com.elephasvacation.tms.web.entity.Customer;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface CustomerDTOMapper {
-    CustomerDTOMapper instance = Mappers.getMapper(CustomerDTOMapper.class);
+public abstract class CustomerDTOMapper {
 
     /*  -------------------- Customer  -------------------- */
-    Customer getCustomer(CustomerDTO customerDTO);
+    public abstract Customer getCustomer(CustomerDTO customerDTO);
 
-    CustomerDTO getCustomerDTO(Customer customer);
+    public abstract CustomerDTO getCustomerDTO(Customer customer);
 
-    List<CustomerDTO> getCustomerDTOs(List<Customer> customerList);
+    public abstract List<CustomerDTO> getCustomerDTOs(List<Customer> customerList);
 }

@@ -26,17 +26,15 @@ package com.elephasvacation.tms.web.business.custom.util.mapper;
 import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface EmployeeCredentialDTOMapper {
-    EmployeeCredentialDTOMapper instance = Mappers.getMapper(EmployeeCredentialDTOMapper.class);
+public abstract class EmployeeCredentialDTOMapper {
 
-    EmployeeCredential getEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO);
+    public abstract EmployeeCredential getEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO);
 
-    EmployeeCredentialDTO getEmployeeCredentialDTO(EmployeeCredential employeeCredential);
+    public abstract EmployeeCredentialDTO getEmployeeCredentialDTO(EmployeeCredential employeeCredential);
 
-    List<EmployeeCredentialDTO> getEmployeeCredentialDTOList(List<EmployeeCredential> employeeCredential);
+    public abstract List<EmployeeCredentialDTO> getEmployeeCredentialDTOList(List<EmployeeCredential> employeeCredential);
 }

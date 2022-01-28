@@ -26,21 +26,18 @@ package com.elephasvacation.tms.web.business.custom.util.mapper;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.MealPlan;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface MealPlanDTOMapper {
+public abstract class MealPlanDTOMapper {
 
-    MealPlanDTOMapper instance = Mappers.getMapper(MealPlanDTOMapper.class);
+    public abstract MealPlan getMealPlan(MealPlanDTO mealPlanDTO);
 
-    MealPlan getMealPlan(MealPlanDTO mealPlanDTO);
+    public abstract MealPlanDTO getMealPlanDTO(MealPlan mealPlan);
 
-    MealPlanDTO getMealPlanDTO(MealPlan mealPlan);
+    public abstract List<MealPlan> getMealPlanList(List<MealPlanDTO> mealPlanDTOList);
 
-    List<MealPlan> getMealPlanList(List<MealPlanDTO> mealPlanDTOList);
-
-    List<MealPlanDTO> getMealPlanDTOList(List<MealPlan> mealPlanList);
+    public abstract List<MealPlanDTO> getMealPlanDTOList(List<MealPlan> mealPlanList);
 
 }

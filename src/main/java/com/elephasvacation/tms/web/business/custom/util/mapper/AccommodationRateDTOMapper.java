@@ -30,13 +30,11 @@ import com.elephasvacation.tms.web.entity.AccommodationRateId;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AccommodationRateDTOMapper {
-    AccommodationRateDTOMapper instance = Mappers.getMapper(AccommodationRateDTOMapper.class);
+public abstract class AccommodationRateDTOMapper {
 
     @Mappings(value = {
             @Mapping(source = "id.pkgRoomTypeId", target = "accommodationRateId.pkgRoomTypeId"),
@@ -44,7 +42,7 @@ public interface AccommodationRateDTOMapper {
             @Mapping(source = "id.pkgMealPlanId", target = "accommodationRateId.pkgMealPlanId"),
             @Mapping(source = "id.accommodationPackageId", target = "accommodationRateId.accommodationPackageId"),
     })
-    AccommodationRateDTO getAccommodationRateDTO(AccommodationRate accommodationRate);
+    public abstract AccommodationRateDTO getAccommodationRateDTO(AccommodationRate accommodationRate);
 
     @Mappings(value = {
             @Mapping(source = "accommodationRateId.pkgRoomTypeId", target = "id.pkgRoomTypeId"),
@@ -52,11 +50,11 @@ public interface AccommodationRateDTOMapper {
             @Mapping(source = "accommodationRateId.pkgMealPlanId", target = "id.pkgMealPlanId"),
             @Mapping(source = "accommodationRateId.accommodationPackageId", target = "id.accommodationPackageId"),
     })
-    AccommodationRate getAccommodationRate(AccommodationRateDTO accommodationRateDTO);
+    public abstract AccommodationRate getAccommodationRate(AccommodationRateDTO accommodationRateDTO);
 
-    List<AccommodationRateDTO> getAccommodationRateDTOList(List<AccommodationRate> accommodationRateList);
+    public abstract List<AccommodationRateDTO> getAccommodationRateDTOList(List<AccommodationRate> accommodationRateList);
 
-    AccommodationRateDTOId getAccommodationRateDTOId(AccommodationRateId accommodationPackageId);
+    public abstract AccommodationRateDTOId getAccommodationRateDTOId(AccommodationRateId accommodationPackageId);
 
-    AccommodationRateId getAccommodationRateId(AccommodationRateDTOId accommodationRateDTOId);
+    public abstract AccommodationRateId getAccommodationRateId(AccommodationRateDTOId accommodationRateDTOId);
 }
