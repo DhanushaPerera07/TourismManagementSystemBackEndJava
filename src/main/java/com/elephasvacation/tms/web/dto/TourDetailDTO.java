@@ -46,11 +46,11 @@ import java.time.LocalDateTime;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TourDetailDTO implements Serializable {
 
-    private int id;
-    private int noOfDays;
-    private int noOfPeople;
-    private int noOfChildren;
-    private int starCategory;
+    private Integer id;
+    private Integer noOfDays;
+    private Integer noOfAdults;
+    private Integer noOfChildren;
+    private Integer starCategory;
     private LocalDateTime arrivalDate;
     private LocalDateTime departureDate;
     private TourDetailStatusTypes status;
@@ -64,7 +64,7 @@ public class TourDetailDTO implements Serializable {
     public TourDetailDTO(
             int id,
             int noOfDays,
-            int noOfPeople,
+            int noOfAdults,
             int noOfChildren,
             int starCategory,
             LocalDateTime arrivalDate,
@@ -76,7 +76,7 @@ public class TourDetailDTO implements Serializable {
             int customerId) {
         this.id = id;
         this.noOfDays = noOfDays;
-        this.noOfPeople = noOfPeople;
+        this.noOfAdults = noOfAdults;
         this.noOfChildren = noOfChildren;
         this.starCategory = starCategory;
         this.arrivalDate = arrivalDate;
