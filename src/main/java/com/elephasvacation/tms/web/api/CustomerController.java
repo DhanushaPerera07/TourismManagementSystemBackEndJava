@@ -32,18 +32,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/v1/customers")
 @RestController
-public class CustomerServlet {
+public class CustomerController {
 
-    //    private static final Logger logger = LoggerFactory.getLogger(CustomerServlet.class);
     @Autowired
     private CustomerBO customerBO;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomers() throws Exception {
-        System.out.println("Get eka weda !!!!");
         return customerBO.getAllCustomers();
     }
 
@@ -80,7 +78,7 @@ public class CustomerServlet {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id:\\d}")
     public void deleteCustomer(@PathVariable String id) throws Exception {
-        Integer customerID = null;
+        Integer customerID;
         try {
             customerID = new Integer(id);
             customerBO.deleteCustomer(customerID);
