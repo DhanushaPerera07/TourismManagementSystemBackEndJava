@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class AppWideExceptionHandler {
     /**
-     * Since `reason` is used here and this method is a void method,
-     * HTTP response will contain HTML response body (it contains the `reason`).
+     * Since `reason` is returned with the method,
+     * HTTP response will NOT contain HTML response body (it just contains the `reason`).
      */
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "ID is not valid.")
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IdFormatException.class)
-    public void handleIdNotValid() {
-        // Nothing to do
+    public String handleIdNotValid() {
+        return "ID is not valid.";
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
