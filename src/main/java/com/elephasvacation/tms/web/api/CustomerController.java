@@ -25,6 +25,8 @@ package com.elephasvacation.tms.web.api;
 
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
+import com.elephasvacation.tms.web.exception.IdFormatException;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,9 +42,41 @@ public class CustomerController {
     @Autowired
     private CustomerBO customerBO;
 
+    /**
+     * Get all customers list.
+     *
+     * @return List<CustomerDTO> customersList.
+     */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomers() throws Exception {
         return customerBO.getAllCustomers();
+    }
+
+    /**
+     * Get customer by customer ID.
+     *
+     * @return CustomerDTO customer object.
+     * @throws IdFormatException       if the ID is not an Integer.
+     * @throws RecordNotFoundException if matching customer record not found,
+     */
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            value = "/{id}")
+    public CustomerDTO getCustomerByID(@PathVariable(name = "id") String id) throws Exception {
+        System.out.println("CustomerID: " + id);
+
+        Integer customerID = null;
+        try {
+            customerID = new Integer(id);
+        } catch (NumberFormatException e) {
+            throw new IdFormatException();
+        }
+
+        CustomerDTO customer = customerBO.getCustomerByID(customerID);
+        System.out.println("Customer Result: " + customer);
+
+        /* If customer not found. */
+        if (customer == null) throw new RecordNotFoundException();
+        return customer;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -74,7 +108,6 @@ public class CustomerController {
 
     }
 
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id:\\d}")
     public void deleteCustomer(@PathVariable String id) throws Exception {
@@ -87,5 +120,12 @@ public class CustomerController {
             e.printStackTrace();
         }
     }
+
+
+    /* the Controller-Level @ExceptionHandler */
+//    @ExceptionHandler(value = {NumberFormatException.class})
+//    public void idIsNotValid(Exception exception) {
+//        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID is invalid!", exception);
+//    }
 
 }
