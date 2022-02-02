@@ -27,19 +27,53 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.WebAppConfig;
+import com.elephasvacation.tms.web.WebRootConfig;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
 
+import static org.junit.Assert.*;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = {WebRootConfig.class, WebAppConfig.class})
 public class CustomerDAOImplTest {
 
     @Autowired
     private CustomerDAO customerDAO;
 
+    @Test
+    public void checkCustomerDAO() {
+        assertNotNull(customerDAO);
+    }
+
+    @Transactional
+    @Test
+    public void getCustomerByID() throws Exception {
+        assertNotNull(customerDAO);
+
+        Customer customer = this.customerDAO.get(10);
+        System.out.println("GET Customer Entity: " + customer);
+        assertNotNull(customer);
+    }
+
+    @Test
+    public void getAllCustomers() throws Exception {
+        List<Customer> customersList = this.customerDAO.getAll();
+        assertEquals(2, customersList.size());
+    }
+
+    @Transactional
     @Test
     public void save() {
         assertNotNull(this.customerDAO);
@@ -55,10 +89,28 @@ public class CustomerDAOImplTest {
                 "None",
                 GenderTypes.MALE
         );
+
+        System.out.println("Customer Entity: " + customer);
+
         try {
-            this.customerDAO.save(customer);
+            Customer savedCustomer = this.customerDAO.save(customer);
+            assertNotNull(savedCustomer);
+            System.out.println("SavedCustomer: " + savedCustomer);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Transactional
+    @Test
+    public void deleteCustomer() throws Exception {
+        assertNotNull(this.customerDAO);
+
+        /* delete */
+        this.customerDAO.delete(3);
+
+        Customer customerFromDB = this.customerDAO.get(10);
+        assertNull(customerFromDB);
     }
 }

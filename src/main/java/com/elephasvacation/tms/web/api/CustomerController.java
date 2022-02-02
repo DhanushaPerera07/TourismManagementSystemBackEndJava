@@ -23,6 +23,7 @@
  */
 package com.elephasvacation.tms.web.api;
 
+import com.elephasvacation.tms.web.api.util.ApiUtil;
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
 import com.elephasvacation.tms.web.exception.IdFormatException;
@@ -60,16 +61,11 @@ public class CustomerController {
      * @throws RecordNotFoundException if matching customer record not found,
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE,
-            value = "/{id}")
+            value = "/{id:\\d}")
     public CustomerDTO getCustomerByID(@PathVariable(name = "id") String id) throws Exception {
         System.out.println("CustomerID: " + id);
 
-        Integer customerID = null;
-        try {
-            customerID = new Integer(id);
-        } catch (NumberFormatException e) {
-            throw new IdFormatException();
-        }
+        Integer customerID = ApiUtil.getIntegerId(id);
 
         CustomerDTO customer = customerBO.getCustomerByID(customerID);
         System.out.println("Customer Result: " + customer);
@@ -82,8 +78,9 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Integer saveCustomer(@RequestBody CustomerDTO customerDTO) throws Exception {
-        customerBO.createCustomer(customerDTO);
-        return customerDTO.getId();
+        System.out.println("API Layer: CustomerDTO ---> " + customerDTO);
+        Integer customerID = customerBO.createCustomer(customerDTO);
+        return customerID;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -91,7 +88,7 @@ public class CustomerController {
     public void updateCustomer(@PathVariable String id,
                                @RequestBody CustomerDTO customerDTO) throws Exception {
         try {
-            Integer customerID = new Integer(id);
+            Integer customerID = ApiUtil.getIntegerId(id);
 
             if (customerDTO.getId() == customerID) {
                 customerDTO.setId(customerID);
@@ -108,24 +105,15 @@ public class CustomerController {
 
     }
 
+    /**
+     * Delete customer by Customer ID.
+     */
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id:\\d}")
+    @DeleteMapping(value = "/{id:\\d}")
     public void deleteCustomer(@PathVariable String id) throws Exception {
-        Integer customerID;
-        try {
-            customerID = new Integer(id);
-            customerBO.deleteCustomer(customerID);
-        } catch (NumberFormatException e) {
-            /* TODO: handle error. */
-            e.printStackTrace();
-        }
+        Integer customerID = ApiUtil.getIntegerId(id);
+        System.out.println("Customer ID: " + customerID);
+        customerBO.deleteCustomer(customerID);
     }
-
-
-    /* the Controller-Level @ExceptionHandler */
-//    @ExceptionHandler(value = {NumberFormatException.class})
-//    public void idIsNotValid(Exception exception) {
-//        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID is invalid!", exception);
-//    }
 
 }

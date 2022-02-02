@@ -27,6 +27,7 @@
  */
 package com.elephasvacation.tms.web.dto;
 
+import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,7 +50,7 @@ public class CustomerDTO implements Serializable {
     private String nationality;
     private String passportNo;
     private String email;
-    //    private String countryCallingCode;
+    private GenderTypes gender;
     private String contactNo;
     private String country;
     private String description;
@@ -62,6 +63,7 @@ public class CustomerDTO implements Serializable {
                        String nationality,
                        String passportNo,
                        String email,
+                       GenderTypes gender,
                        String contactNo,
                        String country,
                        String description,
@@ -71,6 +73,7 @@ public class CustomerDTO implements Serializable {
         this.nationality = nationality;
         this.passportNo = passportNo;
         this.email = email;
+        this.gender = gender;
         this.contactNo = contactNo;
         this.country = country;
         this.description = description;
@@ -78,9 +81,9 @@ public class CustomerDTO implements Serializable {
     }
 
     public CustomerDTO(String name,
-                       String nationality,
-                       String passportNo,
+                       String nationality, String passportNo,
                        String email,
+                       GenderTypes gender,
                        String contactNo,
                        String country,
                        String description,
@@ -89,6 +92,7 @@ public class CustomerDTO implements Serializable {
         this.nationality = nationality;
         this.passportNo = passportNo;
         this.email = email;
+        this.gender = gender;
         this.contactNo = contactNo;
         this.country = country;
         this.description = description;

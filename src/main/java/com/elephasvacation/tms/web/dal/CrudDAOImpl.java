@@ -64,7 +64,7 @@ public class CrudDAOImpl<T extends SuperEntity<Serializable>, K extends Serializ
 
     @Override
     public void delete(K key) throws Exception {
-        this.entityManager.remove(key);
+        this.entityManager.remove( this.entityManager.getReference(entityClass, key));
     }
 
     @Override

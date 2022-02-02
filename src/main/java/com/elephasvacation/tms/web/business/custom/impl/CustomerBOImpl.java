@@ -31,6 +31,7 @@ import com.elephasvacation.tms.web.business.custom.CustomerBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.CustomerDTOMapper;
 import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
+import com.elephasvacation.tms.web.entity.Customer;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,27 +50,38 @@ public class CustomerBOImpl implements CustomerBO {
     @Autowired
     private CustomerDTOMapper mapper;
 
+
     @Override
     public Integer createCustomer(CustomerDTO customerDTO) throws Exception {
         /* save. */
-        return this.customerDAO.save(mapper.getCustomer(customerDTO)).getId();
+        Customer customer = this.mapper.getCustomer(customerDTO);
+
+        /* Set customer id to null, since CustomerID should be null in the DAO layer.
+         * If customerID is set to an Integer, then detached error will be prompted */
+        if (customer != null && customer.getId() != null) {
+            customer.setId(null);
+        }
+
+        return this.customerDAO.save(customer).getId();
     }
 
     @Override
     public void updateCustomer(CustomerDTO customerDTO) throws Exception {
         /* update. */
-        this.customerDAO.update(mapper.getCustomer(customerDTO));
+        Customer customer = this.mapper.getCustomer(customerDTO);
+        System.out.println("CustomerDTO ---> Customer: " + customer);
+        this.customerDAO.update(customer);
     }
 
     @Override
-    public void deleteCustomer(int customerID) throws Exception {
+    public void deleteCustomer(Integer customerID) throws Exception {
         /* delete. */
         this.customerDAO.delete(customerID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public CustomerDTO getCustomerByID(int customerID) throws Exception {
+    public CustomerDTO getCustomerByID(Integer customerID) throws Exception {
         /* get customer by customer ID. */
         return this.mapper.getCustomerDTO(this.customerDAO.get(customerID));
     }

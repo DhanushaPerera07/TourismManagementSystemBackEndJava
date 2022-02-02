@@ -47,14 +47,14 @@
         </dependency>
 
 
-        <!-- Yasson - JSONb-->
-        <!-- https://mvnrepository.com/artifact/org.eclipse/yasson -->
-        <dependency>
-            <groupId>org.eclipse</groupId>
-            <artifactId>yasson</artifactId>
-            <version>2.0.2</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--        &lt;!&ndash; Yasson - JSONb&ndash;&gt;-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.eclipse/yasson &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.eclipse</groupId>-->
+        <!--            <artifactId>yasson</artifactId>-->
+        <!--            <version>2.0.2</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
 
 
         <!-- Junit4 for unit testing -->
@@ -134,23 +134,22 @@
             <version>2.9.0</version>
         </dependency>
 
-        <!-- Spring Data Access - Spring AOP - Aspectj ========================================== -->
+                <!-- Spring Data Access - Spring AOP - Aspectj ========================================== -->
+                <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+                <dependency>
+                    <groupId>org.aspectj</groupId>
+                    <artifactId>aspectjrt</artifactId>
+                    <version>1.9.7</version>
+                </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.9.7</version>
-        </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.9.7</version>
-            <scope>runtime</scope>
-        </dependency>
+                <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+                <dependency>
+                    <groupId>org.aspectj</groupId>
+                    <artifactId>aspectjweaver</artifactId>
+                    <version>1.9.7</version>
+                    <scope>runtime</scope>
+                </dependency>
 
         <!-- Spring Web MVC =================================================================== -->
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
@@ -168,6 +167,23 @@
             <version>2.13.1</version>
         </dependency>
 
+        <!--Jackson Datatype-->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.1</version>
+        </dependency>
+
+
+        <!--Spring TestContext Framework-->
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.3.15</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

@@ -28,7 +28,13 @@
 package com.elephasvacation.tms.web.dto;
 
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
-import jakarta.json.bind.annotation.JsonbDateFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,8 +56,12 @@ public class EmployeeDTO implements Serializable {
     private int id;
     private String name;
     private String address;
-    @JsonbDateFormat("yyyy-MM-dd") // dd.MM.yyyy
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class) // dd.MM.yyyy
     private LocalDate dateOfBirth;
+    /*    @JsonbDateFormat("yyyy-MM-dd") // dd.MM.yyyy
+        private LocalDate dateOfBirth;*/
     private String nic;
     private String contact;
     private String email;
@@ -59,9 +69,13 @@ public class EmployeeDTO implements Serializable {
     private String position;
     private String status;
     //    private String password;
-    @JsonbDateFormat("dd.MM.yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime created;
-    @JsonbDateFormat("dd.MM.yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime lastUpdated;
 
     /* custom constructor - without created, lastUpdated. */

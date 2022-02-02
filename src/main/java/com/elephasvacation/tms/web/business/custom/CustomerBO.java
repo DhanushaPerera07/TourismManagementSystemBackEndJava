@@ -38,9 +38,9 @@ public interface CustomerBO extends SuperBO {
 
     void updateCustomer(CustomerDTO customerDTO) throws Exception;
 
-    void deleteCustomer(int customerID) throws Exception;
+    void deleteCustomer(Integer customerID) throws Exception;
 
-    CustomerDTO getCustomerByID(int customerID) throws Exception;
+    CustomerDTO getCustomerByID(Integer customerID) throws Exception;
 
     List<CustomerDTO> getAllCustomers() throws Exception;
 }
