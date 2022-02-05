@@ -25,16 +25,13 @@
  * @author : Dhanusha Perera
  * @date : 27/07/2021
  */
-package com.elephasvacation.tms.web.dal.custom;
+package com.elephasvacation.tms.web.dal;
 
+import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAOCustom;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
 import com.elephasvacation.tms.web.entity.AccommodationRateId;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.sql.SQLException;
-import java.util.List;
-
-public interface AccommodationRateDAO extends CrudDAO<AccommodationRate, AccommodationRateId> {
-
-    List<AccommodationRate> getAllAccommodationRatesByAccommodationPackageID(Integer accommodationPackageID)
-            throws SQLException;
+public interface AccommodationRateDAO extends JpaRepository<AccommodationRate, AccommodationRateId>,
+        AccommodationRateDAOCustom {
 }
