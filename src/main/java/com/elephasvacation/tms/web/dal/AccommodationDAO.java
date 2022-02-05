@@ -21,11 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+/*
+ * @author : Dhanusha Perera
+ * @date : 04/07/2021
+ */
 package com.elephasvacation.tms.web.dal.custom;
 
-import com.elephasvacation.tms.web.dal.CrudDAO;
-import com.elephasvacation.tms.web.entity.EmployeeCredential;
+import com.elephasvacation.tms.web.entity.Accommodation;
 
-public interface EmployeeCredentialDAO extends CrudDAO<EmployeeCredential, Integer> {
+public interface AccommodationDAO extends CrudDAO<Accommodation, Integer> {
 }

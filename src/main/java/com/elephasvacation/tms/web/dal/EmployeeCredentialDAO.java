@@ -15,17 +15,16 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package com.elephasvacation.tms.web.dal.custom;
 
-import com.elephasvacation.tms.web.dal.SuperDAO;
+import com.elephasvacation.tms.web.entity.EmployeeCredential;
 
-public interface QueryDAO extends SuperDAO {
-    /* CustomEntity related DAO operations can be handled here.
-     * Implementation of this interface can be done later whenever if needed. */
+public interface EmployeeCredentialDAO extends CrudDAO<EmployeeCredential, Integer> {
 }

@@ -15,40 +15,24 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.commonConstant.Number;
-import com.elephasvacation.tms.web.dal.CrudDAOImpl;
-import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
+package com.elephasvacation.tms.web.dal.custom;
+
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Repository
-public class AccommodationPackageMealPlanDAOImpl
-        extends CrudDAOImpl<AccommodationPackageMealPlan, AccommodationPackageMealPlanId>
-        implements AccommodationPackageMealPlanDAO {
+public interface AccommodationPackageMealPlanDAO extends
+        CrudDAO<AccommodationPackageMealPlan, AccommodationPackageMealPlanId> {
 
-    @Override
-    public List<AccommodationPackageMealPlan> getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage) {
-        TypedQuery<AccommodationPackageMealPlan> query = this.getEntityManager().
-                createQuery("SELECT pkgMp " +
-                                "FROM AccommodationPackageMealPlan pkgMp " +
-                                "WHERE pkgMp.id.accommodationPackageId=?1",
-                        AccommodationPackageMealPlan.class);
-        /* set the numbered parameter. */
-        query.setParameter(Number.ONE, accommodationPackage.getId());
-
-        return query.getResultList();
-    }
+    List<AccommodationPackageMealPlan>
+    getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage);
 }

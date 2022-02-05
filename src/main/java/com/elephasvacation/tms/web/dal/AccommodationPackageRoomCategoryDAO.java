@@ -15,38 +15,24 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.commonConstant.Number;
-import com.elephasvacation.tms.web.dal.CrudDAOImpl;
-import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDAO;
+package com.elephasvacation.tms.web.dal.custom;
+
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategoryId;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Repository
-public class AccommodationPackageRoomCategoryDAOImpl
-        extends CrudDAOImpl<AccommodationPackageRoomCategory, AccommodationPackageRoomCategoryId>
-        implements AccommodationPackageRoomCategoryDAO {
+public interface AccommodationPackageRoomCategoryDAO extends
+        CrudDAO<AccommodationPackageRoomCategory, AccommodationPackageRoomCategoryId> {
 
-    @Override
-    public List<AccommodationPackageRoomCategory>
-    getAllRoomCategoriesForAccommodationPackage(AccommodationPackage accommodationPackage) {
-        TypedQuery<AccommodationPackageRoomCategory> query = this.getEntityManager().
-                createQuery("SELECT pkgRc " +
-                        "FROM AccommodationPackageRoomCategory pkgRc " +
-                        "WHERE pkgRc.id.accommodationPackageId=?1", AccommodationPackageRoomCategory.class);
-        query.setParameter(Number.ONE, accommodationPackage.getId());
-        return query.getResultList();
-    }
+    List<AccommodationPackageRoomCategory>
+    getAllRoomCategoriesForAccommodationPackage(AccommodationPackage accommodationPackage);
 }

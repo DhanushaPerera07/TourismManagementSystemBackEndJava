@@ -21,20 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+/*
+ * @author : Dhanusha Perera
+ * @date : 26/07/2021
+ */
 package com.elephasvacation.tms.web.dal.custom;
 
-import com.elephasvacation.tms.web.dal.CrudDAO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
-import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
-import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
-import com.elephasvacation.tms.web.entity.MealPlan;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public interface AccommodationPackageMealPlanDAO extends
-        CrudDAO<AccommodationPackageMealPlan, AccommodationPackageMealPlanId> {
-
-    List<AccommodationPackageMealPlan>
-    getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage);
+public interface AccommodationPackageDAO extends CrudDAO<AccommodationPackage, Integer> {
+    List<AccommodationPackage> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
+            throws SQLException;
 }

@@ -21,19 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+/*
+ * @author : Dhanusha Perera
+ * @date : 04/07/2021
+ */
 package com.elephasvacation.tms.web.dal.custom;
 
-import com.elephasvacation.tms.web.dal.CrudDAO;
-import com.elephasvacation.tms.web.entity.AccommodationPackage;
-import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
-import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategoryId;
+import com.elephasvacation.tms.web.entity.Employee;
 
-import java.util.List;
-
-public interface AccommodationPackageRoomCategoryDAO extends
-        CrudDAO<AccommodationPackageRoomCategory, AccommodationPackageRoomCategoryId> {
-
-    List<AccommodationPackageRoomCategory>
-    getAllRoomCategoriesForAccommodationPackage(AccommodationPackage accommodationPackage);
+public interface EmployeeDAO extends CrudDAO<Employee, Integer> {
 }
