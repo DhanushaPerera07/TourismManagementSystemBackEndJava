@@ -27,21 +27,19 @@ import com.elephasvacation.tms.web.business.SuperBO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface AccommodationRateBO extends SuperBO {
 
-    AccommodationRateDTOId createAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception;
+    AccommodationRateDTOId createAccommodationRate(AccommodationRateDTO accommodationRateDTO);
 
-    void updateAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception;
+    void updateAccommodationRate(AccommodationRateDTO accommodationRateDTO);
 
-    void deleteAccommodationRate(AccommodationRateDTOId accommodationRateDTOId) throws Exception;
+    void deleteAccommodationRate(AccommodationRateDTOId accommodationRateDTOId);
 
-    AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId) throws Exception;
+    AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId);
 
-    List<AccommodationRateDTO> getAllAccommodationRates() throws Exception;
+    List<AccommodationRateDTO> getAllAccommodationRates();
 
-    List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID)
-            throws SQLException;
+    List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID);
 }

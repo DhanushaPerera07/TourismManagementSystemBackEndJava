@@ -29,7 +29,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.AccommodationDAO;
+import com.elephasvacation.tms.web.dal.AccommodationDAO;
 import com.elephasvacation.tms.web.dto.AccommodationDTO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import lombok.NoArgsConstructor;
@@ -51,32 +51,32 @@ public class AccommodationBOImpl implements AccommodationBO {
     AccommodationDTOMapper mapper;
 
     @Override
-    public Integer createAccommodation(AccommodationDTO accommodationDTO) throws Exception {
+    public Integer createAccommodation(AccommodationDTO accommodationDTO) {
         Accommodation accommodation = this.accommodationDAO.save(this.mapper.getAccommodation(accommodationDTO));
         return accommodation.getId();
     }
 
     @Override
-    public void updateAccommodation(AccommodationDTO accommodationDTO) throws Exception {
-        this.accommodationDAO.update(this.mapper.getAccommodation(accommodationDTO));
+    public void updateAccommodation(AccommodationDTO accommodationDTO) {
+        this.accommodationDAO.save(this.mapper.getAccommodation(accommodationDTO));
     }
 
     @Override
     public void deleteAccommodation(int accommodationID) throws Exception {
-        this.accommodationDAO.delete(accommodationID);
+        this.accommodationDAO.deleteById(accommodationID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public AccommodationDTO getAccommodationByID(int accommodationID) throws Exception {
+    public AccommodationDTO getAccommodationByID(int accommodationID) {
         return this.mapper.
-                getAccommodationDTO(this.accommodationDAO.get(accommodationID));
+                getAccommodationDTO(this.accommodationDAO.getById(accommodationID));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<AccommodationDTO> getAllAccommodations() throws Exception {
+    public List<AccommodationDTO> getAllAccommodations() {
         return this.mapper.
-                getAccommodationDTOList(this.accommodationDAO.getAll());
+                getAccommodationDTOList(this.accommodationDAO.findAll());
     }
 }

@@ -30,21 +30,20 @@ package com.elephasvacation.tms.web.business.custom;
 import com.elephasvacation.tms.web.business.SuperBO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface AccommodationPackageBO extends SuperBO {
 
-    Integer createAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception;
+    Integer createAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
 
-    void updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception;
+    void updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
 
-    void deleteAccommodationPackage(Integer accommodationPackageID) throws Exception;
+    void deleteAccommodationPackage(Integer accommodationPackageID);
 
-    AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID) throws Exception;
+    AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID);
 
-    List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID) throws SQLException;
+    List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID);
 
-    List<AccommodationPackageDTO> getAllAccommodationPackages() throws Exception;
+    List<AccommodationPackageDTO> getAllAccommodationPackages();
 
 }

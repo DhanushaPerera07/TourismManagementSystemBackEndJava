@@ -2,7 +2,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationRateBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationRateDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.AccommodationRateDAO;
+import com.elephasvacation.tms.web.dal.AccommodationRateDAO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTO;
 import com.elephasvacation.tms.web.dto.AccommodationRateDTOId;
 import com.elephasvacation.tms.web.entity.AccommodationRate;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @NoArgsConstructor
@@ -28,7 +27,7 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
 
 
     @Override
-    public AccommodationRateDTOId createAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception {
+    public AccommodationRateDTOId createAccommodationRate(AccommodationRateDTO accommodationRateDTO) {
 
         /* convert AccommodationRateDTO to entity. */
         AccommodationRate accommodationRate = this.mapper.getAccommodationRate(accommodationRateDTO);
@@ -42,31 +41,30 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
     }
 
     @Override
-    public void updateAccommodationRate(AccommodationRateDTO accommodationRateDTO) throws Exception {
+    public void updateAccommodationRate(AccommodationRateDTO accommodationRateDTO) {
         /* update */
-        this.accommodationRateDAO.update(this.mapper.getAccommodationRate(accommodationRateDTO));
+        this.accommodationRateDAO.save(this.mapper.getAccommodationRate(accommodationRateDTO));
     }
 
     @Override
-    public void deleteAccommodationRate(AccommodationRateDTOId accommodationRateDTOId) throws Exception {
+    public void deleteAccommodationRate(AccommodationRateDTOId accommodationRateDTOId) {
 
         /* convert accommodationRateDTOId to entity. */
         AccommodationRateId accommodationRateId = this.mapper.getAccommodationRateId(accommodationRateDTOId);
 
         /* delete AccommodationRate By ID. */
-        this.accommodationRateDAO.delete(accommodationRateId);
+        this.accommodationRateDAO.deleteById(accommodationRateId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId)
-            throws Exception {
+    public AccommodationRateDTO getAccommodationRateByID(AccommodationRateDTOId accommodationRateDTOId) {
 
         /* convert accommodationRateDTOId to entity. */
         AccommodationRateId accommodationRateId = this.mapper.getAccommodationRateId(accommodationRateDTOId);
 
         /* get AccommodationRate by ID. */
-        AccommodationRate accommodationRate = this.accommodationRateDAO.get(accommodationRateId);
+        AccommodationRate accommodationRate = this.accommodationRateDAO.getById(accommodationRateId);
 
         /* convert AccommodationRate to AccommodationRateDTO. */
         return this.mapper.getAccommodationRateDTO(accommodationRate);
@@ -74,10 +72,10 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AccommodationRateDTO> getAllAccommodationRates() throws Exception {
+    public List<AccommodationRateDTO> getAllAccommodationRates() {
 
         /* get all Accommodation Rates. */
-        List<AccommodationRate> allAccommodationRateList = this.accommodationRateDAO.getAll();
+        List<AccommodationRate> allAccommodationRateList = this.accommodationRateDAO.findAll();
 
         /* convert allAccommodationRateList to DTOList. */
         return this.mapper.
@@ -91,8 +89,7 @@ public class AccommodationRateBOImpl implements AccommodationRateBO {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID)
-            throws SQLException {
+    public List<AccommodationRateDTO> getAllAccommodationRatesForAccommodationPackage(Integer accommodationPackageID) {
 
         /* get all accommodation rates by Accommodation Package ID. */
         List<AccommodationRate> allAccommodationRatesByAccommodationPackageID = this.accommodationRateDAO.

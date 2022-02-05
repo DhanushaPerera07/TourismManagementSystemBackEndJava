@@ -27,8 +27,8 @@ import com.elephasvacation.tms.web.business.custom.AccommodationPackageMealPlanB
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageMealPlanDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAO;
-import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
+import com.elephasvacation.tms.web.dal.AccommodationPackageMealPlanDAO;
+import com.elephasvacation.tms.web.dal.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
@@ -66,7 +66,7 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
 
     @Override
     public AccommodationPackageMealPlanDTO
-    addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) throws Exception {
+    addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) {
 
         /* convert DTO to AccommodationPackageMealPlan. */
         AccommodationPackageMealPlan accommodationPackageMealPlan = this.mapper.
@@ -82,28 +82,26 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
     }
 
     @Override
-    public void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO)
-            throws Exception {
+    public void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) {
 
         /* convert DTO to entity, and get the AccommodationPackageMealPlanId. */
         AccommodationPackageMealPlanId packageMealPlanId = this.mapper.
                 getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO).getId();
 
         /* delete AccommodationPackageMealPlan By ID. */
-        this.accommodationPackageMealPlanDAO.delete(packageMealPlanId);
+        this.accommodationPackageMealPlanDAO.deleteById(packageMealPlanId);
 
     }
 
     @Transactional(readOnly = true)
     @Override
-    public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO)
-            throws Exception {
+    public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO) {
 
         /* convert AccommodationPackageMealPlanDTO to entity. */
         AccommodationPackageMealPlan pkgMealPlan = this.mapper.getAccommodationPackageMealPlan(pkgMealPlanDTO);
 
         /* get MealPlan */
-        MealPlan mealPlan = this.mealPlanDAO.get(pkgMealPlan.getId().getMealPlanId());
+        MealPlan mealPlan = this.mealPlanDAO.getById(pkgMealPlan.getId().getMealPlanId());
 
         /* convert mealPlan entity to DTO. */
         return this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);

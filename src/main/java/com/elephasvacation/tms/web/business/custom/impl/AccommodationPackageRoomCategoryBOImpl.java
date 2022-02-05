@@ -26,7 +26,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomCategoryBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomCategoryDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDAO;
+import com.elephasvacation.tms.web.dal.AccommodationPackageRoomCategoryDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomCategoryDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
@@ -55,7 +55,7 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
 
     @Override
     public AccommodationPackageRoomCategoryDTO
-    createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) throws Exception {
+    createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) {
 
         /* convert AccommodationPackageRoomCategoryDTO to entity. */
         AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
@@ -72,15 +72,14 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
     }
 
     @Override
-    public void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO)
-            throws Exception {
+    public void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) {
 
         /* convert AccommodationPackageRoomCategoryDTO to entity. */
         AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
                 getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
 
         /* delete the AccommodationPackageRoomCategory By ID. */
-        this.packageRoomCategoryDAO.delete(packageRoomCategory.getId());
+        this.packageRoomCategoryDAO.deleteById(packageRoomCategory.getId());
     }
 
     @Override

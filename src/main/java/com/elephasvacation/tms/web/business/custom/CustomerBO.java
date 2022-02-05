@@ -34,13 +34,13 @@ import java.util.List;
 
 public interface CustomerBO extends SuperBO {
 
-    Integer createCustomer(CustomerDTO customerDTO) throws Exception;
+    Integer createCustomer(CustomerDTO customerDTO);
 
-    void updateCustomer(CustomerDTO customerDTO) throws Exception;
+    void updateCustomer(CustomerDTO customerDTO);
 
-    void deleteCustomer(Integer customerID) throws Exception;
+    void deleteCustomer(Integer customerID);
 
-    CustomerDTO getCustomerByID(Integer customerID) throws Exception;
+    CustomerDTO getCustomerByID(Integer customerID);
 
-    List<CustomerDTO> getAllCustomers() throws Exception;
+    List<CustomerDTO> getAllCustomers();
 }

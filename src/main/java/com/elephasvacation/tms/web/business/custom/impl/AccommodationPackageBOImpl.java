@@ -29,7 +29,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAO;
+import com.elephasvacation.tms.web.dal.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import lombok.NoArgsConstructor;
@@ -37,7 +37,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @NoArgsConstructor
@@ -53,27 +52,27 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
 
     @Override
-    public Integer createAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception {
+    public Integer createAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) {
         AccommodationPackage accommodationPackage = this.accommodationPackageDAO.
                 save(this.mapper.getAccommodationPackage(accommodationPackageDTO));
         return accommodationPackage.getId(); // returns the ID
     }
 
     @Override
-    public void updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) throws Exception {
-        this.accommodationPackageDAO.update(this.mapper.getAccommodationPackage(accommodationPackageDTO));
+    public void updateAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO) {
+        this.accommodationPackageDAO.save(this.mapper.getAccommodationPackage(accommodationPackageDTO));
     }
 
     @Override
-    public void deleteAccommodationPackage(Integer accommodationPackageID) throws Exception {
-        this.accommodationPackageDAO.delete(accommodationPackageID);
+    public void deleteAccommodationPackage(Integer accommodationPackageID) {
+        this.accommodationPackageDAO.deleteById(accommodationPackageID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID) throws Exception {
+    public AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID) {
         return this.mapper.
-                getAccommodationPackageDTO(this.accommodationPackageDAO.get(accommodationPackageID));
+                getAccommodationPackageDTO(this.accommodationPackageDAO.getById(accommodationPackageID));
     }
 
     /**
@@ -83,8 +82,7 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID)
-            throws SQLException {
+    public List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID) {
         /* Get all accommodation packages by accommodation ID. */
         List<AccommodationPackage> allAccommodationPackagesByAccommodationID = this.accommodationPackageDAO.
                 getAllAccommodationPackagesByAccommodationID(accommodationID);
@@ -96,8 +94,8 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
     @Transactional(readOnly = true)
     @Override
-    public List<AccommodationPackageDTO> getAllAccommodationPackages() throws Exception {
+    public List<AccommodationPackageDTO> getAllAccommodationPackages() {
         return this.mapper.
-                getAccommodationPackageDTOList(this.accommodationPackageDAO.getAll());
+                getAccommodationPackageDTOList(this.accommodationPackageDAO.findAll());
     }
 }

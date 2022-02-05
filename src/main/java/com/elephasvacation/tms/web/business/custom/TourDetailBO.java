@@ -34,17 +34,17 @@ import java.util.List;
 
 public interface TourDetailBO extends SuperBO {
 
-    Integer createTourDetail(TourDetailDTO tourDetailDTO) throws Exception;
+    Integer createTourDetail(TourDetailDTO tourDetailDTO);
 
-    void updateTourDetail(TourDetailDTO tourDetailDTO) throws Exception;
+    void updateTourDetail(TourDetailDTO tourDetailDTO);
 
-    void deleteTourDetail(Integer tourDetailID) throws Exception;
+    void deleteTourDetail(Integer tourDetailID);
 
-    TourDetailDTO getTourDetailByID(Integer tourDetailID) throws Exception;
+    TourDetailDTO getTourDetailByID(Integer tourDetailID);
 
     TourDetailDTO getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception;
 
-    List<TourDetailDTO> getAllTourDetails() throws Exception;
+    List<TourDetailDTO> getAllTourDetails();
 
     List<TourDetailDTO> getAllTourDetailsByCustomerID(Integer customerID) throws Exception;
 }

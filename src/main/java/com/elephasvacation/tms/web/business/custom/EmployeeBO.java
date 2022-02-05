@@ -34,13 +34,13 @@ import java.util.List;
 
 public interface EmployeeBO extends SuperBO {
 
-    Integer createEmployee(EmployeeDTO dto) throws Exception;
+    Integer createEmployee(EmployeeDTO dto);
 
-    void updateEmployee(EmployeeDTO dto) throws Exception;
+    void updateEmployee(EmployeeDTO dto);
 
-    void deleteEmployee(int employeeID) throws Exception;
+    void deleteEmployee(Integer employeeID);
 
-    EmployeeDTO getEmployeeByID(int employeeID) throws Exception;
+    EmployeeDTO getEmployeeByID(Integer employeeID);
 
-    List<EmployeeDTO> getAllEmployees() throws Exception;
+    List<EmployeeDTO> getAllEmployees();
 }

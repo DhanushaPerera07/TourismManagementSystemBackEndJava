@@ -29,7 +29,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.EmployeeBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
+import com.elephasvacation.tms.web.dal.EmployeeDAO;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
 import com.elephasvacation.tms.web.entity.Employee;
 import lombok.NoArgsConstructor;
@@ -51,29 +51,29 @@ public class EmployeeBOImpl implements EmployeeBO {
     private EmployeeDTOMapper mapper;
 
     @Override
-    public Integer createEmployee(EmployeeDTO employeeDTO) throws Exception {
+    public Integer createEmployee(EmployeeDTO employeeDTO) {
         /* save. */
         Integer generatedEmployeeId = this.employeeDAO.save(mapper.getEmployee(employeeDTO)).getId();
         return generatedEmployeeId;
     }
 
     @Override
-    public void updateEmployee(EmployeeDTO employeeDTO) throws Exception {
+    public void updateEmployee(EmployeeDTO employeeDTO) {
         /* update. */
-        this.employeeDAO.update(mapper.getEmployee(employeeDTO));
+        this.employeeDAO.save(mapper.getEmployee(employeeDTO));
     }
 
     @Override
-    public void deleteEmployee(int employeeID) throws Exception {
+    public void deleteEmployee(Integer employeeID) {
         /* delete. */
-        this.employeeDAO.delete(employeeID);
+        this.employeeDAO.deleteById(employeeID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public EmployeeDTO getEmployeeByID(int employeeID) throws Exception {
+    public EmployeeDTO getEmployeeByID(Integer employeeID) {
         /* get employee by ID. */
-        Employee employee = this.employeeDAO.get(employeeID);
+        Employee employee = this.employeeDAO.getById(employeeID);
 
         /* convert employee to DTO. */
         return this.mapper.getEmployeeDTO(employee);
@@ -81,9 +81,9 @@ public class EmployeeBOImpl implements EmployeeBO {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EmployeeDTO> getAllEmployees() throws Exception {
+    public List<EmployeeDTO> getAllEmployees() {
         /* get all employees. */
-        List<Employee> employeeList = this.employeeDAO.getAll();
+        List<Employee> employeeList = this.employeeDAO.findAll();
 
         /* convert employeeList to DTOList. */
         return this.mapper.getEmployeeDTOs(employeeList);

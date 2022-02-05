@@ -34,13 +34,13 @@ import java.util.List;
 
 public interface RoomCategoryBO extends SuperBO {
 
-    Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception;
+    Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO);
 
-    void updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) throws Exception;
+    void updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO);
 
-    void deleteRoomCategoryDTO(Integer roomCategoryID) throws Exception;
+    void deleteRoomCategoryDTO(Integer roomCategoryID);
 
-    RoomCategoryDTO getRoomCategoryByID(Integer roomCategoryID) throws Exception;
+    RoomCategoryDTO getRoomCategoryByID(Integer roomCategoryID);
 
-    List<RoomCategoryDTO> getAllRoomCategories() throws Exception;
+    List<RoomCategoryDTO> getAllRoomCategories();
 }

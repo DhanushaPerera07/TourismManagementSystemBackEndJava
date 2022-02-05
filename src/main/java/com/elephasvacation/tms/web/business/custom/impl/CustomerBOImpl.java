@@ -29,7 +29,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.CustomerDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
+import com.elephasvacation.tms.web.dal.CustomerDAO;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
 import com.elephasvacation.tms.web.entity.Customer;
 import lombok.NoArgsConstructor;
@@ -52,7 +52,7 @@ public class CustomerBOImpl implements CustomerBO {
 
 
     @Override
-    public Integer createCustomer(CustomerDTO customerDTO) throws Exception {
+    public Integer createCustomer(CustomerDTO customerDTO) {
         /* save. */
         Customer customer = this.mapper.getCustomer(customerDTO);
 
@@ -66,30 +66,30 @@ public class CustomerBOImpl implements CustomerBO {
     }
 
     @Override
-    public void updateCustomer(CustomerDTO customerDTO) throws Exception {
+    public void updateCustomer(CustomerDTO customerDTO) {
         /* update. */
         Customer customer = this.mapper.getCustomer(customerDTO);
         System.out.println("CustomerDTO ---> Customer: " + customer);
-        this.customerDAO.update(customer);
+        this.customerDAO.save(customer);
     }
 
     @Override
-    public void deleteCustomer(Integer customerID) throws Exception {
+    public void deleteCustomer(Integer customerID) {
         /* delete. */
-        this.customerDAO.delete(customerID);
+        this.customerDAO.deleteById(customerID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public CustomerDTO getCustomerByID(Integer customerID) throws Exception {
+    public CustomerDTO getCustomerByID(Integer customerID) {
         /* get customer by customer ID. */
-        return this.mapper.getCustomerDTO(this.customerDAO.get(customerID));
+        return this.mapper.getCustomerDTO(this.customerDAO.getById(customerID));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<CustomerDTO> getAllCustomers() throws Exception {
+    public List<CustomerDTO> getAllCustomers() {
         /* get all customers. */
-        return this.mapper.getCustomerDTOs(this.customerDAO.getAll());
+        return this.mapper.getCustomerDTOs(this.customerDAO.findAll());
     }
 }

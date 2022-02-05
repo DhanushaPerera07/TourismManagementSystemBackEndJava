@@ -31,11 +31,9 @@ import java.util.List;
 
 public interface AccommodationPackageRoomCategoryBO extends SuperBO {
     AccommodationPackageRoomCategoryDTO
-    createPackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO)
-            throws Exception;
+    createPackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
 
-    void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO)
-            throws Exception;
+    void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
 
     List<AccommodationPackageRoomCategoryDTO>
     getAllRoomCategoriesForAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);

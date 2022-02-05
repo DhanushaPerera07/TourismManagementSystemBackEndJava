@@ -29,7 +29,7 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.MealPlanBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
-import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
+import com.elephasvacation.tms.web.dal.MealPlanDAO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.MealPlan;
 import lombok.NoArgsConstructor;
@@ -51,7 +51,7 @@ public class MealPlanBOImpl implements MealPlanBO {
     private MealPlanDTOMapper mapper;
 
     @Override
-    public Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
+    public Integer createMealPlan(MealPlanDTO mealPlanDTO) {
 
         /* convert DTO to entity. */
         MealPlan mealPlan = this.mapper.getMealPlan(mealPlanDTO);
@@ -61,21 +61,21 @@ public class MealPlanBOImpl implements MealPlanBO {
     }
 
     @Override
-    public void updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception {
-        this.mealPlanDAO.update(this.mapper.getMealPlan(mealPlanDTO));
+    public void updateMealPlan(MealPlanDTO mealPlanDTO) {
+        this.mealPlanDAO.save(this.mapper.getMealPlan(mealPlanDTO));
     }
 
     @Override
-    public void deleteMealPlan(Integer mealPlanID) throws Exception {
-        this.mealPlanDAO.delete(mealPlanID);
+    public void deleteMealPlan(Integer mealPlanID) {
+        this.mealPlanDAO.deleteById(mealPlanID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public MealPlanDTO getMealPlanByID(Integer mealPlanID) throws Exception {
+    public MealPlanDTO getMealPlanByID(Integer mealPlanID) {
 
         /* get meal plan by ID. */
-        MealPlan mealPlan = this.mealPlanDAO.get(mealPlanID);
+        MealPlan mealPlan = this.mealPlanDAO.getById(mealPlanID);
 
         /* convert entity to DTO. */
         return this.mapper.getMealPlanDTO(mealPlan);
@@ -83,10 +83,10 @@ public class MealPlanBOImpl implements MealPlanBO {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MealPlanDTO> getAllMealPlans() throws Exception {
+    public List<MealPlanDTO> getAllMealPlans() {
 
         /* get all meal plans. */
-        List<MealPlan> mealPlanList = this.mealPlanDAO.getAll();
+        List<MealPlan> mealPlanList = this.mealPlanDAO.findAll();
 
         /* convert mealPlanList to DTOList. */
         return this.mapper.getMealPlanDTOList(mealPlanList);

@@ -34,13 +34,13 @@ import java.util.List;
 
 public interface AccommodationBO extends SuperBO {
 
-    Integer createAccommodation(AccommodationDTO accommodationDTO) throws Exception;
+    Integer createAccommodation(AccommodationDTO accommodationDTO);
 
-    void updateAccommodation(AccommodationDTO accommodationDTO) throws Exception;
+    void updateAccommodation(AccommodationDTO accommodationDTO);
 
     void deleteAccommodation(int accommodationID) throws Exception;
 
-    AccommodationDTO getAccommodationByID(int accommodationID) throws Exception;
+    AccommodationDTO getAccommodationByID(int accommodationID);
 
-    List<AccommodationDTO> getAllAccommodations() throws Exception;
+    List<AccommodationDTO> getAllAccommodations();
 }

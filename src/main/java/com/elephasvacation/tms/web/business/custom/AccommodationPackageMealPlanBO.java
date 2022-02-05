@@ -33,17 +33,14 @@ import java.util.List;
 public interface AccommodationPackageMealPlanBO extends SuperBO {
 
     AccommodationPackageMealPlanDTO
-    addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO)
-            throws Exception;
+    addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
 //    void updateMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO,
-//                        AccommodationPackageMealPlanDTO newAccommodationPackageMealPlanDTO) throws Exception;
+//                        AccommodationPackageMealPlanDTO newAccommodationPackageMealPlanDTO);
 
-    void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO)
-            throws Exception;
+    void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
-    MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO)
-            throws Exception;
+    MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
     List<AccommodationPackageMealPlanDTO>
     getAllMealPlansForAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);

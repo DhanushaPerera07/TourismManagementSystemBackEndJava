@@ -34,13 +34,13 @@ import java.util.List;
 
 public interface MealPlanBO extends SuperBO {
 
-    Integer createMealPlan(MealPlanDTO mealPlanDTO) throws Exception;
+    Integer createMealPlan(MealPlanDTO mealPlanDTO);
 
-    void updateMealPlan(MealPlanDTO mealPlanDTO) throws Exception;
+    void updateMealPlan(MealPlanDTO mealPlanDTO);
 
-    void deleteMealPlan(Integer mealPlanID) throws Exception;
+    void deleteMealPlan(Integer mealPlanID);
 
-    MealPlanDTO getMealPlanByID(Integer mealPlanID) throws Exception;
+    MealPlanDTO getMealPlanByID(Integer mealPlanID);
 
-    List<MealPlanDTO> getAllMealPlans() throws Exception;
+    List<MealPlanDTO> getAllMealPlans();
 }
