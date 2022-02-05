@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 Dhanusha Perera
+ * Copyright (c) 2022 Dhanusha Perera
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.dal.custom.impl;
+package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.WebAppConfig;
 import com.elephasvacation.tms.web.WebRootConfig;
-import com.elephasvacation.tms.web.dal.EmployeeCredentialDAO;
-import com.elephasvacation.tms.web.dal.EmployeeDAO;
-import com.elephasvacation.tms.web.entity.Employee;
-import com.elephasvacation.tms.web.entity.EmployeeCredential;
+import com.elephasvacation.tms.web.business.custom.TourDetailBO;
+import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,40 +34,28 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {WebRootConfig.class, WebAppConfig.class})
-public class EmployeeCredentialDAOImplTest {
+public class TourDetailBOImplTest {
 
     @Autowired
-    private EmployeeDAO employeeDAO;
-
-    @Autowired
-    private EmployeeCredentialDAO employeeCredentialDAO;
+    private TourDetailBO tourDetailBO;
 
     @Test
-    public void save() {
-        try {
-            Employee john = this.employeeDAO.getById(1);
+    public void getAllTourDetailsByCustomerID() throws Exception {
+        assertNotNull(this.tourDetailBO);
+        List<TourDetailDTO> allTourDetailsByCustomerID = this.tourDetailBO.getAllTourDetailsByCustomerID(2);
 
-            assertNotNull(john);
-
-            /* creates a new Employee Credential object. */
-            EmployeeCredential johnsCredential = new EmployeeCredential(john.getId(), "Test@123");
-
-            /* saving the Employee. */
-            Integer employeeCredentialId = this.employeeCredentialDAO.save(johnsCredential).getId();
-
-            /* assert */
-            assertNotNull(employeeCredentialId);
-
-            /* print the generated ID on the terminal. */
-            System.out.println("Generated Employee Credential ID: " + employeeCredentialId);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (TourDetailDTO tourDetailDTO : allTourDetailsByCustomerID) {
+            System.out.println(tourDetailDTO);
         }
+
+        assertEquals(2, allTourDetailsByCustomerID.size());
     }
 }

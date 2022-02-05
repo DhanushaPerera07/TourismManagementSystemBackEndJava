@@ -23,13 +23,22 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.WebAppConfig;
+import com.elephasvacation.tms.web.WebRootConfig;
 import com.elephasvacation.tms.web.dal.MealPlanDAO;
 import com.elephasvacation.tms.web.entity.MealPlan;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = {WebRootConfig.class, WebAppConfig.class})
 public class MealPlanDAOImplTest {
 
     @Autowired

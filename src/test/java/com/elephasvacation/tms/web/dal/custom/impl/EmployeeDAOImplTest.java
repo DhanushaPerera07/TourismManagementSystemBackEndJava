@@ -23,16 +23,25 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.WebAppConfig;
+import com.elephasvacation.tms.web.WebRootConfig;
 import com.elephasvacation.tms.web.dal.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDate;
 
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = {WebRootConfig.class, WebAppConfig.class})
 public class EmployeeDAOImplTest {
 
     @Autowired

@@ -23,14 +23,23 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.WebAppConfig;
+import com.elephasvacation.tms.web.WebRootConfig;
 import com.elephasvacation.tms.web.dal.AccommodationDAO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = {WebRootConfig.class, WebAppConfig.class})
 public class AccommodationDAOImplTest {
 
     @Autowired
