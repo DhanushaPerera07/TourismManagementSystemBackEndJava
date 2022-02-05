@@ -27,7 +27,7 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.custom.RoomCategoryDAO;
+import com.elephasvacation.tms.web.dal.RoomCategoryDAO;
 import com.elephasvacation.tms.web.entity.RoomCategory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +55,12 @@ public class RoomCategoryDAOImplTest {
         String single = "SGL";
 
         try {
-            RoomCategory roomCategory = this.roomCategoryDAO.get(1);
+            RoomCategory roomCategory = this.roomCategoryDAO.getById(1);
             assertNotNull(roomCategory);
             roomCategory.setRoomCategory(single);
-            this.roomCategoryDAO.update(roomCategory);
+            this.roomCategoryDAO.save(roomCategory);
 
-            RoomCategory roomCategoryAfter = this.roomCategoryDAO.get(1);
+            RoomCategory roomCategoryAfter = this.roomCategoryDAO.getById(1);
             assertEquals(single, roomCategoryAfter.getRoomCategory());
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,11 +71,11 @@ public class RoomCategoryDAOImplTest {
     public void delete() {
 
         try {
-            RoomCategory roomCategory = this.roomCategoryDAO.get(1);
+            RoomCategory roomCategory = this.roomCategoryDAO.getById(1);
             assertNotNull(roomCategory);
-            this.roomCategoryDAO.delete(1);
+            this.roomCategoryDAO.deleteById(1);
 
-            RoomCategory roomCategoryAfter = this.roomCategoryDAO.get(1);
+            RoomCategory roomCategoryAfter = this.roomCategoryDAO.getById(1);
             assertNull(roomCategoryAfter);
         } catch (Exception e) {
             e.printStackTrace();

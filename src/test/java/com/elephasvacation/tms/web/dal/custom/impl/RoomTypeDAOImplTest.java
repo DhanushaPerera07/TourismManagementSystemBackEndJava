@@ -27,7 +27,7 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.custom.RoomTypeDAO;
+import com.elephasvacation.tms.web.dal.RoomTypeDAO;
 import com.elephasvacation.tms.web.entity.RoomType;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +55,12 @@ public class RoomTypeDAOImplTest {
         String std = "STD";
 
         try {
-            RoomType roomType = this.roomTypeDAO.get(1);
+            RoomType roomType = this.roomTypeDAO.getById(1);
             assertNotNull(roomType);
             roomType.setRoomType(std);
-            this.roomTypeDAO.update(roomType);
+            this.roomTypeDAO.save(roomType);
 
-            RoomType roomTypeAfter = this.roomTypeDAO.get(1);
+            RoomType roomTypeAfter = this.roomTypeDAO.getById(1);
             assertEquals(std, roomTypeAfter.getRoomType());
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,11 +71,11 @@ public class RoomTypeDAOImplTest {
     public void delete() {
 
         try {
-            RoomType roomType = this.roomTypeDAO.get(1);
+            RoomType roomType = this.roomTypeDAO.getById(1);
             assertNotNull(roomType);
-            this.roomTypeDAO.delete(1);
+            this.roomTypeDAO.deleteById(1);
 
-            RoomType roomTypeAfter = this.roomTypeDAO.get(1);
+            RoomType roomTypeAfter = this.roomTypeDAO.getById(1);
             assertNull(roomTypeAfter);
         } catch (Exception e) {
             e.printStackTrace();

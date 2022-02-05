@@ -23,7 +23,7 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
+import com.elephasvacation.tms.web.dal.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import org.junit.Test;

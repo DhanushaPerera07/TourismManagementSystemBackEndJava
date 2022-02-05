@@ -23,6 +23,7 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
+import com.elephasvacation.tms.web.dal.AccommodationDAO;
 import com.elephasvacation.tms.web.entity.Accommodation;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import static org.junit.Assert.assertNotNull;
 public class AccommodationDAOImplTest {
 
     @Autowired
-    AccommodationDAOImpl accommodationDAO;
+    AccommodationDAO accommodationDAO;
 
     @Test
     public void save() {
@@ -75,7 +76,7 @@ public class AccommodationDAOImplTest {
                 "None");
 
         try {
-            accommodationDAO.update(accommodation);
+            accommodationDAO.save(accommodation);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,7 +92,7 @@ public class AccommodationDAOImplTest {
         assertNotNull(accommodationDAO);
 
         try {
-            Accommodation accommodation = accommodationDAO.get(new Integer("4"));
+            Accommodation accommodation = accommodationDAO.getById(new Integer("4"));
 
             assertEquals(new Integer("4"), accommodation.getId());
             assertEquals("ABC hotel", accommodation.getName());

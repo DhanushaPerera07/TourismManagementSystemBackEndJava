@@ -23,8 +23,8 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.custom.EmployeeCredentialDAO;
-import com.elephasvacation.tms.web.dal.custom.EmployeeDAO;
+import com.elephasvacation.tms.web.dal.EmployeeCredentialDAO;
+import com.elephasvacation.tms.web.dal.EmployeeDAO;
 import com.elephasvacation.tms.web.entity.Employee;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class EmployeeCredentialDAOImplTest {
     @Test
     public void save() {
         try {
-            Employee john = this.employeeDAO.get(new Integer("1"));
+            Employee john = this.employeeDAO.getById(1);
 
             assertNotNull(john);
 

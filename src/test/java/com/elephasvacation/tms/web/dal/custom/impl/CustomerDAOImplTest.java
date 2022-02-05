@@ -29,7 +29,7 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 
 import com.elephasvacation.tms.web.WebAppConfig;
 import com.elephasvacation.tms.web.WebRootConfig;
-import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
+import com.elephasvacation.tms.web.dal.CustomerDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
 import org.junit.Test;
@@ -62,15 +62,15 @@ public class CustomerDAOImplTest {
     public void getCustomerByID() throws Exception {
         assertNotNull(customerDAO);
 
-        Customer customer = this.customerDAO.get(10);
+        Customer customer = this.customerDAO.getById(10);
         System.out.println("GET Customer Entity: " + customer);
         assertNotNull(customer);
     }
 
     @Test
     public void getAllCustomers() throws Exception {
-        List<Customer> customersList = this.customerDAO.getAll();
-        assertEquals(2, customersList.size());
+        List<Customer> customersList = this.customerDAO.findAll();
+        assertEquals(3, customersList.size());
     }
 
     @Transactional
@@ -108,9 +108,9 @@ public class CustomerDAOImplTest {
         assertNotNull(this.customerDAO);
 
         /* delete */
-        this.customerDAO.delete(3);
+        this.customerDAO.deleteById(3);
 
-        Customer customerFromDB = this.customerDAO.get(10);
+        Customer customerFromDB = this.customerDAO.getById(10);
         assertNull(customerFromDB);
     }
 }

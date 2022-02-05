@@ -23,7 +23,7 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.custom.MealPlanDAO;
+import com.elephasvacation.tms.web.dal.MealPlanDAO;
 import com.elephasvacation.tms.web.entity.MealPlan;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +53,12 @@ public class MealPlanDAOImplTest {
     public void update() {
         try {
             // get the database record.
-            MealPlan roomOnlyMealPlan = mealPlanDAO.get(1);
+            MealPlan roomOnlyMealPlan = mealPlanDAO.getById(1);
             assertNotNull(roomOnlyMealPlan);
             roomOnlyMealPlan.setMealPlan("RO");
-            this.mealPlanDAO.update(roomOnlyMealPlan);
+            this.mealPlanDAO.save(roomOnlyMealPlan);
 
-            MealPlan roomOnlyMealPlanAfter = mealPlanDAO.get(1);
+            MealPlan roomOnlyMealPlanAfter = mealPlanDAO.getById(1);
             assertEquals("RO", roomOnlyMealPlanAfter.getMealPlan());
 
         } catch (Exception exception) {
@@ -69,10 +69,10 @@ public class MealPlanDAOImplTest {
     @Test
     public void delete() {
         try {
-            MealPlan mealPlan = this.mealPlanDAO.get(1);
+            MealPlan mealPlan = this.mealPlanDAO.getById(1);
             assertNotNull(mealPlan);
-            this.mealPlanDAO.delete(1);
-            MealPlan mealPlanAfter = this.mealPlanDAO.get(1);
+            this.mealPlanDAO.deleteById(1);
+            MealPlan mealPlanAfter = this.mealPlanDAO.getById(1);
             assertNull(mealPlanAfter);
 
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class MealPlanDAOImplTest {
     @Test
     public void get() {
         try {
-            MealPlan mealPlan = this.mealPlanDAO.get(1);
+            MealPlan mealPlan = this.mealPlanDAO.getById(1);
             /*if there is a record in the database, assertion will be passed. */
             assertNotNull(mealPlan);
 

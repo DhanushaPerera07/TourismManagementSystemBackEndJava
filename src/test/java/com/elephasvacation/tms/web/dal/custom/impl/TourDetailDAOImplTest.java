@@ -27,19 +27,30 @@
 */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.dal.custom.CustomerDAO;
-import com.elephasvacation.tms.web.dal.custom.TourDetailDAO;
+import com.elephasvacation.tms.web.WebAppConfig;
+import com.elephasvacation.tms.web.WebRootConfig;
+import com.elephasvacation.tms.web.dal.CustomerDAO;
+import com.elephasvacation.tms.web.dal.TourDetailDAO;
 import com.elephasvacation.tms.web.entity.Customer;
 import com.elephasvacation.tms.web.entity.TourDetail;
 import com.elephasvacation.tms.web.entity.enumeration.TourDetailStatusTypes;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = {WebRootConfig.class, WebAppConfig.class})
 public class TourDetailDAOImplTest {
 
     @Autowired
@@ -54,7 +65,7 @@ public class TourDetailDAOImplTest {
         assertNotNull(this.tourDetailDAO);
 
         try {
-            Customer customer = this.customerDAO.get(1);
+            Customer customer = this.customerDAO.getById(1);
 
             /* creates a new Employee Credential object. */
             TourDetail tourDetail = new TourDetail(new BigDecimal("4"),
@@ -81,5 +92,19 @@ public class TourDetailDAOImplTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void getAllTourDetailsByCustomerID() throws Exception {
+        assertNotNull(this.tourDetailDAO);
+
+        List<TourDetail> allTourDetailsByCustomerID = this.tourDetailDAO.getAllTourDetailsByCustomerID(2);
+
+        for (TourDetail tourDetail : allTourDetailsByCustomerID) {
+            System.out.println(tourDetail);
+        }
+
+        assertEquals(2, allTourDetailsByCustomerID.size());
+
     }
 }
