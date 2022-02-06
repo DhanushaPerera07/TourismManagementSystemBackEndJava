@@ -28,13 +28,93 @@
 package com.elephasvacation.tms.web.api;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.elephasvacation.tms.web.api.util.ApiUtil;
+import com.elephasvacation.tms.web.business.custom.RoomCategoryBO;
+import com.elephasvacation.tms.web.commonconstant.API;
+import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
+import com.elephasvacation.tms.web.exception.IdFormatException;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+import java.util.List;
+
+@CrossOrigin(origins = API.HTTP_LOCALHOST_8080)
 @RequestMapping("/api/v1/room-categories")
 @RestController
 public class RoomCategoryController {
+    @Autowired
+    private RoomCategoryBO roomCategoryBO;
+
+    /**
+     * Get all roomCategories list.
+     *
+     * @return List<RoomCategoryDTO> roomCategoriesList.
+     */
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<RoomCategoryDTO> getAllRoomCategories() {
+        return this.roomCategoryBO.getAllRoomCategories();
+    }
+
+    /**
+     * Get roomCategory by roomCategory ID.
+     *
+     * @return RoomCategoryDTO roomCategory object.
+     * @throws IdFormatException       if the ID is not an Integer.
+     * @throws RecordNotFoundException if matching roomCategory record not found,
+     */
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            value = "/{id}")
+    public RoomCategoryDTO getRoomCategoryByID(@PathVariable(name = "id") String id) {
+        System.out.println("RoomCategoryID: " + id);
+
+        Integer roomCategoryID = ApiUtil.getIntegerId(id);
+
+        RoomCategoryDTO roomCategoryDTO = this.roomCategoryBO.getRoomCategoryByID(roomCategoryID);
+        System.out.println("RoomCategory Result: " + roomCategoryDTO);
+
+        /* If RoomCategory not found. */
+        if (roomCategoryDTO == null) throw new RecordNotFoundException();
+        return roomCategoryDTO;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Integer saveRoomCategory(@RequestBody RoomCategoryDTO roomCategoryDTO) {
+        System.out.println("API Layer: RoomCategoryDTO ---> " + roomCategoryDTO);
+        return this.roomCategoryBO.createRoomCategory(roomCategoryDTO);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updateRoomCategory(@PathVariable String id,
+                                   @RequestBody RoomCategoryDTO roomCategoryDTO) {
+        Integer roomCategoryID = ApiUtil.getIntegerId(id);
+
+        /* TODO: RoomCategory - update validation logic. */
+        if (roomCategoryDTO.getId() == roomCategoryID) {
+            roomCategoryDTO.setId(roomCategoryID);
+            this.roomCategoryBO.updateRoomCategory(roomCategoryDTO);
+        } else {
+            /* URL param roomCategoryID and roomCategoryObject's roomCategoryID mismatched.
+            Therefore, Let's throw an error.*/
+            /* TODO: handle error. */
+            throw new RuntimeException();
+        }
+
+    }
+
+    /**
+     * Delete roomCategory by RoomCategoryID.
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{id}")
+    public void deleteRoomCategory(@PathVariable String id) {
+        Integer roomCategoryID = ApiUtil.getIntegerId(id);
+        System.out.println("RoomCategory ID: " + roomCategoryID);
+        this.roomCategoryBO.deleteRoomCategory(roomCategoryID);
+    }
 
 }
