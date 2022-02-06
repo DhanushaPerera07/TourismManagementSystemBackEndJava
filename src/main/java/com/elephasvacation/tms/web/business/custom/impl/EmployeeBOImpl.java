@@ -73,7 +73,7 @@ public class EmployeeBOImpl implements EmployeeBO {
     @Override
     public EmployeeDTO getEmployeeByID(Integer employeeID) {
         /* get employee by ID. */
-        Employee employee = this.employeeDAO.getById(employeeID);
+        Employee employee = this.employeeDAO.findById(employeeID).get();
 
         /* convert employee to DTO. */
         return this.mapper.getEmployeeDTO(employee);
