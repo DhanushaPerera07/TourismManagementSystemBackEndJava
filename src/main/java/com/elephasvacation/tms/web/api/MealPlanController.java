@@ -27,13 +27,93 @@
 */
 package com.elephasvacation.tms.web.api;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.elephasvacation.tms.web.api.util.ApiUtil;
+import com.elephasvacation.tms.web.business.custom.MealPlanBO;
+import com.elephasvacation.tms.web.commonconstant.API;
+import com.elephasvacation.tms.web.dto.MealPlanDTO;
+import com.elephasvacation.tms.web.exception.IdFormatException;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+import java.util.List;
+
+@CrossOrigin(origins = API.HTTP_LOCALHOST_8080)
 @RequestMapping("/api/v1/meal-plans")
 @RestController
 public class MealPlanController {
 
+    @Autowired
+    private MealPlanBO mealPlanBO;
+
+    /**
+     * Get all MealPlans list.
+     *
+     * @return List<MealPlanDTO> mealPlansList.
+     */
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealPlanDTO> getAllMealPlans() {
+        return this.mealPlanBO.getAllMealPlans();
+    }
+
+    /**
+     * Get MealPlan by MealPlan ID.
+     *
+     * @return MealPlanDTO MealPlan object.
+     * @throws IdFormatException       if the ID is not an Integer.
+     * @throws RecordNotFoundException if matching MealPlan record not found,
+     */
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            value = "/{id}")
+    public MealPlanDTO getMealPlanByID(@PathVariable(name = "id") String id) {
+        System.out.println("MealPlanID: " + id);
+
+        Integer mealPlanID = ApiUtil.getIntegerId(id);
+
+        MealPlanDTO mealPlanDTO = this.mealPlanBO.getMealPlanByID(mealPlanID);
+        System.out.println("MealPlan Result: " + mealPlanDTO);
+
+        /* If MealPlan not found. */
+        if (mealPlanDTO == null) throw new RecordNotFoundException();
+        return mealPlanDTO;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Integer saveMealPlan(@RequestBody MealPlanDTO mealPlanDTO) {
+        System.out.println("API Layer: MealPlanDTO ---> " + mealPlanDTO);
+        return this.mealPlanBO.createMealPlan(mealPlanDTO);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updateMealPlan(@PathVariable String id,
+                               @RequestBody MealPlanDTO mealPlanDTO) {
+        Integer mealPlanID = ApiUtil.getIntegerId(id);
+
+        /* TODO: MealPlan - update validation logic. */
+        if (mealPlanID.equals(mealPlanDTO.getId())) {
+            mealPlanDTO.setId(mealPlanID);
+            this.mealPlanBO.updateMealPlan(mealPlanDTO);
+        } else {
+            /* URL param mealPlanID and mealPlanObject's mealPlanID mismatched.
+            Therefore, Let's throw an error.*/
+            /* TODO: handle error. */
+            throw new RuntimeException();
+        }
+
+    }
+
+    /**
+     * Delete mealPlan by MealPlanID.
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{id}")
+    public void deleteMealPlan(@PathVariable String id) {
+        Integer mealPlanID = ApiUtil.getIntegerId(id);
+        System.out.println("MealPlan ID: " + mealPlanID);
+        this.mealPlanBO.deleteMealPlan(mealPlanID);
+    }
 }
