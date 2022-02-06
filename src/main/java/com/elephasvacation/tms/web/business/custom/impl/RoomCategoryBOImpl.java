@@ -51,7 +51,7 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
     private RoomCategoryDTOMapper mapper;
 
     @Override
-    public Integer createRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) {
+    public Integer createRoomCategory(RoomCategoryDTO roomCategoryDTO) {
 
         /* convert DTO to entity. */
         RoomCategory roomCategory = this.mapper.getRoomCategory(roomCategoryDTO);
@@ -61,13 +61,13 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
     }
 
     @Override
-    public void updateRoomCategoryDTO(RoomCategoryDTO roomCategoryDTO) {
+    public void updateRoomCategory(RoomCategoryDTO roomCategoryDTO) {
         /* update. */
         this.roomCategoryDAO.save(this.mapper.getRoomCategory(roomCategoryDTO));
     }
 
     @Override
-    public void deleteRoomCategoryDTO(Integer roomCategoryID) {
+    public void deleteRoomCategory(Integer roomCategoryID) {
         this.roomCategoryDAO.deleteById(roomCategoryID);
     }
 
@@ -76,7 +76,7 @@ public class RoomCategoryBOImpl implements RoomCategoryBO {
     public RoomCategoryDTO getRoomCategoryByID(Integer roomCategoryID) {
 
         /* get room category by ID. */
-        RoomCategory roomCategory = this.roomCategoryDAO.getById(roomCategoryID);
+        RoomCategory roomCategory = this.roomCategoryDAO.findById(roomCategoryID).get();
 
         /* convert entity to DTO. */
         return this.mapper.getRoomCategoryDTO(roomCategory);
