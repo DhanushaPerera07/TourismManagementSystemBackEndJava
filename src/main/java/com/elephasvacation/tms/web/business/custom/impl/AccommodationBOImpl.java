@@ -70,7 +70,7 @@ public class AccommodationBOImpl implements AccommodationBO {
     @Override
     public AccommodationDTO getAccommodationByID(Integer accommodationID) {
         return this.mapper.
-                getAccommodationDTO(this.accommodationDAO.getById(accommodationID));
+                getAccommodationDTO(this.accommodationDAO.findById(accommodationID).get());
     }
 
     @Transactional(readOnly = true)
