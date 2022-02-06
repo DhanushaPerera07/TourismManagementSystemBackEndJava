@@ -75,7 +75,7 @@ public class MealPlanBOImpl implements MealPlanBO {
     public MealPlanDTO getMealPlanByID(Integer mealPlanID) {
 
         /* get meal plan by ID. */
-        MealPlan mealPlan = this.mealPlanDAO.getById(mealPlanID);
+        MealPlan mealPlan = this.mealPlanDAO.findById(mealPlanID).get();
 
         /* convert entity to DTO. */
         return this.mapper.getMealPlanDTO(mealPlan);
