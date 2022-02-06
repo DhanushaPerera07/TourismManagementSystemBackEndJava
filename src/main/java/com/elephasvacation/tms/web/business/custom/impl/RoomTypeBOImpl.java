@@ -52,7 +52,7 @@ public class RoomTypeBOImpl implements RoomTypeBO {
 
 
     @Override
-    public Integer createRoomTypeDTO(RoomTypeDTO roomTypeDTO) {
+    public Integer createRoomType(RoomTypeDTO roomTypeDTO) {
 
         /* convert DTO to entity. */
         RoomType roomType = this.mapper.getRoomType(roomTypeDTO);
@@ -62,13 +62,13 @@ public class RoomTypeBOImpl implements RoomTypeBO {
     }
 
     @Override
-    public void updateRoomTypeDTO(RoomTypeDTO roomTypeDTO) {
+    public void updateRoomType(RoomTypeDTO roomTypeDTO) {
         /* update. */
         this.roomTypeDAO.save(this.mapper.getRoomType(roomTypeDTO));
     }
 
     @Override
-    public void deleteRoomTypeDTO(Integer roomTypeID) {
+    public void deleteRoomType(Integer roomTypeID) {
         this.roomTypeDAO.deleteById(roomTypeID);
     }
 
@@ -76,7 +76,7 @@ public class RoomTypeBOImpl implements RoomTypeBO {
     @Override
     public RoomTypeDTO getRoomTypeByID(Integer roomTypeID) {
         /* get room type by ID. */
-        RoomType roomType = this.roomTypeDAO.getById(roomTypeID);
+        RoomType roomType = this.roomTypeDAO.findById(roomTypeID).get();
 
         /* convert entity to DTO. */
         return this.mapper.getRoomTypeDTO(roomType);
