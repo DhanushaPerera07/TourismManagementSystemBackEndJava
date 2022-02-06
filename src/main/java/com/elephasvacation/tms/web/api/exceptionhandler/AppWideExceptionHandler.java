@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class AppWideExceptionHandler {
     Logger logger = LoggerFactory.getLogger(AppWideExceptionHandler.class);
@@ -24,10 +26,16 @@ public class AppWideExceptionHandler {
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    @ExceptionHandler(RecordNotFoundException.class)
+    @ExceptionHandler(value = {RecordNotFoundException.class, NoSuchElementException.class})
     public String recordNotFoundException() {
         return "Record not found.";
     }
+
+//    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public String NoMatchingRecordNotFoundException() {
+//        return "Record not found.";
+//    }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Throwable.class)
