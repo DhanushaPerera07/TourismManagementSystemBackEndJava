@@ -24,7 +24,7 @@
  * @author : Dhanusha Perera
  * @since : 21/04/2021
  */
-package com.elephasvacation.tms.web.commonConstant;
+package com.elephasvacation.tms.web.commonconstant;
 
 public final class FailedMessages {
     public static final String FAILED_LOADING_SOMETHING = "Failed to load {0}. ";

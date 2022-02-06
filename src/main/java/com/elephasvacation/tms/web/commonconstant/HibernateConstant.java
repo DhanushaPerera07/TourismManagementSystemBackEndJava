@@ -25,7 +25,7 @@
  * @author : Dhanusha Perera
  * @date : 12/10/2021
  */
-package com.elephasvacation.tms.web.commonConstant;
+package com.elephasvacation.tms.web.commonconstant;
 
 /* Hibernate configurations related constants.*/
 public final class HibernateConstant {

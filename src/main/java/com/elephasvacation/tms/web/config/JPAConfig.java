@@ -23,7 +23,7 @@
  */
 package com.elephasvacation.tms.web.config;
 
-import com.elephasvacation.tms.web.commonConstant.HibernateConstant;
+import com.elephasvacation.tms.web.commonconstant.HibernateConstant;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

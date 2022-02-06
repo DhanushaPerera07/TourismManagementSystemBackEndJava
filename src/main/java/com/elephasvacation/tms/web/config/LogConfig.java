@@ -8,8 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import static com.elephasvacation.tms.web.commonConstant.Commons.LOGGER_FILE_DIRECTORY;
-import static com.elephasvacation.tms.web.commonConstant.Commons.LOGGER_FILE_NAME;
+import static com.elephasvacation.tms.web.commonconstant.Commons.LOGGER_FILE_DIRECTORY;
+import static com.elephasvacation.tms.web.commonconstant.Commons.LOGGER_FILE_NAME;
 
 public class LogConfig {
 

@@ -23,7 +23,7 @@
  */
 package com.elephasvacation.tms.web.dal.custom.impl;
 
-import com.elephasvacation.tms.web.commonConstant.Number;
+import com.elephasvacation.tms.web.commonconstant.Number;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageDAOCustom;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import org.springframework.beans.factory.annotation.Autowired;

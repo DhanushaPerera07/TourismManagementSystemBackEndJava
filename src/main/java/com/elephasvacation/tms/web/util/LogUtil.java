@@ -27,8 +27,8 @@
 package com.elephasvacation.tms.web.util;
 
 
-import com.elephasvacation.tms.web.commonConstant.Commons;
-import com.elephasvacation.tms.web.commonConstant.SuccessfulMessages;
+import com.elephasvacation.tms.web.commonconstant.Commons;
+import com.elephasvacation.tms.web.commonconstant.SuccessfulMessages;
 
 import java.io.File;
 import java.io.IOException;

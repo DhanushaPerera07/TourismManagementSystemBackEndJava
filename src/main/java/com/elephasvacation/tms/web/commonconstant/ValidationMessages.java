@@ -32,7 +32,7 @@
  * @author : Dhanusha Perera
  * @date : 27/04/2021
  */
-package com.elephasvacation.tms.web.commonConstant;
+package com.elephasvacation.tms.web.commonconstant;
 
 public final class ValidationMessages {
     public static final String INVALID_DATA_INPUT = "Invalid data input";

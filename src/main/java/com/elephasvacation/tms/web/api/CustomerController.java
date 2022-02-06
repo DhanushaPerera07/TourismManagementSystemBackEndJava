@@ -25,6 +25,7 @@ package com.elephasvacation.tms.web.api;
 
 import com.elephasvacation.tms.web.api.util.ApiUtil;
 import com.elephasvacation.tms.web.business.custom.CustomerBO;
+import com.elephasvacation.tms.web.commonconstant.API;
 import com.elephasvacation.tms.web.dto.CustomerDTO;
 import com.elephasvacation.tms.web.exception.IdFormatException;
 import com.elephasvacation.tms.web.exception.RecordNotFoundException;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = API.HTTP_LOCALHOST_8080)
 @RequestMapping("/api/v1/customers")
 @RestController
 public class CustomerController {
@@ -49,7 +50,7 @@ public class CustomerController {
      * @return List<CustomerDTO> customersList.
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CustomerDTO> getAllCustomers() throws Exception {
+    public List<CustomerDTO> getAllCustomers() {
         return customerBO.getAllCustomers();
     }
 
@@ -62,7 +63,7 @@ public class CustomerController {
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             value = "/{id}")
-    public CustomerDTO getCustomerByID(@PathVariable(name = "id") String id) throws Exception {
+    public CustomerDTO getCustomerByID(@PathVariable(name = "id") String id) {
         System.out.println("CustomerID: " + id);
 
         Integer customerID = ApiUtil.getIntegerId(id);
@@ -77,7 +78,7 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Integer saveCustomer(@RequestBody CustomerDTO customerDTO) throws Exception {
+    public Integer saveCustomer(@RequestBody CustomerDTO customerDTO) {
         System.out.println("API Layer: CustomerDTO ---> " + customerDTO);
         Integer customerID = customerBO.createCustomer(customerDTO);
         return customerID;
@@ -86,7 +87,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateCustomer(@PathVariable String id,
-                               @RequestBody CustomerDTO customerDTO) throws Exception {
+                               @RequestBody CustomerDTO customerDTO) {
         try {
             Integer customerID = ApiUtil.getIntegerId(id);
 
@@ -110,7 +111,7 @@ public class CustomerController {
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}")
-    public void deleteCustomer(@PathVariable String id) throws Exception {
+    public void deleteCustomer(@PathVariable String id) {
         Integer customerID = ApiUtil.getIntegerId(id);
         System.out.println("Customer ID: " + customerID);
         customerBO.deleteCustomer(customerID);
