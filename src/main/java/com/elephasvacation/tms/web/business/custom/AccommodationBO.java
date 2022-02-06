@@ -38,9 +38,9 @@ public interface AccommodationBO extends SuperBO {
 
     void updateAccommodation(AccommodationDTO accommodationDTO);
 
-    void deleteAccommodation(int accommodationID) throws Exception;
+    void deleteAccommodation(Integer accommodationID);
 
-    AccommodationDTO getAccommodationByID(int accommodationID);
+    AccommodationDTO getAccommodationByID(Integer accommodationID);
 
     List<AccommodationDTO> getAllAccommodations();
 }

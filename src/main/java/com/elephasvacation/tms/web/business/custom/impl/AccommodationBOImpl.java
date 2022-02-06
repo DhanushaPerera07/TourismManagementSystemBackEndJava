@@ -62,13 +62,13 @@ public class AccommodationBOImpl implements AccommodationBO {
     }
 
     @Override
-    public void deleteAccommodation(int accommodationID) throws Exception {
+    public void deleteAccommodation(Integer accommodationID) {
         this.accommodationDAO.deleteById(accommodationID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public AccommodationDTO getAccommodationByID(int accommodationID) {
+    public AccommodationDTO getAccommodationByID(Integer accommodationID) {
         return this.mapper.
                 getAccommodationDTO(this.accommodationDAO.getById(accommodationID));
     }
