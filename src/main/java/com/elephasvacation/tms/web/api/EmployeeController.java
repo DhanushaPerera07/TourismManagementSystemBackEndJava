@@ -27,13 +27,94 @@
 */
 package com.elephasvacation.tms.web.api;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.elephasvacation.tms.web.api.util.ApiUtil;
+import com.elephasvacation.tms.web.business.custom.EmployeeBO;
+import com.elephasvacation.tms.web.commonconstant.API;
+import com.elephasvacation.tms.web.dto.EmployeeDTO;
+import com.elephasvacation.tms.web.exception.IdFormatException;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+import java.util.List;
+
+@CrossOrigin(origins = API.HTTP_LOCALHOST_8080)
 @RequestMapping("/api/v1/employees")
 @RestController
 public class EmployeeController {
 
+    @Autowired
+    private EmployeeBO employeeBO;
+
+    /**
+     * Get all employees list.
+     *
+     * @return List<EmployeeDTO> employeesList.
+     */
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<EmployeeDTO> getAllEmployees() {
+        return this.employeeBO.getAllEmployees();
+    }
+
+    /**
+     * Get employee by employee ID.
+     *
+     * @return EmployeeDTO employee object.
+     * @throws IdFormatException       if the ID is not an Integer.
+     * @throws RecordNotFoundException if matching employee record not found,
+     */
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            value = "/{id}")
+    public EmployeeDTO getEmployeeByID(@PathVariable(name = "id") String id) {
+        System.out.println("EmployeeID: " + id);
+
+        Integer employeeID = ApiUtil.getIntegerId(id);
+
+        EmployeeDTO employeeDTO = this.employeeBO.getEmployeeByID(employeeID);
+        System.out.println("Employee Result: " + employeeDTO);
+
+        /* If Employee not found. */
+        if (employeeDTO == null) throw new RecordNotFoundException();
+        return employeeDTO;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Integer saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        System.out.println("API Layer: EmployeeDTO ---> " + employeeDTO);
+        Integer employeeId = this.employeeBO.createEmployee(employeeDTO);
+        return employeeId;
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updateEmployee(@PathVariable String id,
+                               @RequestBody EmployeeDTO employeeDTO) {
+        Integer employeeID = ApiUtil.getIntegerId(id);
+
+        /* TODO: Employee - update validation logic. */
+        if (employeeDTO.getId() == employeeID) {
+            employeeDTO.setId(employeeID);
+            this.employeeBO.updateEmployee(employeeDTO);
+        } else {
+            /* URL param employeeID and employeeObject's employeeID mismatched.
+            Therefore, Let's throw an error.*/
+            /* TODO: handle error. */
+            throw new RuntimeException();
+        }
+
+    }
+
+    /**
+     * Delete employee by EmployeeID.
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{id}")
+    public void deleteEmployee(@PathVariable String id) {
+        Integer employeeID = ApiUtil.getIntegerId(id);
+        System.out.println("Employee ID: " + employeeID);
+        this.employeeBO.deleteEmployee(employeeID);
+    }
 }
