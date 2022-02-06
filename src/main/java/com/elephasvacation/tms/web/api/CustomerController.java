@@ -61,7 +61,7 @@ public class CustomerController {
      * @throws RecordNotFoundException if matching customer record not found,
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE,
-            value = "/{id:\\d}")
+            value = "/{id}")
     public CustomerDTO getCustomerByID(@PathVariable(name = "id") String id) throws Exception {
         System.out.println("CustomerID: " + id);
 
@@ -84,7 +84,7 @@ public class CustomerController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping(value = "/{id:\\d}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateCustomer(@PathVariable String id,
                                @RequestBody CustomerDTO customerDTO) throws Exception {
         try {
@@ -109,7 +109,7 @@ public class CustomerController {
      * Delete customer by Customer ID.
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(value = "/{id:\\d}")
+    @DeleteMapping(value = "/{id}")
     public void deleteCustomer(@PathVariable String id) throws Exception {
         Integer customerID = ApiUtil.getIntegerId(id);
         System.out.println("Customer ID: " + customerID);

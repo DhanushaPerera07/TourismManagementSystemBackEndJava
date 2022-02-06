@@ -83,7 +83,7 @@ public class CustomerBOImpl implements CustomerBO {
     @Override
     public CustomerDTO getCustomerByID(Integer customerID) {
         /* get customer by customer ID. */
-        return this.mapper.getCustomerDTO(this.customerDAO.getById(customerID));
+        return this.mapper.getCustomerDTO(this.customerDAO.findById(customerID).get());
     }
 
     @Transactional(readOnly = true)
