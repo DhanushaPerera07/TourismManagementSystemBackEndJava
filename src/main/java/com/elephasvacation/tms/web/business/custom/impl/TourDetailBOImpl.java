@@ -61,7 +61,7 @@ public class TourDetailBOImpl implements TourDetailBO {
 
         /* if customer is not found. */
         if (!this.customerDAO.existsById(tourDetailDTO.getCustomerId()))
-            throw new RecordNotFoundException("No matching Customer record not found for ID: " + tourDetailDTO.getCustomerId());
+            throw new RecordNotFoundException("No matching Customer record found for ID: " + tourDetailDTO.getCustomerId());
 
         /* convert DTO to entity. */
         TourDetail tourDetail = this.mapper.getTourDetail(tourDetailDTO);
