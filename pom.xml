@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -47,16 +47,6 @@
         </dependency>
 
 
-        <!--        &lt;!&ndash; Yasson - JSONb&ndash;&gt;-->
-        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.eclipse/yasson &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.eclipse</groupId>-->
-        <!--            <artifactId>yasson</artifactId>-->
-        <!--            <version>2.0.2</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--        </dependency>-->
-
-
         <!-- Junit4 for unit testing -->
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
@@ -95,7 +85,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.6.3.Final</version>
+            <version>5.6.5.Final</version>
         </dependency>
 
 
@@ -123,7 +113,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>5.3.14</version>
+            <version>5.3.15</version>
         </dependency>
 
         <!-- Apache Commons DBCP -->
@@ -147,7 +137,7 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.9.7</version>
+            <version>1.9.8</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -175,6 +165,12 @@
             <version>2.13.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jdk8 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>2.13.1</version>
+        </dependency>
 
         <!--Spring TestContext Framework ====================================================== -->
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
