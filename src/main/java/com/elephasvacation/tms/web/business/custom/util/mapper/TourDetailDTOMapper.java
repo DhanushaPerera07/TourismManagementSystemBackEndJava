@@ -26,16 +26,30 @@ package com.elephasvacation.tms.web.business.custom.util.mapper;
 import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {DateTimeMapper.class})
 public abstract class TourDetailDTOMapper {
 
     /*  -------------------- Tour-Details.  -------------------- */
+    @Mappings(value = {
+            @Mapping(source = "customerId", target = "customer.id"),
+            @Mapping(source = "arrivalDate", target = "arrivalDate"),
+            @Mapping(source = "departureDate", target = "departureDate"),
+            @Mapping(source = "created", target = "created"),
+            @Mapping(source = "updated", target = "updated")
+    })
     public abstract TourDetail getTourDetail(TourDetailDTO tourDetailsDTO);
 
-    public abstract TourDetailDTO getTourDetailDTO(TourDetail tourDetails);
+    @Mappings(value = {
+            @Mapping(source = "customer.id", target = "customerId"),
+            @Mapping(source = "created", target = "created"),
+            @Mapping(source = "updated", target = "updated")
+    })
+    public abstract TourDetailDTO getTourDetailDTO(TourDetail tourDetail);
 
     public abstract List<TourDetailDTO> getTourDetailDTOList(List<TourDetail> tourDetailList);
 }
