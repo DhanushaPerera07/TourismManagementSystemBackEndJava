@@ -36,6 +36,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -53,7 +56,7 @@ public class EmployeeDAOImplTest {
             /* creates a new Employee object. */
             Employee employee = new Employee("John Doe",
                     "New York",
-                    LocalDate.of(1991, 1, 1),
+                    ZonedDateTime.of(LocalDateTime.of(1991, 1, 1, 0, 0), ZoneId.of("Asia/Colombo")),
                     "112233445566",
                     "03321234567",
                     "john.test@gmail.com",

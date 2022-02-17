@@ -43,6 +43,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -72,8 +74,8 @@ public class TourDetailDAOImplTest {
                     4,
                     2,
                     3,
-                    LocalDateTime.of(2021, 12, 20, 0, 0),
-                    LocalDateTime.of(2021, 12, 24, 0, 0),
+                    ZonedDateTime.of(LocalDateTime.of(2021, 12, 20, 0, 0), ZoneId.of("Asia/Colombo")),
+                    ZonedDateTime.of(LocalDateTime.of(2021, 12, 24, 0, 0), ZoneId.of("Asia/Colombo")),
                     TourDetailStatusTypes.POTENTIAL,
                     new BigDecimal("200.00"),
                     "None",
