@@ -29,9 +29,11 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.TourDetailBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.TourDetailDTOMapper;
+import com.elephasvacation.tms.web.dal.CustomerDAO;
 import com.elephasvacation.tms.web.dal.TourDetailDAO;
 import com.elephasvacation.tms.web.dto.TourDetailDTO;
 import com.elephasvacation.tms.web.entity.TourDetail;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,9 @@ import java.util.List;
 public class TourDetailBOImpl implements TourDetailBO {
 
     @Autowired
+    private CustomerDAO customerDAO;
+
+    @Autowired
     private TourDetailDAO tourDetailDAO;
 
     @Autowired
@@ -53,6 +58,10 @@ public class TourDetailBOImpl implements TourDetailBO {
 
     @Override
     public Integer createTourDetail(TourDetailDTO tourDetailDTO) {
+
+        /* if customer is not found. */
+        if (!this.customerDAO.existsById(tourDetailDTO.getCustomerId()))
+            throw new RecordNotFoundException("No matching Customer record not found for ID: " + tourDetailDTO.getCustomerId());
 
         /* convert DTO to entity. */
         TourDetail tourDetail = this.mapper.getTourDetail(tourDetailDTO);
@@ -63,6 +72,12 @@ public class TourDetailBOImpl implements TourDetailBO {
 
     @Override
     public void updateTourDetail(TourDetailDTO tourDetailDTO) {
+
+        /* if customer is not found. */
+        if (!this.customerDAO.existsById(tourDetailDTO.getCustomerId()) ||
+                !this.tourDetailDAO.existsById(tourDetailDTO.getId()))
+            throw new RecordNotFoundException(String.valueOf(tourDetailDTO.getCustomerId()));
+
         /* update. */
         this.tourDetailDAO.save(this.mapper.getTourDetail(tourDetailDTO));
     }
@@ -96,7 +111,7 @@ public class TourDetailBOImpl implements TourDetailBO {
      */
     @Transactional(readOnly = true)
     @Override
-    public TourDetailDTO getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception {
+    public TourDetailDTO getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) {
 
         /* get tour detail by customerID &  tourDetailID. */
         TourDetail tourDetail = this.tourDetailDAO.
@@ -129,7 +144,7 @@ public class TourDetailBOImpl implements TourDetailBO {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<TourDetailDTO> getAllTourDetailsByCustomerID(Integer customerID) throws Exception {
+    public List<TourDetailDTO> getAllTourDetailsByCustomerID(Integer customerID) {
         /* get all tour details by customerID. */
         List<TourDetail> tourDetailList = this.tourDetailDAO.getAllTourDetailsByCustomerID(customerID);
 

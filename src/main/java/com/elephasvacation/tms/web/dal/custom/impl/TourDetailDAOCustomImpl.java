@@ -43,11 +43,14 @@ public class TourDetailDAOCustomImpl implements TourDetailDAOCustom {
 
     @Override
     public TourDetail getTourDetailByCustomerIDAndTourDetailID(Integer customerID, Integer tourDetailID) {
-        Query query = this.entityManager.
-                createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1 AND t.id=?2");
+        TypedQuery<TourDetail> query = this.entityManager.
+                createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1 AND t.id=?2", TourDetail.class);
+//        Query query = this.entityManager.
+//                createQuery("SELECT t FROM TourDetail t WHERE t.customer.id=?1 AND t.id=?2");
         query.setParameter(Number.ONE, customerID);
         query.setParameter(Number.TWO, tourDetailID);
-        return (TourDetail) query.getSingleResult();
+//        return (TourDetail) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     /**

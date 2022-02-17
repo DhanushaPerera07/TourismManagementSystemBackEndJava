@@ -28,7 +28,7 @@ import com.elephasvacation.tms.web.entity.TourDetail;
 import java.util.List;
 
 public interface TourDetailDAOCustom {
-    TourDetail getTourDetailByCustomerIDAndTourDetailID(Integer customerID, Integer tourDetailID) throws Exception;
+    TourDetail getTourDetailByCustomerIDAndTourDetailID(Integer customerID, Integer tourDetailID);
 
-    List<TourDetail> getAllTourDetailsByCustomerID(Integer customerID) throws Exception;
+    List<TourDetail> getAllTourDetailsByCustomerID(Integer customerID);
 }

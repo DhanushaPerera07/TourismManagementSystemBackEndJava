@@ -42,9 +42,9 @@ public interface TourDetailBO extends SuperBO {
 
     TourDetailDTO getTourDetailByID(Integer tourDetailID);
 
-    TourDetailDTO getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID) throws Exception;
+    TourDetailDTO getTourDetailByIDAndCustomerID(Integer customerID, Integer tourDetailID);
 
     List<TourDetailDTO> getAllTourDetails();
 
-    List<TourDetailDTO> getAllTourDetailsByCustomerID(Integer customerID) throws Exception;
+    List<TourDetailDTO> getAllTourDetailsByCustomerID(Integer customerID);
 }
