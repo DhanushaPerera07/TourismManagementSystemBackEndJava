@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -37,7 +37,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -51,15 +50,15 @@ public class TourDetailDTO implements Serializable {
     private Integer noOfAdults;
     private Integer noOfChildren;
     private Integer starCategory;
-    private LocalDateTime arrivalDate;
-    private LocalDateTime departureDate;
+    private String arrivalDate;
+    private String departureDate;
     private TourDetailStatusTypes status;
     private BigDecimal exchangeRate;
     private String tourAgent;
     private BigDecimal agentProfit;
-    private int customerId;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private Integer customerId;
+    private String created;
+    private String updated;
 
     public TourDetailDTO(
             int id,
@@ -67,8 +66,8 @@ public class TourDetailDTO implements Serializable {
             int noOfAdults,
             int noOfChildren,
             int starCategory,
-            LocalDateTime arrivalDate,
-            LocalDateTime departureDate,
+            String arrivalDate,
+            String departureDate,
             TourDetailStatusTypes status,
             BigDecimal exchangeRate,
             String tourAgent,

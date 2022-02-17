@@ -31,8 +31,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "employee")
@@ -57,7 +56,7 @@ public class Employee implements SuperEntity<Serializable>{
     private String address;
 
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    private ZonedDateTime dateOfBirth;
 
     @Column(name = "nic", length = 45)
     private String nic;
@@ -78,16 +77,16 @@ public class Employee implements SuperEntity<Serializable>{
     private String status;
 
     @Column(name = "created")
-    private LocalDateTime created;
+    private ZonedDateTime created;
 
     @Column(name = "updated")
-    private LocalDateTime updated;
+    private ZonedDateTime updated;
 
     /* Constructor with ID attribute. */
     public Employee(Integer id,
                     String name,
                     String address,
-                    LocalDate dateOfBirth,
+                    ZonedDateTime dateOfBirth,
                     String nic,
                     String contact,
                     String email,
@@ -109,7 +108,7 @@ public class Employee implements SuperEntity<Serializable>{
     /* Constructor without ID attribute. */
     public Employee(String name,
                     String address,
-                    LocalDate dateOfBirth,
+                    ZonedDateTime dateOfBirth,
                     String nic,
                     String contact,
                     String email,
@@ -129,12 +128,12 @@ public class Employee implements SuperEntity<Serializable>{
 
     @PrePersist
     public void creationTimeStamps() {
-        created = LocalDateTime.now();
+        created = ZonedDateTime.now();
     }
 
 
     @PreUpdate
     public void updateTimeStamps() {
-        updated = LocalDateTime.now();
+        updated = ZonedDateTime.now();
     }
 }

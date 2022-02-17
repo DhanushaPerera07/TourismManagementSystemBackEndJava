@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Table(name = "customer")
 @Entity
@@ -75,10 +75,10 @@ public class Customer implements SuperEntity<Serializable> {
     private String additionalNotes;
 
     @Column(name = "created")
-    private LocalDateTime created;
+    private ZonedDateTime created;
 
     @Column(name = "updated")
-    private LocalDateTime updated;
+    private ZonedDateTime updated;
 
     @Column(name = "gender", length = 6)
     private GenderTypes gender;
@@ -129,13 +129,13 @@ public class Customer implements SuperEntity<Serializable> {
 
     @PrePersist
     public void creationTimeStamps() {
-        created = LocalDateTime.now();
+        created = ZonedDateTime.now();
     }
 
 
     @PreUpdate
     public void updateTimeStamps() {
-        updated = LocalDateTime.now();
+        updated = ZonedDateTime.now();
     }
 
 }

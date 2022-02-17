@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor
@@ -55,8 +55,8 @@ public class CustomerDTO implements Serializable {
     private String country;
     private String description;
     private String additionalNotes;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private ZonedDateTime created;
+    private ZonedDateTime updated;
 
     public CustomerDTO(int id,
                        String name,

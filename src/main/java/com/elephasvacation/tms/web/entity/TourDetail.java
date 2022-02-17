@@ -33,6 +33,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Table(name = "tour_detail", indexes = {
         @Index(name = "fk_tour_detail_customer1_idx", columnList = "customer_id")
@@ -64,10 +65,10 @@ public class TourDetail implements SuperEntity<Serializable> {
     private Integer starCategory;
 
     @Column(name = "arrival_date", nullable = false)
-    private LocalDateTime arrivalDate;
+    private ZonedDateTime arrivalDate;
 
     @Column(name = "departure_date", nullable = false)
-    private LocalDateTime departureDate;
+    private ZonedDateTime departureDate;
 
     @Column(name = "status", length = 45)
     private TourDetailStatusTypes status;
@@ -83,10 +84,10 @@ public class TourDetail implements SuperEntity<Serializable> {
     private BigDecimal agentProfit;
 
     @Column(name = "created")
-    private LocalDateTime created;
+    private ZonedDateTime created;
 
     @Column(name = "updated")
-    private LocalDateTime updated;
+    private ZonedDateTime updated;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
@@ -98,8 +99,8 @@ public class TourDetail implements SuperEntity<Serializable> {
                       Integer noOfAdults,
                       Integer noOfChildren,
                       Integer starCategory,
-                      LocalDateTime arrivalDate,
-                      LocalDateTime departureDate,
+                      ZonedDateTime arrivalDate,
+                      ZonedDateTime departureDate,
                       TourDetailStatusTypes status,
                       BigDecimal exchangeRate,
                       String tourAgent,
@@ -124,8 +125,8 @@ public class TourDetail implements SuperEntity<Serializable> {
                       Integer noOfAdults,
                       Integer noOfChildren,
                       Integer starCategory,
-                      LocalDateTime arrivalDate,
-                      LocalDateTime departureDate,
+                      ZonedDateTime arrivalDate,
+                      ZonedDateTime departureDate,
                       TourDetailStatusTypes status,
                       BigDecimal exchangeRate,
                       String tourAgent,
@@ -146,12 +147,12 @@ public class TourDetail implements SuperEntity<Serializable> {
 
     @PrePersist
     public void creationTimeStamps() {
-        created = LocalDateTime.now();
+        created = ZonedDateTime.now();
     }
 
 
     @PreUpdate
     public void updateTimeStamps() {
-        updated = LocalDateTime.now();
+        updated = ZonedDateTime.now();
     }
 }

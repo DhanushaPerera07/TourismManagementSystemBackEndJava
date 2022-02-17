@@ -28,13 +28,6 @@
 package com.elephasvacation.tms.web.dto;
 
 import com.elephasvacation.tms.web.entity.enumeration.GenderTypes;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,8 +36,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor
@@ -56,10 +48,7 @@ public class EmployeeDTO implements Serializable {
     private int id;
     private String name;
     private String address;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class) // dd.MM.yyyy
-    private LocalDate dateOfBirth;
+    private ZonedDateTime dateOfBirth;
     /*    @JsonbDateFormat("yyyy-MM-dd") // dd.MM.yyyy
         private LocalDate dateOfBirth;*/
     private String nic;
@@ -69,20 +58,14 @@ public class EmployeeDTO implements Serializable {
     private String position;
     private String status;
     //    private String password;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime created;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime lastUpdated;
+    private ZonedDateTime created;
+    private ZonedDateTime lastUpdated;
 
     /* custom constructor - without created, lastUpdated. */
     public EmployeeDTO(int id,
                        String name,
                        String address,
-                       LocalDate dateOfBirth,
+                       ZonedDateTime dateOfBirth,
                        String nic,
                        String contact,
                        String email,
@@ -103,7 +86,7 @@ public class EmployeeDTO implements Serializable {
 
     public EmployeeDTO(String name,
                        String address,
-                       LocalDate dateOfBirth,
+                       ZonedDateTime dateOfBirth,
                        String nic,
                        String contact,
                        String email,
