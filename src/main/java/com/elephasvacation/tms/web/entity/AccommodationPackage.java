@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Table(name = "accommodation_package", indexes = {
         @Index(name = "fk_accommodation_package_accommodation_idx", columnList = "accommodation_id")
@@ -59,10 +59,10 @@ public class AccommodationPackage implements SuperEntity<Serializable> {
     private String validPeriod;
 
     @Column(name = "created")
-    private LocalDateTime created;
+    private ZonedDateTime created;
 
     @Column(name = "updated")
-    private LocalDateTime updated;
+    private ZonedDateTime updated;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "accommodation_id", nullable = false)
@@ -92,12 +92,12 @@ public class AccommodationPackage implements SuperEntity<Serializable> {
 
     @PrePersist
     public void creationTimeStamps() {
-        created = LocalDateTime.now();
+        created = ZonedDateTime.now();
     }
 
 
     @PreUpdate
     public void updateTimeStamps() {
-        updated = LocalDateTime.now();
+        updated = ZonedDateTime.now();
     }
 }
