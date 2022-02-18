@@ -45,18 +45,12 @@ public abstract class AccommodationPackageDTOMapper {
 
     @Named(value = "toAccommodationQBN")
     public Accommodation toAccommodation(AccommodationPackageDTO accommodationPackageDTO) {
-//        Accommodation accommodation = AppInitializer.getContext().getBean(Accommodation.class);
         accommodation.setId(accommodationPackageDTO.getAccommodationId());
         return accommodation;
     }
 
-    @Mapping(target = "accommodationId", source = ".", qualifiedByName = "toAccommodationPackageId")
+    @Mapping(target = "accommodationId", source = "accommodation.id")
     public abstract AccommodationPackageDTO getAccommodationPackageDTO(AccommodationPackage accommodationPackage);
-
-    @Named(value = "toAccommodationPackageId")
-    public Integer toAccommodationId(AccommodationPackage accommodationPackage) {
-        return accommodationPackage.getAccommodation().getId();
-    }
 
     public abstract List<AccommodationPackageDTO> getAccommodationPackageDTOList(List<AccommodationPackage> accommodationPackageList);
 }
