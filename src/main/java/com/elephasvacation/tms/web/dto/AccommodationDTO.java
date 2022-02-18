@@ -35,7 +35,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -44,7 +43,7 @@ import java.time.LocalDateTime;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AccommodationDTO implements Serializable {
 
-    private int id;
+    private Integer id;
     private String name;
     private String situatedIn;
     private int starRating;
@@ -55,8 +54,8 @@ public class AccommodationDTO implements Serializable {
     private String website;
     private String specialDetails;
     private String remark;
-    private LocalDateTime created;
-    private LocalDateTime lastUpdated;
+    private String created;
+    private String lastUpdated;
 
     public AccommodationDTO(int id,
                             String name,
