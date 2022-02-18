@@ -29,9 +29,11 @@ package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
+import com.elephasvacation.tms.web.dal.AccommodationDAO;
 import com.elephasvacation.tms.web.dal.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,10 +47,25 @@ import java.util.List;
 public class AccommodationPackageBOImpl implements AccommodationPackageBO {
 
     @Autowired
+    private AccommodationDAO accommodationDAO;
+
+    @Autowired
     private AccommodationPackageDAO accommodationPackageDAO;
 
     @Autowired
     private AccommodationPackageDTOMapper mapper;
+
+    /**
+     * Check for an Accommodation record for a given ID.
+     *
+     * @param accommodationId ID of the Accommodation.
+     * @throws RecordNotFoundException if not found.
+     */
+    private void checkForAccommodationRecord(Integer accommodationId) {
+        /* if Accommodation is not found. */
+        if (accommodationId == null || !this.accommodationDAO.existsById(accommodationId))
+            throw new RecordNotFoundException("No matching Accommodation record found for ID: " + accommodationId);
+    }
 
 
     @Override
@@ -68,11 +85,39 @@ public class AccommodationPackageBOImpl implements AccommodationPackageBO {
         this.accommodationPackageDAO.deleteById(accommodationPackageID);
     }
 
+    @Override
+    public void deleteAccommodationPackage(Integer accommodationId, Integer accommodationPackageId) {
+
+        /* if Accommodation is not found. */
+        checkForAccommodationRecord(accommodationId);
+
+        this.accommodationPackageDAO.deleteById(accommodationPackageId);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID) {
         return this.mapper.
                 getAccommodationPackageDTO(this.accommodationPackageDAO.getById(accommodationPackageID));
+    }
+
+    /**
+     * Get the AccommodationPackage record.
+     *
+     * @param accommodationId        Integer ID of the Accommodation.
+     * @param accommodationPackageId Integer ID of the Accommodation Package.
+     * @throws RecordNotFoundException if no matching Accommodation record found for given AccommodationID.
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationId,
+                                                               Integer accommodationPackageId) {
+        /* if Accommodation is not found. */
+        checkForAccommodationRecord(accommodationId);
+
+        AccommodationPackage accommodationPackage = this.accommodationPackageDAO.findById(accommodationPackageId).get();
+
+        return this.mapper.getAccommodationPackageDTO(accommodationPackage);
     }
 
     /**

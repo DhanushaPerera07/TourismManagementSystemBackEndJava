@@ -40,7 +40,11 @@ public interface AccommodationPackageBO extends SuperBO {
 
     void deleteAccommodationPackage(Integer accommodationPackageID);
 
+    void deleteAccommodationPackage(Integer accommodationId, Integer accommodationPackageId);
+
     AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationPackageID);
+
+    AccommodationPackageDTO getAccommodationPackageByID(Integer accommodationId, Integer accommodationPackageID);
 
     List<AccommodationPackageDTO> getAllAccommodationPackagesByAccommodationID(Integer accommodationID);
 
