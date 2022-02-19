@@ -28,11 +28,16 @@ public class AppWideExceptionHandler {
         return "ID is not valid.";
     }
 
+
+    /* TODO: Handle the errors with the error message. */
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = {RecordNotFoundException.class, NoSuchElementException.class, EmptyResultDataAccessException.class})
-    public String recordNotFoundException(RecordNotFoundException recordNotFoundException) {
-        return (recordNotFoundException == null) ? "Record not found." : "Record not found: " +
-                recordNotFoundException.getMessage();
+    public String recordNotFoundException(RuntimeException exception) {
+        System.err.println(exception.getMessage());
+        return (exception == null ||
+                exception.getMessage().equals("No value present") ||
+                exception.getMessage().isEmpty()) ? "Record not found." : "Record not found: " +
+                exception.getMessage();
     }
 
 //    @ResponseStatus(code = HttpStatus.NOT_FOUND)
