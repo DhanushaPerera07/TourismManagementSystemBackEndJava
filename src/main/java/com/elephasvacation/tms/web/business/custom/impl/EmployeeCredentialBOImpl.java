@@ -26,19 +26,24 @@ package com.elephasvacation.tms.web.business.custom.impl;
 import com.elephasvacation.tms.web.business.custom.EmployeeCredentialBO;
 import com.elephasvacation.tms.web.business.custom.util.mapper.EmployeeCredentialDTOMapper;
 import com.elephasvacation.tms.web.dal.EmployeeCredentialDAO;
+import com.elephasvacation.tms.web.dal.EmployeeDAO;
+import com.elephasvacation.tms.web.dto.CredentialDataDTO;
 import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
 import com.elephasvacation.tms.web.entity.EmployeeCredential;
+import com.elephasvacation.tms.web.exception.BadRequestException;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @NoArgsConstructor
 @Transactional
 @Service
 public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
+
+    @Autowired
+    private EmployeeDAO employeeDAO;
 
     @Autowired
     private EmployeeCredentialDAO employeeCredentialDAO;
@@ -49,47 +54,80 @@ public class EmployeeCredentialBOImpl implements EmployeeCredentialBO {
     @Override
     public Integer createEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO) {
 
+        /* Check for a matching employee. */
+        if (!this.employeeDAO.existsById(employeeCredentialDTO.getEmployeeId()))
+            throw new RecordNotFoundException("No matching Employee record found for ID: " +
+                    employeeCredentialDTO.getEmployeeId());
+
+        /* Check whether there is a record in employee credentials table. */
+        if (this.employeeCredentialDAO.existsById(employeeCredentialDTO.getEmployeeId()))
+            throw new BadRequestException("Record already exists");
+
         /* convert employeeCredentialDTO to entity. */
         EmployeeCredential employeeCredential = this.mapper.getEmployeeCredential(employeeCredentialDTO);
 
         /* save. */
-        return this.employeeCredentialDAO.save(employeeCredential).getId();
+        this.employeeCredentialDAO.save(employeeCredential);
+
+        /* Employee Credential entity does not maintain a separate ID column,
+        so no need to generate an ID for it. */
+        return employeeCredentialDTO.getEmployeeId();
     }
 
-    @Override
+/*    @Override
     public void updateEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO) {
 
-        /* convert DTO to entity. */
+        *//* convert DTO to entity. *//*
         EmployeeCredential employeeCredential = this.mapper.getEmployeeCredential(employeeCredentialDTO);
 
-        /* update. */
+        *//* update. *//*
         this.employeeCredentialDAO.save(employeeCredential);
-    }
+    }*/
 
     @Override
+    public void updateEmployeeCredential(Integer employeeId, CredentialDataDTO credentials) {
+        EmployeeCredential employeeCredential = this.employeeCredentialDAO.findById(employeeId).orElse(null);
+
+        if (employeeCredential == null)
+            throw new RecordNotFoundException("No matching Employee record found for ID: " + employeeId);
+
+        /* TODO: password change logic. */
+        if (!employeeCredential.getPassword().equals(credentials.getOldPassword())) {
+            /* No update. */
+            throw new BadRequestException("Given credentials are invalid.");
+        } else {
+            /* set the new password. */
+            /* TODO: new password should be hashed. */
+            employeeCredential.setPassword(credentials.getNewPassword());
+            /* update. */
+            this.employeeCredentialDAO.save(employeeCredential);
+        }
+
+    }
+
+/*    @Override
     public void deleteEmployeeCredential(Integer employeeCredentialID) {
         this.employeeCredentialDAO.deleteById(employeeCredentialID);
-    }
+    }*/
 
-    @Transactional(readOnly = true)
+ /*   @Transactional(readOnly = true)
     @Override
-    public EmployeeCredentialDTO getEmployeeCredentialByID(Integer employeeCredentialID) {
+    public EmployeeCredentialDTO getEmployeeCredentialByID(Integer employeeId) {
+        EmployeeCredential employeeCredential = this.employeeCredentialDAO.findById(employeeId)
+                .orElseThrow(() -> new RecordNotFoundException("No matching Employee found for ID: " + employeeId));
 
-        /* get EmployeeCredential By ID.  */
-        EmployeeCredential employeeCredential = this.employeeCredentialDAO.getById(employeeCredentialID);
-
-        /* convert entity to DTO. */
+        *//* convert entity to DTO. *//*
         return this.mapper.getEmployeeCredentialDTO(employeeCredential);
-    }
+    }*/
 
-    @Transactional(readOnly = true)
+/*    @Transactional(readOnly = true)
     @Override
     public List<EmployeeCredentialDTO> getAllEmployeeCredentials(Integer employeeCredentialID) {
 
-        /* get all employee credentials. */
+        *//* get all employee credentials. *//*
         List<EmployeeCredential> employeeCredentialList = this.employeeCredentialDAO.findAll();
 
-        /* convert employeeCredentialList to DTOList. */
+        *//* convert employeeCredentialList to DTOList. *//*
         return this.mapper.getEmployeeCredentialDTOList(employeeCredentialList);
-    }
+    }*/
 }

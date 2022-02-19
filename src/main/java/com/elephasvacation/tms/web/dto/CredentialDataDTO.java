@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 Dhanusha Perera
+ * Copyright (c) 2022 Dhanusha Perera
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.elephasvacation.tms.web.business.custom;
+package com.elephasvacation.tms.web.dto;
 
-import com.elephasvacation.tms.web.business.SuperBO;
-import com.elephasvacation.tms.web.dto.CredentialDataDTO;
-import com.elephasvacation.tms.web.dto.EmployeeCredentialDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public interface EmployeeCredentialBO extends SuperBO {
+import java.io.Serializable;
 
-    Integer createEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO);
-
-//    void updateEmployeeCredential(EmployeeCredentialDTO employeeCredentialDTO);
-
-    void updateEmployeeCredential(Integer employeeId, CredentialDataDTO credentials);
-
-//    void deleteEmployeeCredential(Integer employeeCredentialID);
-
-//    EmployeeCredentialDTO getEmployeeCredentialByID(Integer employeeId);
-
-//    List<EmployeeCredentialDTO> getAllEmployeeCredentials(Integer employeeCredentialID);
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class CredentialDataDTO implements Serializable {
+    private String oldPassword;
+    private String newPassword;
 }
