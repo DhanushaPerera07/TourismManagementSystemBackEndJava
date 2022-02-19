@@ -30,15 +30,15 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-@Table(name = "employee_credential")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Getter
 @Setter
 @ToString
+@Table(name = "employee_credential")
+@Entity
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class EmployeeCredential implements SuperEntity<Serializable> {
@@ -47,18 +47,15 @@ public class EmployeeCredential implements SuperEntity<Serializable> {
     @Getter(AccessLevel.PRIVATE)
     private Integer employeeId; // Employee ID
 
-//    @Column(name = "email", length = 200)
-//    private String email;
-
     @Lob
     @Column(name = "password")
     private String password;
 
     @Column(name = "created")
-    private LocalDateTime created;
+    private ZonedDateTime created;
 
     @Column(name = "updated")
-    private LocalDateTime updated;
+    private ZonedDateTime updated;
 
     /* Constructor with ID attribute */
     public EmployeeCredential(Integer employeeId, String password) {
@@ -66,31 +63,16 @@ public class EmployeeCredential implements SuperEntity<Serializable> {
         this.password = password;
     }
 
-/*    *//* Constructor with ID attribute *//*
-    public EmployeeCredential(Integer id,
-                              String email,
-                              String password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-    }
-
-    *//* Constructor without ID attribute *//*
-    public EmployeeCredential(String email,
-                              String password) {
-        this.email = email;
-        this.password = password;
-    }*/
 
     @PrePersist
     public void creationTimeStamps() {
-        created = LocalDateTime.now();
+        created = ZonedDateTime.now();
     }
 
 
     @PreUpdate
     public void updateTimeStamps() {
-        updated = LocalDateTime.now();
+        updated = ZonedDateTime.now();
     }
 
     @Override
