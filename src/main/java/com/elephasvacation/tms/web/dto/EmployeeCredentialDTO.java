@@ -31,7 +31,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -40,9 +39,9 @@ import java.time.LocalDateTime;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class EmployeeCredentialDTO implements Serializable {
     private Integer employeeId;
-    private String email;
+    //    private String email;
     private String password;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private String created;
+    private String updated;
 
 }
