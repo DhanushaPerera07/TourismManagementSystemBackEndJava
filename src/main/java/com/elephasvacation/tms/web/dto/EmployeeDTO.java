@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -36,7 +36,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor
@@ -45,12 +44,10 @@ import java.time.ZonedDateTime;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class EmployeeDTO implements Serializable {
 
-    private int id;
+    private Integer id;
     private String name;
     private String address;
-    private ZonedDateTime dateOfBirth;
-    /*    @JsonbDateFormat("yyyy-MM-dd") // dd.MM.yyyy
-        private LocalDate dateOfBirth;*/
+    private String dateOfBirth;
     private String nic;
     private String contact;
     private String email;
@@ -58,14 +55,14 @@ public class EmployeeDTO implements Serializable {
     private String position;
     private String status;
     //    private String password;
-    private ZonedDateTime created;
-    private ZonedDateTime lastUpdated;
+    private String created;
+    private String lastUpdated;
 
     /* custom constructor - without created, lastUpdated. */
     public EmployeeDTO(int id,
                        String name,
                        String address,
-                       ZonedDateTime dateOfBirth,
+                       String dateOfBirth,
                        String nic,
                        String contact,
                        String email,
@@ -86,7 +83,7 @@ public class EmployeeDTO implements Serializable {
 
     public EmployeeDTO(String name,
                        String address,
-                       ZonedDateTime dateOfBirth,
+                       String dateOfBirth,
                        String nic,
                        String contact,
                        String email,
