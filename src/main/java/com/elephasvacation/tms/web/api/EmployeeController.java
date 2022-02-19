@@ -31,6 +31,7 @@ import com.elephasvacation.tms.web.api.util.ApiUtil;
 import com.elephasvacation.tms.web.business.custom.EmployeeBO;
 import com.elephasvacation.tms.web.commonconstant.API;
 import com.elephasvacation.tms.web.dto.EmployeeDTO;
+import com.elephasvacation.tms.web.exception.BadRequestException;
 import com.elephasvacation.tms.web.exception.IdFormatException;
 import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,16 +95,13 @@ public class EmployeeController {
                                @RequestBody EmployeeDTO employeeDTO) {
         Integer employeeID = ApiUtil.getIntegerId(id);
 
+        /* validation. */
+        if (employeeDTO.getId() != null)
+            throw new BadRequestException("Invalid field \"EmployeeId\"");
+
         /* TODO: Employee - update validation logic. */
-        if (employeeDTO.getId() == employeeID) {
-            employeeDTO.setId(employeeID);
-            this.employeeBO.updateEmployee(employeeDTO);
-        } else {
-            /* URL param employeeID and employeeObject's employeeID mismatched.
-            Therefore, Let's throw an error.*/
-            /* TODO: handle error. */
-            throw new RuntimeException();
-        }
+        employeeDTO.setId(employeeID);
+        this.employeeBO.updateEmployee(employeeDTO);
 
     }
 
