@@ -24,18 +24,19 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageMealPlanBO;
-import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageMealPlanDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.MealPlanDTOMapper;
+import com.elephasvacation.tms.web.dal.AccommodationDAO;
+import com.elephasvacation.tms.web.dal.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dal.AccommodationPackageMealPlanDAO;
 import com.elephasvacation.tms.web.dal.MealPlanDAO;
-import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,13 +50,16 @@ import java.util.List;
 public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageMealPlanBO {
 
     @Autowired
+    private AccommodationDAO accommodationDAO;
+
+    @Autowired
+    private AccommodationPackageDAO accommodationPackageDAO;
+
+    @Autowired
     private MealPlanDAO mealPlanDAO;
 
     @Autowired
     private AccommodationPackageMealPlanDAO accommodationPackageMealPlanDAO;
-
-    @Autowired
-    private AccommodationPackageDTOMapper packageDTOMapper;
 
     @Autowired
     private MealPlanDTOMapper mealPlanDTOMapper;
@@ -66,11 +70,15 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
 
     @Override
     public AccommodationPackageMealPlanDTO
-    addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) {
+    addAccommodationPackageMealPlan(Integer accommodationId,
+                                    AccommodationPackageMealPlanDTO packageMealPlanDTO) {
+
+        /* validation. */
+        checkForIDs(accommodationId, packageMealPlanDTO);
 
         /* convert DTO to AccommodationPackageMealPlan. */
         AccommodationPackageMealPlan accommodationPackageMealPlan = this.mapper.
-                getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO);
+                getAccommodationPackageMealPlan(packageMealPlanDTO);
 
         /* add/save AccommodationPackageMealPlan. */
         AccommodationPackageMealPlan addedPkgMealPlan = this.accommodationPackageMealPlanDAO
@@ -82,47 +90,72 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
     }
 
     @Override
-    public void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) {
+    public void deleteAccommodationPackageMealPlan(Integer accommodationId,
+                                                   AccommodationPackageMealPlanDTO packageMealPlanDTO) {
+        /* validation. */
+        checkForIDs(accommodationId, packageMealPlanDTO);
 
         /* convert DTO to entity, and get the AccommodationPackageMealPlanId. */
         AccommodationPackageMealPlanId packageMealPlanId = this.mapper.
-                getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO).getId();
+                getAccommodationPackageMealPlan(packageMealPlanDTO).getId();
 
         /* delete AccommodationPackageMealPlan By ID. */
         this.accommodationPackageMealPlanDAO.deleteById(packageMealPlanId);
 
     }
 
+//    @Transactional(readOnly = true)
+//    @Override
+//    public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO) {
+//
+//        /* convert AccommodationPackageMealPlanDTO to entity. */
+//        AccommodationPackageMealPlan pkgMealPlan = this.mapper.getAccommodationPackageMealPlan(pkgMealPlanDTO);
+//
+//        /* get MealPlan */
+//        MealPlan mealPlan = this.mealPlanDAO.getById(pkgMealPlan.getId().getMealPlanId());
+//
+//        /* convert mealPlan entity to DTO. */
+//        return this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);
+//    }
+
     @Transactional(readOnly = true)
     @Override
-    public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO) {
+    public List<MealPlanDTO>
+    getAllMealPlansForAccommodationPackage(Integer accommodationId, Integer accommodationPackageId) {
 
-        /* convert AccommodationPackageMealPlanDTO to entity. */
-        AccommodationPackageMealPlan pkgMealPlan = this.mapper.getAccommodationPackageMealPlan(pkgMealPlanDTO);
+        /* Check Accommodation ID. If Accommodation is not found. */
+        if (!this.accommodationDAO.existsById(accommodationId))
+            throw new RecordNotFoundException("No matching Accommodation record found for ID: " + accommodationId);
 
-        /* get MealPlan */
-        MealPlan mealPlan = this.mealPlanDAO.getById(pkgMealPlan.getId().getMealPlanId());
-
-        /* convert mealPlan entity to DTO. */
-        return this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<AccommodationPackageMealPlanDTO>
-    getAllMealPlansForAccommodationPackage(AccommodationPackageDTO packageDTO) {
-
-        /* AccommodationPackageDTO --> AccommodationPackage conversion */
-        AccommodationPackage accommodationPackage = this.packageDTOMapper
-                .getAccommodationPackage(packageDTO);
+        /* Check Accommodation Package ID. If not found. */
+        AccommodationPackage accommodationPackage = this.accommodationPackageDAO
+                .findById(accommodationPackageId)
+                .orElseThrow(() -> new RecordNotFoundException("No matching Accommodation Package record found for ID: " +
+                        accommodationPackageId));
 
         /* Find out all the all MealPlans For Accommodation Package */
-        List<AccommodationPackageMealPlan> allMealPlansForAccommodationPackage =
-                this.accommodationPackageMealPlanDAO.getAllMealPlansForAccommodationPackage(accommodationPackage);
+        /* TODO: let's get the required details using a custom query. */
+        List<MealPlan> allMealPlansForAccommodationPackage = this.accommodationPackageMealPlanDAO
+                .getAllMealPlansForAccommodationPackage(accommodationPackage);
 
-        /* convert entityList to DTOList. */
-        /* return the List in DTO form. */
-        return this.mapper.
-                getAccommodationPackageMealPlanDTOList(allMealPlansForAccommodationPackage);
+        /* MealPlan entities to MealPlanDTOList  conversion. */
+        return this.mealPlanDTOMapper.getMealPlanDTOList(allMealPlansForAccommodationPackage);
+    }
+
+    private void checkForIDs(Integer accommodationId,
+                             AccommodationPackageMealPlanDTO packageMealPlanDTO) {
+        /* Check Accommodation ID. If Accommodation is not found. */
+        if (!this.accommodationDAO.existsById(accommodationId))
+            throw new RecordNotFoundException("No matching Accommodation record found for ID: " + accommodationId);
+
+        /* Check Accommodation Package ID. If not found. */
+        if (!this.accommodationPackageDAO.existsById(packageMealPlanDTO.getAccommodationPackageId()))
+            throw new RecordNotFoundException("No matching Accommodation Package record found for ID: " +
+                    packageMealPlanDTO.getAccommodationPackageId());
+
+        /* Check Meal Plan ID. If not found. */
+        if (!this.mealPlanDAO.existsById(packageMealPlanDTO.getMealPlanId()))
+            throw new RecordNotFoundException("No matching Meal Plan record found for ID: " +
+                    packageMealPlanDTO.getMealPlanId());
     }
 }

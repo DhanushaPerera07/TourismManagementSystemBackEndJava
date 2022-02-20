@@ -24,7 +24,6 @@
 package com.elephasvacation.tms.web.business.custom;
 
 import com.elephasvacation.tms.web.business.SuperBO;
-import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageMealPlanDTO;
 import com.elephasvacation.tms.web.dto.MealPlanDTO;
 
@@ -33,15 +32,17 @@ import java.util.List;
 public interface AccommodationPackageMealPlanBO extends SuperBO {
 
     AccommodationPackageMealPlanDTO
-    addAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
+    addAccommodationPackageMealPlan(Integer accommodationId,
+                                    AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
 //    void updateMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO,
 //                        AccommodationPackageMealPlanDTO newAccommodationPackageMealPlanDTO);
 
-    void deleteAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
+    void deleteAccommodationPackageMealPlan(Integer accommodationId,
+                                            AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
-    MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
+//    MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
-    List<AccommodationPackageMealPlanDTO>
-    getAllMealPlansForAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
+    List<MealPlanDTO>
+    getAllMealPlansForAccommodationPackage(Integer accommodationId, Integer accommodationPackageId);
 }
