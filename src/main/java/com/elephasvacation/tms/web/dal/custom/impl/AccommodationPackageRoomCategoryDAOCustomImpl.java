@@ -27,6 +27,7 @@ import com.elephasvacation.tms.web.commonconstant.Number;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageRoomCategoryDAOCustom;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
+import com.elephasvacation.tms.web.entity.RoomCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -47,6 +48,16 @@ public class AccommodationPackageRoomCategoryDAOCustomImpl implements Accommodat
                         "FROM AccommodationPackageRoomCategory pkgRc " +
                         "WHERE pkgRc.id.accommodationPackageId=?1", AccommodationPackageRoomCategory.class);
         query.setParameter(Number.ONE, accommodationPackage.getId());
+        return query.getResultList();
+    }
+
+    @Override
+    public List<RoomCategory> getAllRoomCategoriesForAccommodationPackage(Integer accommodationPackageId) {
+
+        TypedQuery<RoomCategory> query = this.entityManager.createQuery("SELECT rc " +
+                "FROM AccommodationPackageRoomCategory pkgRc, RoomCategory rc " +
+                "WHERE pkgRc.id.roomCategoryId=rc.id and pkgRc.id.accommodationPackageId=?1", RoomCategory.class);
+        query.setParameter(Number.ONE, accommodationPackageId);
         return query.getResultList();
     }
 }

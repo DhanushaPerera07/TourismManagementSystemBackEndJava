@@ -24,17 +24,17 @@
 package com.elephasvacation.tms.web.business.custom;
 
 import com.elephasvacation.tms.web.business.SuperBO;
-import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomCategoryDTO;
+import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
 
 import java.util.List;
 
 public interface AccommodationPackageRoomCategoryBO extends SuperBO {
     AccommodationPackageRoomCategoryDTO
-    createPackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
+    addPackageRoomCategory(Integer accommodationId, AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
 
-    void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
+    void deletePackageRoomCategory(Integer accommodationId, AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDTO);
 
-    List<AccommodationPackageRoomCategoryDTO>
-    getAllRoomCategoriesForAccommodationPackage(AccommodationPackageDTO accommodationPackageDTO);
+    List<RoomCategoryDTO>
+    getAllRoomCategoriesForAccommodationPackage(Integer accommodationId, Integer accommodationPackageId);
 }

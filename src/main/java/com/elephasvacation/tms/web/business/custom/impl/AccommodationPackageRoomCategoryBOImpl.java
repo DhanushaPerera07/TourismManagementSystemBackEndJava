@@ -24,13 +24,17 @@
 package com.elephasvacation.tms.web.business.custom.impl;
 
 import com.elephasvacation.tms.web.business.custom.AccommodationPackageRoomCategoryBO;
-import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageDTOMapper;
 import com.elephasvacation.tms.web.business.custom.util.mapper.AccommodationPackageRoomCategoryDTOMapper;
+import com.elephasvacation.tms.web.business.custom.util.mapper.RoomCategoryDTOMapper;
+import com.elephasvacation.tms.web.dal.AccommodationDAO;
+import com.elephasvacation.tms.web.dal.AccommodationPackageDAO;
 import com.elephasvacation.tms.web.dal.AccommodationPackageRoomCategoryDAO;
-import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomCategoryDTO;
-import com.elephasvacation.tms.web.entity.AccommodationPackage;
+import com.elephasvacation.tms.web.dto.RoomCategoryDTO;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomCategory;
+import com.elephasvacation.tms.web.entity.RoomCategory;
+import com.elephasvacation.tms.web.exception.BadRequestException;
+import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,18 +48,36 @@ import java.util.List;
 public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPackageRoomCategoryBO {
 
     @Autowired
+    private AccommodationDAO accommodationDAO;
+
+    @Autowired
+    private AccommodationPackageDAO accommodationPackageDAO;
+
+    @Autowired
     private AccommodationPackageRoomCategoryDAO packageRoomCategoryDAO;
 
     @Autowired
     private AccommodationPackageRoomCategoryDTOMapper mapper;
 
+//    @Autowired
+//    private AccommodationPackageDTOMapper packageDTOMapper;
+
     @Autowired
-    private AccommodationPackageDTOMapper packageDTOMapper;
+    private RoomCategoryDTOMapper roomCategoryDTOMapper;
 
 
     @Override
     public AccommodationPackageRoomCategoryDTO
-    createPackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) {
+    addPackageRoomCategory(Integer accommodationId, AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) {
+
+        /* AccommodationId. */
+        checkAccommodationId(accommodationId);
+
+        /* AccommodationPackage. */
+        checkAccommodationPackageId(packageRoomCategoryDTO.getAccommodationPackageId());
+
+        /* Let's check whether an AccommodationPackageRoomCategory record already exists or not. */
+        checkForAccommodationPackageRoomCategoryRecord(packageRoomCategoryDTO);
 
         /* convert AccommodationPackageRoomCategoryDTO to entity. */
         AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
@@ -72,11 +94,18 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
     }
 
     @Override
-    public void deletePackageRoomCategory(AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) {
+    public void deletePackageRoomCategory(Integer accommodationId, AccommodationPackageRoomCategoryDTO packageRoomCategoryDTO) {
+
+        /* AccommodationId. */
+        checkAccommodationId(accommodationId);
+
+        /* AccommodationPackage. */
+        checkAccommodationPackageId(packageRoomCategoryDTO.getAccommodationPackageId());
 
         /* convert AccommodationPackageRoomCategoryDTO to entity. */
-        AccommodationPackageRoomCategory packageRoomCategory = this.mapper.
-                getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
+        AccommodationPackageRoomCategory packageRoomCategory = this.mapper.getAccommodationPackageRoomCategory(packageRoomCategoryDTO);
+        if (!this.packageRoomCategoryDAO.existsById(packageRoomCategory.getId()))
+            throw new BadRequestException("No matching Room Category record found under given accommodation package. AccommodationPackageRoomCategory ID: " + packageRoomCategory.getId());
 
         /* delete the AccommodationPackageRoomCategory By ID. */
         this.packageRoomCategoryDAO.deleteById(packageRoomCategory.getId());
@@ -84,20 +113,36 @@ public class AccommodationPackageRoomCategoryBOImpl implements AccommodationPack
 
     @Override
     @Transactional(readOnly = true)
-    public List<AccommodationPackageRoomCategoryDTO>
-    getAllRoomCategoriesForAccommodationPackage(AccommodationPackageDTO packageDTO) {
+    public List<RoomCategoryDTO> getAllRoomCategoriesForAccommodationPackage(Integer accommodationId, Integer accommodationPackageId) {
 
-        /* convert AccommodationPackageDTO to entity. */
-        AccommodationPackage accommodationPackage = this.packageDTOMapper.getAccommodationPackage(packageDTO);
+        checkAccommodationId(accommodationId);
 
-        /* get all room categories for an AccommodationPackage. */
-        List<AccommodationPackageRoomCategory> allRoomCategoriesForAccommodationPackage = this.packageRoomCategoryDAO.
-                getAllRoomCategoriesForAccommodationPackage(accommodationPackage);
+        checkAccommodationPackageId(accommodationPackageId);
 
-        /* convert allRoomCategoriesForAccommodationPackage to DTOList. */
-        List<AccommodationPackageRoomCategoryDTO> accommodationPackageRoomCategoryDTOList = this.mapper.
-                getAccommodationPackageRoomCategoryDTOList(allRoomCategoriesForAccommodationPackage);
+        /* Get all room categories for an accommodation package. */
+        List<RoomCategory> entityList = this.packageRoomCategoryDAO.
+                getAllRoomCategoriesForAccommodationPackage(accommodationPackageId);
 
-        return accommodationPackageRoomCategoryDTOList;
+        return this.roomCategoryDTOMapper.getRoomCategoryDTOs(entityList);
+    }
+
+
+    private void checkAccommodationId(Integer accommodationId) {
+        /* Check Accommodation ID. If Accommodation is not found. */
+        if (!this.accommodationDAO.existsById(accommodationId))
+            throw new RecordNotFoundException("No matching Accommodation record found for ID: " + accommodationId);
+    }
+
+    private void checkAccommodationPackageId(Integer accommodationPackageId) {
+        /* Check Accommodation Package ID. If not found. */
+        if (!this.accommodationPackageDAO.existsById(accommodationPackageId))
+            throw new RecordNotFoundException("No matching Accommodation Package record found for ID: " + accommodationPackageId);
+
+    }
+
+    private void checkForAccommodationPackageRoomCategoryRecord(AccommodationPackageRoomCategoryDTO accommodationPackageRoomCategoryDto) {
+        AccommodationPackageRoomCategory packageRoomCategory = this.mapper.getAccommodationPackageRoomCategory(accommodationPackageRoomCategoryDto);
+        if (this.packageRoomCategoryDAO.existsById(packageRoomCategory.getId()))
+            throw new BadRequestException("Record already exists for ID: " + packageRoomCategory.getId());
     }
 }
