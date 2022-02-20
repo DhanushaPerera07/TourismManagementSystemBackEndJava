@@ -35,8 +35,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,8 +43,8 @@ import java.time.LocalDateTime;
 public class MealPlanDTO implements SuperEntity {
     private Integer id;
     private String mealPlan;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private String created;
+    private String updated;
 
     public MealPlanDTO(int id, String mealPlan) {
         this.id = id;
