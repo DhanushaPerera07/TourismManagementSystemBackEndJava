@@ -43,16 +43,16 @@ import java.io.Serializable;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RoomCategoryDTO implements Serializable {
     private int id;
-    private String category;
+    private String roomCategory;
     private String created;
     private String updated;
 
-    public RoomCategoryDTO(int id, String category) {
+    public RoomCategoryDTO(int id, String roomCategory) {
         this.id = id;
-        this.category = category;
+        this.roomCategory = roomCategory;
     }
 
-    public RoomCategoryDTO(String category) {
-        this.category = category;
+    public RoomCategoryDTO(String roomCategory) {
+        this.roomCategory = roomCategory;
     }
 }
