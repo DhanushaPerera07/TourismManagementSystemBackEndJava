@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -28,7 +28,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Table(name = "accommodation_package_room_category", indexes = {
@@ -46,14 +49,6 @@ import java.io.Serializable;
 public class AccommodationPackageRoomCategory implements SuperEntity<Serializable> {
     @EmbeddedId
     private AccommodationPackageRoomCategoryId id;
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "index_id", nullable = false)
-    private Integer indexId;
-
-    public AccommodationPackageRoomCategory(AccommodationPackageRoomCategoryId id) {
-        this.id = id;
-    }
 
     public AccommodationPackageRoomCategory(Integer accommodationPackageId, Integer roomCategoryId) {
         this.id = new AccommodationPackageRoomCategoryId(accommodationPackageId, roomCategoryId);

@@ -33,7 +33,6 @@ import java.io.Serializable;
 
 @Table(name = "accommodation_package_meal_plan", indexes = {
         @Index(name = "fk_accommodation_package_has_meal_plan_meal_plan1_idx", columnList = "meal_plan_id"),
-        @Index(name = "id_UNIQUE", columnList = "index_id", unique = true),
         @Index(name = "fk_accommodation_package_has_meal_plan_accommodation_packag_idx", columnList = "accommodation_package_id")
 })
 @Entity
@@ -48,13 +47,13 @@ public class AccommodationPackageMealPlan implements SuperEntity<Serializable> {
     @EmbeddedId
     private AccommodationPackageMealPlanId id;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "index_id", nullable = false)
-    private Integer indexId;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "index_id", nullable = false)
+//    private Integer indexId;
 
-    public AccommodationPackageMealPlan(AccommodationPackageMealPlanId id) {
-        this.id = id;
-    }
+//    public AccommodationPackageMealPlan(AccommodationPackageMealPlanId id) {
+//        this.id = id;
+//    }
 
     public AccommodationPackageMealPlan(Integer AccommodationPackageId, Integer mealPlanId) {
         this.id = new AccommodationPackageMealPlanId(AccommodationPackageId, mealPlanId);

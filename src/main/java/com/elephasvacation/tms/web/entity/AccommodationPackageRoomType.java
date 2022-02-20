@@ -28,7 +28,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Table(name = "accommodation_package_room_type", indexes = {
@@ -47,13 +50,13 @@ public class AccommodationPackageRoomType implements SuperEntity<Serializable> {
     @EmbeddedId
     private AccommodationPackageRoomTypeId id;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "index_id", nullable = false)
-    private Integer indexId;
-
-    public AccommodationPackageRoomType(AccommodationPackageRoomTypeId id) {
-        this.id = id;
-    }
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "index_id", nullable = false)
+//    private Integer indexId;
+//
+//    public AccommodationPackageRoomType(AccommodationPackageRoomTypeId id) {
+//        this.id = id;
+//    }
 
     public AccommodationPackageRoomType(Integer accommodationPackageId, Integer roomType) {
         this.id = new AccommodationPackageRoomTypeId(accommodationPackageId, roomType);
