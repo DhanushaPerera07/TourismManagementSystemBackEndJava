@@ -26,7 +26,7 @@ package com.elephasvacation.tms.web.dal.custom.impl;
 import com.elephasvacation.tms.web.commonconstant.Number;
 import com.elephasvacation.tms.web.dal.custom.AccommodationPackageMealPlanDAOCustom;
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
-import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
+import com.elephasvacation.tms.web.entity.MealPlan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,12 +41,11 @@ public class AccommodationPackageMealPlanDAOCustomImpl implements AccommodationP
     EntityManager entityManager;
 
     @Override
-    public List<AccommodationPackageMealPlan> getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage) {
-        TypedQuery<AccommodationPackageMealPlan> query = this.entityManager.
-                createQuery("SELECT pkgMp " +
-                                "FROM AccommodationPackageMealPlan pkgMp " +
-                                "WHERE pkgMp.id.accommodationPackageId=?1",
-                        AccommodationPackageMealPlan.class);
+    public List<MealPlan> getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage) {
+
+        TypedQuery<MealPlan> query = this.entityManager.createQuery("SELECT mp " +
+                "FROM AccommodationPackageMealPlan pkgMp, MealPlan mp " +
+                "WHERE pkgMp.id.mealPlanId=mp.id and pkgMp.id.accommodationPackageId=?1", MealPlan.class);
         /* set the numbered parameter. */
         query.setParameter(Number.ONE, accommodationPackage.getId());
 

@@ -24,11 +24,11 @@
 package com.elephasvacation.tms.web.dal.custom;
 
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
-import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
+import com.elephasvacation.tms.web.entity.MealPlan;
 
 import java.util.List;
 
 public interface AccommodationPackageMealPlanDAOCustom {
-    List<AccommodationPackageMealPlan>
+    List<MealPlan>
     getAllMealPlansForAccommodationPackage(AccommodationPackage accommodationPackage);
 }
