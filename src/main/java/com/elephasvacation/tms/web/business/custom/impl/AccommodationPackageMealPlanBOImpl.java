@@ -36,6 +36,7 @@ import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlan;
 import com.elephasvacation.tms.web.entity.AccommodationPackageMealPlanId;
 import com.elephasvacation.tms.web.entity.MealPlan;
+import com.elephasvacation.tms.web.exception.BadRequestException;
 import com.elephasvacation.tms.web.exception.RecordNotFoundException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,9 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         /* validation. */
         checkForIDs(accommodationId, packageMealPlanDTO);
 
+        /* Let's check whether an AccommodationPackageMealPlan record already exists or not. */
+        checkForAccommodationPackageMealPlanRecord(packageMealPlanDTO);
+
         /* convert DTO to AccommodationPackageMealPlan. */
         AccommodationPackageMealPlan accommodationPackageMealPlan = this.mapper.
                 getAccommodationPackageMealPlan(packageMealPlanDTO);
@@ -103,20 +107,6 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         this.accommodationPackageMealPlanDAO.deleteById(packageMealPlanId);
 
     }
-
-//    @Transactional(readOnly = true)
-//    @Override
-//    public MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO pkgMealPlanDTO) {
-//
-//        /* convert AccommodationPackageMealPlanDTO to entity. */
-//        AccommodationPackageMealPlan pkgMealPlan = this.mapper.getAccommodationPackageMealPlan(pkgMealPlanDTO);
-//
-//        /* get MealPlan */
-//        MealPlan mealPlan = this.mealPlanDAO.getById(pkgMealPlan.getId().getMealPlanId());
-//
-//        /* convert mealPlan entity to DTO. */
-//        return this.mealPlanDTOMapper.getMealPlanDTO(mealPlan);
-//    }
 
     @Transactional(readOnly = true)
     @Override
@@ -157,5 +147,11 @@ public class AccommodationPackageMealPlanBOImpl implements AccommodationPackageM
         if (!this.mealPlanDAO.existsById(packageMealPlanDTO.getMealPlanId()))
             throw new RecordNotFoundException("No matching Meal Plan record found for ID: " +
                     packageMealPlanDTO.getMealPlanId());
+    }
+
+    private void checkForAccommodationPackageMealPlanRecord(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO) {
+        AccommodationPackageMealPlan packageMealPlan = this.mapper.getAccommodationPackageMealPlan(accommodationPackageMealPlanDTO);
+        if (this.accommodationPackageMealPlanDAO.existsById(packageMealPlan.getId()))
+            throw new BadRequestException("Record already exists for ID: " + packageMealPlan.getId());
     }
 }

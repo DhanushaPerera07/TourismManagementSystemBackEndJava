@@ -35,13 +35,8 @@ public interface AccommodationPackageMealPlanBO extends SuperBO {
     addAccommodationPackageMealPlan(Integer accommodationId,
                                     AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
-//    void updateMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO,
-//                        AccommodationPackageMealPlanDTO newAccommodationPackageMealPlanDTO);
-
     void deleteAccommodationPackageMealPlan(Integer accommodationId,
                                             AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
-
-//    MealPlanDTO getAccommodationPackageMealPlan(AccommodationPackageMealPlanDTO accommodationPackageMealPlanDTO);
 
     List<MealPlanDTO>
     getAllMealPlansForAccommodationPackage(Integer accommodationId, Integer accommodationPackageId);
