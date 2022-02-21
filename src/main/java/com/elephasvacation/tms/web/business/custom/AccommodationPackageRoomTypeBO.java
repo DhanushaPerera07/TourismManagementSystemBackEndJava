@@ -26,16 +26,22 @@ package com.elephasvacation.tms.web.business.custom;
 import com.elephasvacation.tms.web.business.SuperBO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageDTO;
 import com.elephasvacation.tms.web.dto.AccommodationPackageRoomTypeDTO;
+import com.elephasvacation.tms.web.dto.RoomTypeDTO;
 
 import java.util.List;
 
 public interface AccommodationPackageRoomTypeBO extends SuperBO {
 
     AccommodationPackageRoomTypeDTO
-    createAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO);
+    addAccommodationPackageRoomType(Integer accommodationId,
+                                    AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO);
 
-    void deleteAccommodationPackageRoomType(AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO);
+    void deleteAccommodationPackageRoomType(Integer accommodationId,
+                                            AccommodationPackageRoomTypeDTO accommodationPackageRoomTypeDTO);
 
     List<AccommodationPackageRoomTypeDTO>
     getAllPackageRoomTypesForAccommodationPackage(AccommodationPackageDTO packageDTO);
+
+    List<RoomTypeDTO> getAllPackageRoomTypesForAccommodationPackage(Integer accommodationId,
+                                                                    Integer accommodationPackageId);
 }

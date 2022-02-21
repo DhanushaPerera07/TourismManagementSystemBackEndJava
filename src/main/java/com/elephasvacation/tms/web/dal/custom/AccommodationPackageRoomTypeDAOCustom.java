@@ -25,10 +25,13 @@ package com.elephasvacation.tms.web.dal.custom;
 
 import com.elephasvacation.tms.web.entity.AccommodationPackage;
 import com.elephasvacation.tms.web.entity.AccommodationPackageRoomType;
+import com.elephasvacation.tms.web.entity.RoomType;
 
 import java.util.List;
 
 public interface AccommodationPackageRoomTypeDAOCustom {
     List<AccommodationPackageRoomType>
     getAllPackageRoomTypesForAccommodationPackage(AccommodationPackage accommodationPackage);
+
+    List<RoomType> getAllPackageRoomTypesForAccommodationPackage(Integer accommodationPackageId);
 }
