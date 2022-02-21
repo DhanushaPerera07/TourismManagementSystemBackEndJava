@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -35,7 +35,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -44,16 +43,16 @@ import java.time.LocalDateTime;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RoomTypeDTO implements Serializable {
     private int id;
-    private String type;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private String roomType;
+    private String created;
+    private String updated;
 
-    public RoomTypeDTO(int id, String type) {
+    public RoomTypeDTO(int id, String roomType) {
         this.id = id;
-        this.type = type;
+        this.roomType = roomType;
     }
 
-    public RoomTypeDTO(String type) {
-        this.type = type;
+    public RoomTypeDTO(String roomType) {
+        this.roomType = roomType;
     }
 }
