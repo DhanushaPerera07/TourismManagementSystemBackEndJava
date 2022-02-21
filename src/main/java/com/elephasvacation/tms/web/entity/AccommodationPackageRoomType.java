@@ -50,14 +50,6 @@ public class AccommodationPackageRoomType implements SuperEntity<Serializable> {
     @EmbeddedId
     private AccommodationPackageRoomTypeId id;
 
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "index_id", nullable = false)
-//    private Integer indexId;
-//
-//    public AccommodationPackageRoomType(AccommodationPackageRoomTypeId id) {
-//        this.id = id;
-//    }
-
     public AccommodationPackageRoomType(Integer accommodationPackageId, Integer roomType) {
         this.id = new AccommodationPackageRoomTypeId(accommodationPackageId, roomType);
     }
